@@ -20,6 +20,7 @@ public class MyChrono {
     private static final String PREFS_PAUSED_TIME = "pausedTime";
     private static final String PREFS_ACTIVE = "active";
     private static final String PREFS_PAUSED = "paused";
+    private static final String PREFS_BOOT_TIME = "boot";
     TextView mainView;
     TextView fractionView;
     public long baseTime;
@@ -171,5 +172,22 @@ public class MyChrono {
                 updateHandler.obtainMessage(1).sendToTarget();
             }
         }, 0, precision);
+    }
+
+    public static void clearSaved(SharedPreferences pref, String prefix) {
+        SharedPreferences.Editor ed = pref.edit();
+        ed.putBoolean(prefix+PREFS_ACTIVE, false);
+        ed.apply();
+    }
+
+    public static void detectBoot(SharedPreferences options, String prefix) {
+        long bootTime = java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
+        long oldBootTime = options.getLong(prefix+PREFS_BOOT_TIME, -100000);
+        SharedPreferences.Editor ed = options.edit();
+        if (Math.abs(oldBootTime-bootTime)>60000) {
+            ed.putBoolean(prefix+PREFS_ACTIVE, false);
+        }
+        ed.putLong(prefix+PREFS_BOOT_TIME, bootTime);
+        ed.apply();
     }
 }

@@ -30,6 +30,7 @@ public class StopWatch extends Activity {
         super.onCreate(savedInstanceState);
 
         options = PreferenceManager.getDefaultSharedPreferences(this);
+        MyChrono.detectBoot(options, "");
         setContentView(R.layout.activity_stop_watch);
         chrono = (TextView)findViewById(R.id.chrono);
         resetButton = (Button)findViewById(R.id.reset);
@@ -50,6 +51,7 @@ public class StopWatch extends Activity {
     protected void onResume() {
         super.onResume();
 
+        MyChrono.detectBoot(options, "");
         stopwatch.restore(options, "");
         updateButtons();
     }
