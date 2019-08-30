@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="omegacentauri.mobi.simplestopwatch">
+
+    <application
+        android:allowBackup="true"
+        android:label="Simple Stopwatch"
+        android:supportsRtl="true">
+        <activity android:name=".StopWatch">
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
