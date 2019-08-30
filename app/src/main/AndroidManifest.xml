@@ -5,6 +5,7 @@
     <application
         android:allowBackup="true"
         android:label="Simple Stopwatch"
+        android:theme="@android:style/Theme.NoTitleBar"
         android:supportsRtl="true">
         <activity android:name=".StopWatch">
             android:configChanges="keyboard|keyboardHidden|orientation"

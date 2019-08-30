@@ -9,20 +9,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
 
 public class StopWatch extends Activity {
-    private static final String PREFS_START_TIME = "baseTime";
-    private static final String PREFS_PAUSED_TIME = "pausedTime";
-    private static final String PREFS_ACTIVE = "active";
-    private static final String PREFS_PAUSED = "paused";
     SharedPreferences options;
     long baseTime = 0;
     long pausedTime = 0;
     boolean active = false;
     boolean paused = false;
     boolean chronoStarted = false;
-    private Chronometer chrono;
+    private TextView chrono = null;
+    private MyChrono stopwatch;
+    private Button resetButton;
+    private Button startButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,10 @@ public class StopWatch extends Activity {
 
         options = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_stop_watch);
-        chrono = (Chronometer)findViewById(R.id.chrono);
+        chrono = (TextView)findViewById(R.id.chrono);
+        resetButton = (Button)findViewById(R.id.reset);
+        startButton = (Button)findViewById(R.id.start);
+        stopwatch = new MyChrono(chrono, (TextView)findViewById(R.id.fraction));
         Log.v("chrono", ""+(chrono!=null));
         chrono.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                                              @Override
@@ -46,20 +50,8 @@ public class StopWatch extends Activity {
     protected void onResume() {
         super.onResume();
 
-        baseTime = options.getLong(PREFS_START_TIME, 0);
-        pausedTime = options.getLong(PREFS_PAUSED_TIME, 0);
-        active = options.getBoolean(PREFS_ACTIVE, false);
-        paused = options.getBoolean(PREFS_PAUSED, false);
-        chrono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                MyChrono.maximizeSize(chrono);
-            }
-        });
-
-        if (active) {
-            setParams();
-        }
+        stopwatch.restore(options, "");
+        updateButtons();
     }
 
     @Override
@@ -83,34 +75,39 @@ public class StopWatch extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-
-        if (chronoStarted) {
-            chrono.stop();
-            chronoStarted = false;
-        }
+        stopwatch.save(options, "");
+        stopwatch.stopUpdating();
     }
-
+/*
     void setParams() {
+        if (chrono == null)
+            return;
         if (!active) {
             if (chronoStarted) {
-                chrono.stop();
+                stopwatch.stop();
                 chronoStarted = false;
             }
             chrono.setText(formatTime(0));
+            startButton.setText("Start");
+            resetButton.setVisibility(View.INVISIBLE);
         }
         else {
             if (paused) {
                 if (chronoStarted) {
-                    chrono.stop();
+                    stopwatch.stop();
                     chronoStarted = false;
                 }
                 chrono.setText(formatTime(pausedTime - baseTime));
+                startButton.setText("Continue");
+                resetButton.setVisibility(View.VISIBLE);
             } else {
                 if (chronoStarted)
-                    chrono.stop();
-                chrono.setBase(baseTime);
-                chrono.start();
+                    stopwatch.stop();
+                stopwatch.baseTime = baseTime;
+                stopwatch.start();
                 chronoStarted = true;
+                startButton.setText("Stop");
+                resetButton.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -122,38 +119,52 @@ public class StopWatch extends Activity {
         ed.putBoolean(PREFS_ACTIVE, active);
         ed.putBoolean(PREFS_PAUSED, paused);
         ed.commit();
+    } */
+
+    void updateButtons() {
+        if (!stopwatch.active) {
+            startButton.setText("Start");
+            resetButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            if (stopwatch.paused) {
+                startButton.setText("Continue");
+                resetButton.setVisibility(View.VISIBLE);
+            } else {
+                startButton.setText("Stop");
+                resetButton.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    void pressReset() {
+        stopwatch.reset();
+        updateButtons();
+    }
+
+    void pressStart() {
+        stopwatch.start();
+        updateButtons();
+    }
+
+    public void onButtonStart(View v) {
+        pressStart();
+    }
+
+    public void onButtonReset(View v) {
+        pressReset();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() != KeyEvent.ACTION_DOWN)
             return false;
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_A) {
-            if (active) {
-                if (!paused) {
-                    paused = true;
-                    pausedTime = SystemClock.elapsedRealtime();
-                    setParams();
-                }
-                else {
-                    paused = false;
-                    baseTime += SystemClock.elapsedRealtime() - pausedTime;
-                    setParams();
-                }
-            }
-            else {
-                paused = false;
-                baseTime = SystemClock.elapsedRealtime();
-                active = true;
-                setParams();
-            }
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP /*|| keyCode == KeyEvent.KEYCODE_A*/) {
+            pressStart();
             return true;
         }
-        else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_C) {
-            if (active && paused) {
-                active = false;
-                setParams();
-            }
+        else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN /*|| keyCode == KeyEvent.KEYCODE_C*/) {
+            pressReset();
             return true;
         }
         return false;
