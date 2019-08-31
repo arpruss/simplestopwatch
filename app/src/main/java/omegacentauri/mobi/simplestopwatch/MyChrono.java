@@ -20,11 +20,6 @@ import java.util.TimerTask;
 import static java.lang.Float.max;
 
 public class MyChrono {
-    private static final String PREFS_START_TIME = "baseTime";
-    private static final String PREFS_PAUSED_TIME = "pausedTime";
-    private static final String PREFS_ACTIVE = "active";
-    private static final String PREFS_PAUSED = "paused";
-    private static final String PREFS_BOOT_TIME = "boot";
     private final Context context;
     TextView mainView1;
     TextView mainView2;
@@ -170,12 +165,12 @@ public class MyChrono {
         updateViews();
     }
 
-    public void restore(SharedPreferences pref, String prefix) {
-        baseTime = pref.getLong(prefix+PREFS_START_TIME, 0);
-        pauseTime = pref.getLong(prefix+PREFS_PAUSED_TIME, 0);
-        active = pref.getBoolean(prefix+PREFS_ACTIVE, false);
-        paused = pref.getBoolean(prefix+PREFS_PAUSED, false);
-        precision = Integer.parseInt(pref.getString("precision", "100"));
+    public void restore() {
+        baseTime = options.getLong(Options.PREFS_START_TIME, 0);
+        pauseTime = options.getLong(Options.PREFS_PAUSED_TIME, 0);
+        active = options.getBoolean(Options.PREFS_ACTIVE, false);
+        paused = options.getBoolean(Options.PREFS_PAUSED, false);
+        precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
         if (SystemClock.elapsedRealtime() <= baseTime)
             active = false;
 
@@ -188,12 +183,12 @@ public class MyChrono {
         updateViews();
     }
 
-    public void save(SharedPreferences pref, String prefix) {
-        SharedPreferences.Editor ed = pref.edit();
-        ed.putLong(prefix+PREFS_START_TIME, baseTime);
-        ed.putLong(prefix+PREFS_PAUSED_TIME, pauseTime);
-        ed.putBoolean(prefix+PREFS_ACTIVE, active);
-        ed.putBoolean(prefix+PREFS_PAUSED, paused);
+    public void save() {
+        SharedPreferences.Editor ed = options.edit();
+        ed.putLong(Options.PREFS_START_TIME, baseTime);
+        ed.putLong(Options.PREFS_PAUSED_TIME, pauseTime);
+        ed.putBoolean(Options.PREFS_ACTIVE, active);
+        ed.putBoolean(Options.PREFS_PAUSED, paused);
         ed.apply();
     }
 
@@ -217,28 +212,29 @@ public class MyChrono {
                 }
             }, 0, precision);
         }
-        if (options.getBoolean("screenOn", false))
+        if (options.getBoolean(Options.PREFS_SCREEN_ON, false))
             ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    public static void clearSaved(SharedPreferences pref, String prefix) {
+    public static void clearSaved(SharedPreferences pref) {
         SharedPreferences.Editor ed = pref.edit();
-        ed.putBoolean(prefix+PREFS_ACTIVE, false);
+        ed.putBoolean(Options.PREFS_ACTIVE, false);
         ed.apply();
-        Log.v("chrono", "cleared "+prefix+PREFS_ACTIVE);
+        Log.v("chrono", "cleared "+Options.PREFS_ACTIVE);
     }
 
-    public static void detectBoot(SharedPreferences options, String prefix) {
-        return;/*
+    public static void detectBoot(SharedPreferences options) {
+        return;
+        /*
         long bootTime = java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
-        long oldBootTime = options.getLong(prefix+PREFS_BOOT_TIME, -100000);
+        long oldBootTime = options.getLong(Options.PREFS_BOOT_TIME, -100000);
         SharedPreferences.Editor ed = options.edit();
         if (Math.abs(oldBootTime-bootTime)>60000) {
-            ed.putBoolean(prefix+PREFS_ACTIVE, false);
+            ed.putBoolean(Options.PREFS_ACTIVE, false);
         }
-        ed.putLong(prefix+PREFS_BOOT_TIME, bootTime);
+        ed.putLong(Options.PREFS_BOOT_TIME, bootTime);
         ed.apply(); */
     }
 }

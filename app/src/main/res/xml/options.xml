@@ -10,4 +10,10 @@
         android:defaultValue="100"
         android:entries="@array/precisionDisplayValues"
         android:entryValues="@array/precisionValues" />
+    <ListPreference android:title="Color Scheme"
+        android:summary="Set color scheme"
+        android:key="color"
+        android:defaultValue="white on black"
+        android:entries="@array/colorSchemes"
+        android:entryValues="@array/colorSchemes" />
 </PreferenceScreen>

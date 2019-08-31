@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -11,8 +13,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class StopWatch extends Activity {
@@ -27,13 +33,16 @@ public class StopWatch extends Activity {
     private MyChrono stopwatch;
     private Button resetButton;
     private Button startButton;
+    private static final int RECOLORABLE_TEXTVIEW[] = {
+        R.id.chrono1, R.id.chrono2, R.id.fraction
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         options = PreferenceManager.getDefaultSharedPreferences(this);
-        MyChrono.detectBoot(options, "");
+        MyChrono.detectBoot(options);
         setContentView(R.layout.activity_stop_watch);
         chrono1 = (TextView)findViewById(R.id.chrono1);
         chrono2 = (TextView)findViewById(R.id.chrono2);
@@ -42,9 +51,28 @@ public class StopWatch extends Activity {
         stopwatch = new MyChrono(this, options, chrono1, chrono2, (TextView)findViewById(R.id.fraction));
     }
 
+    void setColorScheme() {
+        int fore = Options.getForeColor(options);
+        int back = Options.getBackColor(options);
+
+//        ((ViewGroup) getWindow().getDecorView()).setBackgroundColor(back);
+        ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(back);
+        Window w = this.getWindow();
+        w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        for (int id : RECOLORABLE_TEXTVIEW) {
+            ((TextView)findViewById(id)).setTextColor(fore);
+            ((TextView)findViewById(id)).setBackgroundColor(back);
+
+        }
+        ((ImageButton)findViewById(R.id.settings)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        setColorScheme();
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.v("chrono", "landscape");
@@ -62,7 +90,7 @@ public class StopWatch extends Activity {
 
         Log.v("chrono", "onResume");
 
-        stopwatch.restore(options, "");
+        stopwatch.restore();
         stopwatch.updateViews();
         updateButtons();
     }
@@ -77,7 +105,7 @@ public class StopWatch extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        stopwatch.save(options, "");
+        stopwatch.save();
         stopwatch.stopUpdating();
     }
 
