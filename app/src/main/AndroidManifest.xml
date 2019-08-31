@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:allowBackup="true"
-        android:label="Plain Stopwatch"
+        android:label="Giant Stopwatch"
         android:theme="@android:style/Theme.NoTitleBar"
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true">
