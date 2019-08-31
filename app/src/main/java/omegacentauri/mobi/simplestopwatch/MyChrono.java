@@ -129,7 +129,7 @@ public class MyChrono {
         if (v.getWidth() > 0 && v.getHeight() > 0) {
             try {
                 float scale = Math.min(v.getWidth() / textWidth, v.getHeight() / (float)textHeight);
-                float newSize = (float) (p.getTextSize()*scale*0.98);
+                float newSize = (float) (p.getTextSize()*scale*0.97);
                 if (Math.abs(newSize - v.getTextSize()) > 10)
                     v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
                 else if (v.getText() == text)
