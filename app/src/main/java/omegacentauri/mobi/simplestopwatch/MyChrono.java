@@ -55,17 +55,24 @@ public class MyChrono {
         long t = active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
         String line1 = formatTime(t,1);
         String line2 = formatTime(t,2);
-        maximizeSize(mainView1, line1);
+        float s1 = maximizeSize(mainView1, line1, 0.96f);
         if (mainView2.getVisibility() == View.VISIBLE) {
-            maximizeSize(mainView2, line2);
-            float s1 = mainView1.getTextSize();
-            float s2 = mainView2.getTextSize();
-            if (s1 > s2)
-                mainView1.setTextSize(s2);
-            else if (s1 < s2)
-                mainView2.setTextSize(s1);
+            float size = Math.min(s1, maximizeSize(mainView2, line2, 0.96f));
+            optionalSetSizeAndText(mainView1, size, line1);
+            optionalSetSizeAndText(mainView2, size, line2);
+        }
+        else {
+            optionalSetSizeAndText(mainView1, s1, line1);
         }
         fractionView.setText(formatTimeFraction(t));
+    }
+
+    static private void optionalSetSizeAndText(TextView v, float newSize, String text) {
+        if (Math.abs(newSize - v.getTextSize()) > 10)
+            v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
+        if (! v.getText().equals(text))
+            v.setText(text);
+
     }
 
     String formatTime(long t, int line) {
@@ -110,11 +117,14 @@ public class MyChrono {
             return "";
     }
 
-    private static void maximizeSize(TextView v, String text) {
-        if (text.length() == 0 && v.getText().length() > 0) {
-            v.setText(text);
-            return;
-        }
+    private static float maximizeSize(TextView v, String text, float scale) {
+        float curSize = v.getTextSize();
+        if (text.length() == 0)
+            return curSize;
+        float vWidth = v.getWidth();
+        float vHeight = v.getHeight();
+        if (vWidth == 0 || vHeight == 0)
+            return curSize;
         String s = text.replaceAll("[0-9]", "8");
         Paint p = new Paint(v.getPaint());
         p.setTextSize(50);
@@ -122,22 +132,11 @@ public class MyChrono {
         p.getTextBounds((String)s, 0, s.length(), bounds);
         float textWidth = bounds.width();
         float textHeight = bounds.height();
-//        float textHeight =  Math.abs(p.getFontMetrics().ascent);
-        Log.v("chrono", ""+p.getFontMetrics().ascent);
-        //float textHeight = p.getFontMetrics().bottom - p.getFontMetrics().top;
+        if (textWidth == 0 || textHeight == 0)
+            return curSize;
 
-        if (v.getWidth() > 0 && v.getHeight() > 0) {
-            try {
-                float scale = Math.min(v.getWidth() / textWidth, v.getHeight() / (float)textHeight);
-                float newSize = (float) (p.getTextSize()*scale*0.96);
-                if (Math.abs(newSize - v.getTextSize()) > 10)
-                    v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
-                else if (v.getText() == text)
-                    return;
-            }
-            catch(Exception e) {}
-        }
-        v.setText(text);
+        float resize = Math.min(vWidth/textWidth, vHeight/textHeight);
+        return (float)(p.getTextSize()*scale*resize);
     }
 
     public void resetButton() {
