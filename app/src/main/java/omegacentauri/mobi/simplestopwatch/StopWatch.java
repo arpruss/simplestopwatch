@@ -3,6 +3,7 @@ package omegacentauri.mobi.simplestopwatch;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
@@ -20,7 +21,8 @@ public class StopWatch extends Activity {
     boolean active = false;
     boolean paused = false;
     boolean chronoStarted = false;
-    private TextView chrono = null;
+    private TextView chrono1 = null;
+    private TextView chrono2 = null;
     private MyChrono stopwatch;
     private Button resetButton;
     private Button startButton;
@@ -32,46 +34,43 @@ public class StopWatch extends Activity {
         options = PreferenceManager.getDefaultSharedPreferences(this);
         MyChrono.detectBoot(options, "");
         setContentView(R.layout.activity_stop_watch);
-        chrono = (TextView)findViewById(R.id.chrono);
+        chrono1 = (TextView)findViewById(R.id.chrono1);
+        chrono2 = (TextView)findViewById(R.id.chrono2);
         resetButton = (Button)findViewById(R.id.reset);
         startButton = (Button)findViewById(R.id.start);
-        stopwatch = new MyChrono(chrono, (TextView)findViewById(R.id.fraction));
-        Log.v("chrono", ""+(chrono!=null));
-        chrono.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                                             @Override
-                                             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                                                 MyChrono.maximizeSize(chrono);
-                                             }
-                                         }
-        );
-
+        stopwatch = new MyChrono(this, chrono1, chrono2, (TextView)findViewById(R.id.fraction));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.v("chrono", "landscape");
+            chrono2.setVisibility(View.GONE);
+        } else {
+            Log.v("chrono", "portrait");
+            chrono2.setVisibility(View.VISIBLE);
+        }
+        chrono1.post(new Runnable() {
+            @Override
+            public void run() {
+                stopwatch.updateViews();
+            }
+        });
 
-        MyChrono.detectBoot(options, "");
+        Log.v("chrono", "onResume");
+
         stopwatch.restore(options, "");
+        stopwatch.updateViews();
         updateButtons();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        Log.v("chrono", "onConfChanged");
         super.onConfigurationChanged(newConfig);
-    }
-
-    String formatTime(long t) {
-        t /= 1000;
-        int s = (int) (t % 60);
-        t /= 60;
-        int m = (int) (t % 60);
-        t /= 60;
-        int h = (int) t;
-        if (h != 0)
-            return String.format("%d:%02d:%02d", h,m,s);
-        else
-            return String.format("%02d:%02d", m,s);
+        stopwatch.updateViews();
     }
 
     @Override
@@ -80,48 +79,6 @@ public class StopWatch extends Activity {
         stopwatch.save(options, "");
         stopwatch.stopUpdating();
     }
-/*
-    void setParams() {
-        if (chrono == null)
-            return;
-        if (!active) {
-            if (chronoStarted) {
-                stopwatch.stop();
-                chronoStarted = false;
-            }
-            chrono.setText(formatTime(0));
-            startButton.setText("Start");
-            resetButton.setVisibility(View.INVISIBLE);
-        }
-        else {
-            if (paused) {
-                if (chronoStarted) {
-                    stopwatch.stop();
-                    chronoStarted = false;
-                }
-                chrono.setText(formatTime(pausedTime - baseTime));
-                startButton.setText("Continue");
-                resetButton.setVisibility(View.VISIBLE);
-            } else {
-                if (chronoStarted)
-                    stopwatch.stop();
-                stopwatch.baseTime = baseTime;
-                stopwatch.start();
-                chronoStarted = true;
-                startButton.setText("Stop");
-                resetButton.setVisibility(View.INVISIBLE);
-            }
-        }
-
-        MyChrono.maximizeSize(chrono);
-
-        SharedPreferences.Editor ed = options.edit();
-        ed.putLong(PREFS_START_TIME, baseTime);
-        ed.putLong(PREFS_PAUSED_TIME, pausedTime);
-        ed.putBoolean(PREFS_ACTIVE, active);
-        ed.putBoolean(PREFS_PAUSED, paused);
-        ed.commit();
-    } */
 
     void updateButtons() {
         if (!stopwatch.active) {
@@ -140,12 +97,12 @@ public class StopWatch extends Activity {
     }
 
     void pressReset() {
-        stopwatch.reset();
+        stopwatch.resetButton();
         updateButtons();
     }
 
     void pressStart() {
-        stopwatch.start();
+        stopwatch.startStopButton();
         updateButtons();
     }
 

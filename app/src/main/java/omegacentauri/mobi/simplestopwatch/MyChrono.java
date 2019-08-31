@@ -1,5 +1,7 @@
 package omegacentauri.mobi.simplestopwatch;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -8,6 +10,8 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -21,7 +25,9 @@ public class MyChrono {
     private static final String PREFS_ACTIVE = "active";
     private static final String PREFS_PAUSED = "paused";
     private static final String PREFS_BOOT_TIME = "boot";
-    TextView mainView;
+    private final Context context;
+    TextView mainView1;
+    TextView mainView2;
     TextView fractionView;
     public long baseTime;
     public long pauseTime;
@@ -32,8 +38,10 @@ public class MyChrono {
     Handler updateHandler;
     public int precision = 100;
 
-    public MyChrono(final TextView mainView, final TextView fractionView) {
-        this.mainView = mainView;
+    public MyChrono(Context context, final TextView mainView1, final TextView mainView2, final TextView fractionView) {
+        this.mainView1 = mainView1;
+        this.mainView2 = mainView2;
+        this.context = context;
         this.fractionView = fractionView;
 
         updateHandler = new Handler() {
@@ -41,30 +49,47 @@ public class MyChrono {
                 updateViews();
             }
         };
-
-        timer = new Timer();
     }
 
     public void updateViews() {
         long t = active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
-        String main = formatTime(t);
-        String fraction = formatTimeFraction(t);
-        MyChrono.this.mainView.setText(main);
-        maximizeSize(MyChrono.this.mainView);
-        MyChrono.this.fractionView.setText(fraction);
+        String line1 = formatTime(t,1);
+        String line2 = formatTime(t,2);
+        maximizeSize(mainView1, line1);
+        if (mainView2.getVisibility() == View.VISIBLE)
+            maximizeSize(mainView2, line2);
+        fractionView.setText(formatTimeFraction(t));
     }
 
-    static String formatTime(long t) {
+    String formatTime(long t, int line) {
         t /= 1000;
         int s = (int) (t % 60);
         t /= 60;
         int m = (int) (t % 60);
         t /= 60;
         int h = (int) t;
-        if (h != 0)
-            return String.format("%d:%02d:%02d", h, m, s);
-        else
-            return String.format("%02d:%02d", m, s);
+        if (mainView2.getVisibility() == View.VISIBLE) {
+            if (line == 1) {
+                if (h != 0)
+                    return String.format("%d:%02d", h, m);
+                else
+                    return String.format("%d", m);
+            }
+            else {
+                return String.format("%02d", s);
+            }
+        }
+        else {
+            if (line == 1) {
+                if (h != 0)
+                    return String.format("%d:%02d:%02d", h, m, s);
+                else
+                    return String.format("%d:%02d", m, s);
+            }
+            else {
+                return "";
+            }
+        }
     }
 
     String formatTimeFraction(long t) {
@@ -78,37 +103,41 @@ public class MyChrono {
             return "";
     }
 
-    public static void maximizeSize(TextView v) {
-        String s = ((String)v.getText()).replaceAll("[0-9]", "8");
-        if (s.length() == 0)
+    private static void maximizeSize(TextView v, String text) {
+        if (text.length() == 0) {
+            v.setText(text);
             return;
+        }
+        String s = text.replaceAll("[0-9]", "8");
         Paint p = new Paint(v.getPaint());
         p.setTextSize(50);
         Rect bounds = new Rect();
         p.getTextBounds((String)s, 0, s.length(), bounds);
         float textWidth = bounds.width();
-        float textHeight = bounds.height();
+        float textHeight = p.getFontMetrics().bottom - p.getFontMetrics().top;
 
         if (v.getWidth() > 0 && v.getHeight() > 0) {
             try {
-                float scale = Math.min(v.getWidth() / (float)bounds.width(), v.getHeight() / (float)bounds.height());
-                float newSize = (float) (p.getTextSize()*scale*0.9);
+                float scale = Math.min(v.getWidth() / textWidth, v.getHeight() / (float)textHeight);
+                float newSize = (float) (p.getTextSize()*scale*0.98);
                 if (Math.abs(newSize - v.getTextSize()) > 10) {
                     v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
                 }
             }
             catch(Exception e) {}
         }
+        v.setText(text);
     }
 
-    public void reset() {
+    public void resetButton() {
         if (! paused)
             return;
         stopUpdating();
         active = false;
+        updateViews();
     }
 
-    public void start() {
+    public void startStopButton() {
         if (active && paused) {
             baseTime += SystemClock.elapsedRealtime() - pauseTime;
             paused = false;
@@ -128,24 +157,19 @@ public class MyChrono {
         updateViews();
     }
 
-    public void pause() {
-        stopUpdating();
-        pauseTime = SystemClock.elapsedRealtime();
-        paused = true;
-        updateViews();
-    }
-
-    public void resume() {
-    }
-
     public void restore(SharedPreferences pref, String prefix) {
         baseTime = pref.getLong(prefix+PREFS_START_TIME, 0);
         pauseTime = pref.getLong(prefix+PREFS_PAUSED_TIME, 0);
         active = pref.getBoolean(prefix+PREFS_ACTIVE, false);
         paused = pref.getBoolean(prefix+PREFS_PAUSED, false);
+        if (SystemClock.elapsedRealtime() <= baseTime)
+            active = false;
 
         if (active && !paused) {
             startUpdating();
+        }
+        else {
+            stopUpdating();
         }
         updateViews();
     }
@@ -160,27 +184,37 @@ public class MyChrono {
     }
 
     public void stopUpdating() {
-        timer.purge();
+        if (timer != null) {
+            Log.v("chrono", "stop update");
+            timer.cancel();
+            timer = null;
+        }
+        ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     public void startUpdating() {
-        timer.purge();
-        timer.schedule(new TimerTask() {
+        if (timer == null) {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
 
-            @Override
-            public void run() {
-                updateHandler.obtainMessage(1).sendToTarget();
-            }
-        }, 0, precision);
+                @Override
+                public void run() {
+                    updateHandler.obtainMessage(1).sendToTarget();
+                }
+            }, 0, precision);
+        }
+        ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     public static void clearSaved(SharedPreferences pref, String prefix) {
         SharedPreferences.Editor ed = pref.edit();
         ed.putBoolean(prefix+PREFS_ACTIVE, false);
         ed.apply();
+        Log.v("chrono", "cleared "+prefix+PREFS_ACTIVE);
     }
 
     public static void detectBoot(SharedPreferences options, String prefix) {
+        return;/*
         long bootTime = java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
         long oldBootTime = options.getLong(prefix+PREFS_BOOT_TIME, -100000);
         SharedPreferences.Editor ed = options.edit();
@@ -188,6 +222,6 @@ public class MyChrono {
             ed.putBoolean(prefix+PREFS_ACTIVE, false);
         }
         ed.putLong(prefix+PREFS_BOOT_TIME, bootTime);
-        ed.apply();
+        ed.apply(); */
     }
 }
