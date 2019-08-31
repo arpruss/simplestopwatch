@@ -56,8 +56,15 @@ public class MyChrono {
         String line1 = formatTime(t,1);
         String line2 = formatTime(t,2);
         maximizeSize(mainView1, line1);
-        if (mainView2.getVisibility() == View.VISIBLE)
+        if (mainView2.getVisibility() == View.VISIBLE) {
             maximizeSize(mainView2, line2);
+            float s1 = mainView1.getTextSize();
+            float s2 = mainView2.getTextSize();
+            if (s1 > s2)
+                mainView1.setTextSize(s2);
+            else if (s1 < s2)
+                mainView2.setTextSize(s1);
+        }
         fractionView.setText(formatTimeFraction(t));
     }
 
