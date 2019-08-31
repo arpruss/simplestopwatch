@@ -104,7 +104,7 @@ public class MyChrono {
     }
 
     private static void maximizeSize(TextView v, String text) {
-        if (text.length() == 0) {
+        if (text.length() == 0 && v.getText().length() > 0) {
             v.setText(text);
             return;
         }
@@ -114,15 +114,18 @@ public class MyChrono {
         Rect bounds = new Rect();
         p.getTextBounds((String)s, 0, s.length(), bounds);
         float textWidth = bounds.width();
-        float textHeight = p.getFontMetrics().bottom - p.getFontMetrics().top;
+        float textHeight =  Math.abs(p.getFontMetrics().ascent);
+        Log.v("chrono", ""+p.getFontMetrics().ascent);
+        //float textHeight = p.getFontMetrics().bottom - p.getFontMetrics().top;
 
         if (v.getWidth() > 0 && v.getHeight() > 0) {
             try {
                 float scale = Math.min(v.getWidth() / textWidth, v.getHeight() / (float)textHeight);
                 float newSize = (float) (p.getTextSize()*scale*0.98);
-                if (Math.abs(newSize - v.getTextSize()) > 10) {
+                if (Math.abs(newSize - v.getTextSize()) > 10)
                     v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
-                }
+                else if (v.getText() == text)
+                    return;
             }
             catch(Exception e) {}
         }

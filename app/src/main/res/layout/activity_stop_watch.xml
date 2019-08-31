@@ -8,7 +8,7 @@
     android:background="#000000"
     tools:context=".StopWatch">
 
-    <TextView
+    <omegacentauri.mobi.simplestopwatch.ShortTextView
         android:id="@+id/chrono1"
         android:layout_width="match_parent"
         android:layout_height="0sp"
@@ -20,7 +20,7 @@
         android:padding="0sp"
 />
 
-    <TextView
+    <omegacentauri.mobi.simplestopwatch.ShortTextView
         android:id="@+id/chrono2"
         android:layout_width="match_parent"
         android:layout_height="0sp"
