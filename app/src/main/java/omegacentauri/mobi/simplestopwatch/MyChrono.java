@@ -114,7 +114,8 @@ public class MyChrono {
         Rect bounds = new Rect();
         p.getTextBounds((String)s, 0, s.length(), bounds);
         float textWidth = bounds.width();
-        float textHeight =  Math.abs(p.getFontMetrics().ascent);
+        float textHeight = bounds.height();
+//        float textHeight =  Math.abs(p.getFontMetrics().ascent);
         Log.v("chrono", ""+p.getFontMetrics().ascent);
         //float textHeight = p.getFontMetrics().bottom - p.getFontMetrics().top;
 
