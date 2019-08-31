@@ -1,6 +1,7 @@
 package omegacentauri.mobi.simplestopwatch;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -38,7 +39,7 @@ public class StopWatch extends Activity {
         chrono2 = (TextView)findViewById(R.id.chrono2);
         resetButton = (Button)findViewById(R.id.reset);
         startButton = (Button)findViewById(R.id.start);
-        stopwatch = new MyChrono(this, chrono1, chrono2, (TextView)findViewById(R.id.fraction));
+        stopwatch = new MyChrono(this, options, chrono1, chrono2, (TextView)findViewById(R.id.fraction));
     }
 
     @Override
@@ -127,5 +128,9 @@ public class StopWatch extends Activity {
             return true;
         }
         return false;
+    }
+
+    public void onButtonSettings(View view) {
+        startActivity(new Intent(this, Options.class));
     }
 }

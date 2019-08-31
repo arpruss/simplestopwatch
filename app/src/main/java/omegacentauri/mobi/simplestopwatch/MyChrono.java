@@ -36,12 +36,14 @@ public class MyChrono {
     TextView view;
     Timer timer;
     Handler updateHandler;
+    SharedPreferences options;
     public int precision = 100;
 
-    public MyChrono(Context context, final TextView mainView1, final TextView mainView2, final TextView fractionView) {
+    public MyChrono(Context context, SharedPreferences options, final TextView mainView1, final TextView mainView2, final TextView fractionView) {
         this.mainView1 = mainView1;
         this.mainView2 = mainView2;
         this.context = context;
+        this.options = options;
         this.fractionView = fractionView;
 
         updateHandler = new Handler() {
@@ -173,6 +175,7 @@ public class MyChrono {
         pauseTime = pref.getLong(prefix+PREFS_PAUSED_TIME, 0);
         active = pref.getBoolean(prefix+PREFS_ACTIVE, false);
         paused = pref.getBoolean(prefix+PREFS_PAUSED, false);
+        precision = Integer.parseInt(pref.getString("precision", "100"));
         if (SystemClock.elapsedRealtime() <= baseTime)
             active = false;
 
@@ -214,7 +217,10 @@ public class MyChrono {
                 }
             }, 0, precision);
         }
-        ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (options.getBoolean("screenOn", false))
+            ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        else
+            ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     public static void clearSaved(SharedPreferences pref, String prefix) {

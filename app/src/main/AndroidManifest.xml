@@ -15,6 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Options">
+            <intent-filter>
+                <category android:name="android.intent.category.PREFERENCE" />
+            </intent-filter>
+        </activity>
         <receiver android:name=".boot" android:enabled="true" android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>

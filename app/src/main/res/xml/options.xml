@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference android:title="Keep screen on"
+        android:key="screenOn"
+        android:defaultValue="false"
+        android:summary="Do not allow device to go to sleep while stopwatch is running"></CheckBoxPreference>
+    <ListPreference android:title="Display Precision"
+        android:summary="Set precision in seconds"
+        android:key="precision"
+        android:defaultValue="100"
+        android:entries="@array/precisionDisplayValues"
+        android:entryValues="@array/precisionValues" />
+</PreferenceScreen>
