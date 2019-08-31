@@ -36,6 +36,9 @@ public class StopWatch extends Activity {
     private static final int RECOLORABLE_TEXTVIEW[] = {
         R.id.chrono1, R.id.chrono2, R.id.fraction
     };
+    private static final int RECOLORABLE_BUTTON[] = {
+            R.id.start, R.id.reset
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +58,20 @@ public class StopWatch extends Activity {
         int fore = Options.getForeColor(options);
         int back = Options.getBackColor(options);
 
-//        ((ViewGroup) getWindow().getDecorView()).setBackgroundColor(back);
         ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(back);
-        Window w = this.getWindow();
-        w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         for (int id : RECOLORABLE_TEXTVIEW) {
             ((TextView)findViewById(id)).setTextColor(fore);
-            ((TextView)findViewById(id)).setBackgroundColor(back);
+           // ((TextView)findViewById(id)).setBackgroundColor(back);
 
+        }
+        int buttonBack = fore == Color.WHITE ? 0xFFD0D0D0 :
+                         fore == Color.BLACK ? 0xFF303030 :
+                                 fore;
+        for (int id : RECOLORABLE_BUTTON) {
+            Button b = findViewById(id);
+            b.setTextColor(back);
+            b.setBackgroundColor(buttonBack);
         }
         ((ImageButton)findViewById(R.id.settings)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
     }
