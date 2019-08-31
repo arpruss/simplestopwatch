@@ -76,18 +76,19 @@ public class MyChrono {
     }
 
     String formatTime(long t, int line) {
+        boolean twoLine = mainView2.getVisibility() == View.VISIBLE;
         t /= 1000;
         int s = (int) (t % 60);
         t /= 60;
         int m = (int) (t % 60);
         t /= 60;
         int h = (int) t;
-        if (mainView2.getVisibility() == View.VISIBLE) {
+        if (twoLine) {
             if (line == 1) {
                 if (h != 0)
                     return String.format("%d:%02d", h, m);
                 else
-                    return String.format("%d", m);
+                    return String.format("%02d", m);
             }
             else {
                 return String.format("%02d", s);
