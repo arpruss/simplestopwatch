@@ -112,6 +112,7 @@ public class MyChrono {
             return "";
     }
 
+    @SuppressLint("ResourceType")
     private void maximizeSize(ShortTextView v, String text, float scale, int prec) {
         float curSize = v.getTextSize();
 
@@ -139,7 +140,8 @@ public class MyChrono {
             return;
 
         Log.v("chrono", "new size "+newSize+ " on height "+v.getHeight());
-        Log.v("chrono", "screen Height" +context.getWindow().getDecorView().getHeight());
+        Log.v("chrono", "screen height " +context.getWindow().getDecorView().getHeight());
+        Log.v("chrono", "activity height " +context.findViewById(R.id.main).getHeight());
 
         v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
     }
