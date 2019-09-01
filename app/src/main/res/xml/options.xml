@@ -4,6 +4,22 @@
         android:key="screenOn"
         android:defaultValue="false"
         android:summary="Do not allow device to go to sleep while stopwatch is running"></CheckBoxPreference>
+    <CheckBoxPreference android:title="Show hours:minutes"
+        android:key="hours"
+        android:defaultValue="true"
+        android:summary="Choose whether to show hours when time goes over 60 minutes"></CheckBoxPreference>
+    <ListPreference android:title="Maximum Size"
+        android:summary="Some devices have trouble drawing extremely large digits and need a limitation."
+        android:key="maxSize"
+        android:defaultValue="1200"
+        android:entries="@array/maximumValues"
+        android:entryValues="@array/maximumValues" />
+    <ListPreference android:title="Display Format"
+        android:summary="Choose display format (shorter formats may be used to save space as needed)"
+        android:key="format"
+        android:defaultValue="h:m:s"
+        android:entries="@array/formatValues"
+        android:entryValues="@array/formatValues" />
     <ListPreference android:title="Display Precision"
         android:summary="Set precision in seconds"
         android:key="precision"
@@ -16,4 +32,10 @@
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />
+    <ListPreference android:title="Orientation"
+        android:summary="Set display orientation"
+        android:key="orientation"
+        android:defaultValue="automatic"
+        android:entries="@array/orientationValues"
+        android:entryValues="@array/orientationValues" />
 </PreferenceScreen>

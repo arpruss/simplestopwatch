@@ -17,7 +17,12 @@ public class Options extends PreferenceActivity {
     public static final String PREFS_SCREEN_ON = "screenOn";
     public static final String PREFS_PRECISION = "precision";
     public static final String PREFS_COLOR = "color";
+    public static final String PREFS_ORIENTATION = "orientation";
+    public static final String PREF_FORMAT = "format";
+    public static final String PREF_MAX_SIZE = "maxSize";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
+    static final int[] defaultColor = {Color.WHITE, Color.BLACK};
+
     private static void addColor(String name, int fg, int bg) {
         colorMap.put(name, new int[]{fg,bg});
     }
@@ -29,11 +34,21 @@ public class Options extends PreferenceActivity {
     }
 
     static int getForeColor(SharedPreferences options) {
-        return colorMap.get(options.getString(PREFS_COLOR, "white on black"))[0];
+        try {
+            return colorMap.get(options.getString(PREFS_COLOR, "white on black"))[0];
+        }
+        catch(Exception e) {
+            return defaultColor[0];
+        }
     }
 
     static int getBackColor(SharedPreferences options) {
-        return colorMap.get(options.getString(PREFS_COLOR, "white on black"))[1];
+        try {
+            return colorMap.get(options.getString(PREFS_COLOR, "white on black"))[1];
+        }
+        catch(Exception e) {
+            return defaultColor[1];
+        }
     }
 
     @Override

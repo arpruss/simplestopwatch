@@ -1,15 +1,18 @@
 package omegacentauri.mobi.simplestopwatch;
 //
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -20,9 +23,8 @@ import java.util.TimerTask;
 import static java.lang.Float.max;
 
 public class MyChrono {
-    private final Context context;
-    TextView mainView1;
-    TextView mainView2;
+    private final Activity context;
+    ShortTextView mainView;
     TextView fractionView;
     public long baseTime;
     public long pauseTime;
@@ -30,16 +32,19 @@ public class MyChrono {
     public boolean active = false;
     TextView view;
     Timer timer;
+    int maxSize;
     Handler updateHandler;
     SharedPreferences options;
     public int precision = 100;
 
-    public MyChrono(Context context, SharedPreferences options, final TextView mainView1, final TextView mainView2, final TextView fractionView) {
-        this.mainView1 = mainView1;
-        this.mainView2 = mainView2;
+    @SuppressLint("NewApi")
+    public MyChrono(Activity context, SharedPreferences options, ShortTextView mainView, TextView fractionView) {
+        this.mainView = mainView;
         this.context = context;
         this.options = options;
         this.fractionView = fractionView;
+        this.maxSize = Integer.parseInt(options.getString(Options.PREF_MAX_SIZE, "1200"));
+        Log.v("chrono", "maxSize " +this.maxSize);
 
         updateHandler = new Handler() {
             public void handleMessage(Message m) {
@@ -50,17 +55,8 @@ public class MyChrono {
 
     public void updateViews() {
         long t = active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
-        String line1 = formatTime(t,1);
-        String line2 = formatTime(t,2);
-        float s1 = maximizeSize(mainView1, line1, 0.96f);
-        if (mainView2.getVisibility() == View.VISIBLE) {
-            float size = Math.min(s1, maximizeSize(mainView2, line2, 0.96f));
-            optionalSetSizeAndText(mainView1, size, line1);
-            optionalSetSizeAndText(mainView2, size, line2);
-        }
-        else {
-            optionalSetSizeAndText(mainView1, s1, line1);
-        }
+        String line1 = formatTime(t);
+        maximizeSize(mainView, line1, 0.96f, 10);
         fractionView.setText(formatTimeFraction(t));
     }
 
@@ -72,35 +68,36 @@ public class MyChrono {
 
     }
 
-    String formatTime(long t, int line) {
-        boolean twoLine = mainView2.getVisibility() == View.VISIBLE;
+    String formatTime(long t) {
+        String format = options.getString(Options.PREF_FORMAT, "h:m:s");
         t /= 1000;
+        if (format.equals("s")) {
+            return String.format("%02d", t);
+        }
         int s = (int) (t % 60);
         t /= 60;
-        int m = (int) (t % 60);
-        t /= 60;
-        int h = (int) t;
-        if (twoLine) {
-            if (line == 1) {
-                if (h != 0)
-                    return String.format("%d:%02d", h, m);
-                else
-                    return String.format("%02d", m);
-            }
-            else {
-                return String.format("%02d", s);
-            }
+        int m;
+        int h;
+        if (format.equals("h:m:s")) {
+            m = (int) (t % 60);
+            t /= 60;
+            h = (int) t;
         }
         else {
-            if (line == 1) {
-                if (h != 0)
-                    return String.format("%d:%02d:%02d", h, m, s);
-                else
-                    return String.format("%d:%02d", m, s);
-            }
-            else {
-                return "";
-            }
+            m = (int) t;
+            h = 0;
+        }
+        if (mainView.getHeight() > mainView.getWidth()) {
+            if (h != 0)
+                return String.format("%d:%02d\n%02d", h, m, s);
+            else
+                return String.format("%02d\n%02d", m, s);
+        }
+        else {
+            if (h != 0)
+                return String.format("%d:%02d:%02d", h, m, s);
+            else
+                return String.format("%d:%02d", m, s);
         }
     }
 
@@ -115,33 +112,44 @@ public class MyChrono {
             return "";
     }
 
-    private static float maximizeSize(TextView v, String text, float scale) {
+    private void maximizeSize(ShortTextView v, String text, float scale, int prec) {
         float curSize = v.getTextSize();
-        if (text.length() == 0)
-            return curSize;
+
+        if (! v.getText().equals(text))
+            v.setText(text);
+
+        if (text.length() == 0) {
+            return;
+        }
         float vWidth = v.getWidth();
         float vHeight = v.getHeight();
-        if (vWidth == 0 || vHeight == 0)
-            return curSize;
-        String s = text.replaceAll("[0-9]", "8");
-        Paint p = new Paint(v.getPaint());
-        p.setTextSize(50);
+        if (vWidth == 0 || vHeight == 0) {
+            return;
+        }
         Rect bounds = new Rect();
-        p.getTextBounds((String)s, 0, s.length(), bounds);
+        v.measureText(bounds);
         float textWidth = bounds.width();
         float textHeight = bounds.height();
         if (textWidth == 0 || textHeight == 0)
-            return curSize;
+            return;
 
-        float resize = Math.min(vWidth/textWidth, vHeight/textHeight);
-        return (float)(p.getTextSize()*scale*resize);
+        float newSize = Math.min(maxSize, Math.min(vWidth/textWidth, vHeight/textHeight) * curSize * scale);
+
+        if (Math.abs(newSize-curSize) < prec)
+            return;
+
+        Log.v("chrono", "new size "+newSize+ " on height "+v.getHeight());
+        Log.v("chrono", "screen Height" +context.getWindow().getDecorView().getHeight());
+
+        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
     }
 
     public void resetButton() {
         if (! paused)
             return;
-        stopUpdating();
         active = false;
+        stopUpdating();
+        save();
         updateViews();
     }
 
@@ -150,22 +158,26 @@ public class MyChrono {
             baseTime += SystemClock.elapsedRealtime() - pauseTime;
             paused = false;
             startUpdating();
+            save();
         }
         else if (!active) {
             baseTime = SystemClock.elapsedRealtime();
             paused = false;
             active = true;
             startUpdating();
+            save();
         }
         else {
             paused = true;
             pauseTime = SystemClock.elapsedRealtime();
             stopUpdating();
+            save();
         }
         updateViews();
     }
 
     public void restore() {
+        maxSize = Integer.parseInt(options.getString(Options.PREF_MAX_SIZE, "1200"));
         baseTime = options.getLong(Options.PREFS_START_TIME, 0);
         pauseTime = options.getLong(Options.PREFS_PAUSED_TIME, 0);
         active = options.getBoolean(Options.PREFS_ACTIVE, false);

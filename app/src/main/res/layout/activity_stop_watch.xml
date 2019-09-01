@@ -9,27 +9,16 @@
     tools:context=".StopWatch">
 
     <omegacentauri.mobi.simplestopwatch.ShortTextView
-        android:id="@+id/chrono1"
+        android:id="@+id/chrono"
         android:layout_width="match_parent"
-        android:layout_height="0sp"
+        android:layout_height="0px"
         android:layout_weight="1"
         android:gravity="center"
         android:text=""
+        android:fontFamily="sans-serif"
         android:textColor="#FFFFFF"
         android:textSize="50sp"
         android:padding="0sp"
-/>
-
-    <omegacentauri.mobi.simplestopwatch.ShortTextView
-        android:id="@+id/chrono2"
-        android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="0sp"
-        android:text=""
-        android:textColor="#FFFFFF"
-        android:textSize="50sp"
 />
 
     <LinearLayout

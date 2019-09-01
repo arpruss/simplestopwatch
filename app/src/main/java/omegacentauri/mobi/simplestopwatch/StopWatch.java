@@ -3,6 +3,7 @@ package omegacentauri.mobi.simplestopwatch;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -31,15 +32,14 @@ public class StopWatch extends Activity {
     boolean active = false;
     boolean paused = false;
     boolean chronoStarted = false;
-    private TextView chrono1 = null;
-    private TextView chrono2 = null;
+    private ShortTextView chrono = null;
     private MyChrono stopwatch;
     private Button resetButton;
     private Button startButton;
     private float unselectedThickness = 2f;
     private float selectedThickness = 6f;
     private static final int RECOLORABLE_TEXTVIEW[] = {
-        R.id.chrono1, R.id.chrono2, R.id.fraction
+        R.id.chrono, R.id.fraction
     };
     private static final int RECOLORABLE_BUTTON[] = {
             R.id.start, R.id.reset
@@ -57,11 +57,10 @@ public class StopWatch extends Activity {
         options = PreferenceManager.getDefaultSharedPreferences(this);
         MyChrono.detectBoot(options);
         setContentView(R.layout.activity_stop_watch);
-        chrono1 = (TextView)findViewById(R.id.chrono1);
-        chrono2 = (TextView)findViewById(R.id.chrono2);
+        chrono = (ShortTextView)findViewById(R.id.chrono);
         resetButton = (Button)findViewById(R.id.reset);
         startButton = (Button)findViewById(R.id.start);
-        stopwatch = new MyChrono(this, options, chrono1, chrono2, (TextView)findViewById(R.id.fraction));
+        stopwatch = new MyChrono(this, options, chrono, (TextView)findViewById(R.id.fraction));
         highlighter = new View.OnTouchListener() {
 
             @Override
@@ -104,16 +103,17 @@ public class StopWatch extends Activity {
     protected void onResume() {
         super.onResume();
 
+        String o = options.getString(Options.PREFS_ORIENTATION, "automatic");
+        if (o.equals("landscape"))
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        else if (o.equals("portrait"))
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        else
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+
         setColorScheme();
         int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.v("chrono", "landscape");
-            chrono2.setVisibility(View.GONE);
-        } else {
-            Log.v("chrono", "portrait");
-            chrono2.setVisibility(View.VISIBLE);
-        }
-        chrono1.post(new Runnable() {
+        chrono.post(new Runnable() {
             @Override
             public void run() {
                 stopwatch.updateViews();
@@ -137,7 +137,7 @@ public class StopWatch extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        stopwatch.save();
+        //stopwatch.save();
         stopwatch.stopUpdating();
     }
 
