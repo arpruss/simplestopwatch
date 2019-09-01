@@ -6,12 +6,15 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -33,12 +36,19 @@ public class StopWatch extends Activity {
     private MyChrono stopwatch;
     private Button resetButton;
     private Button startButton;
+    private float unselectedThickness = 2f;
+    private float selectedThickness = 6f;
     private static final int RECOLORABLE_TEXTVIEW[] = {
         R.id.chrono1, R.id.chrono2, R.id.fraction
     };
     private static final int RECOLORABLE_BUTTON[] = {
             R.id.start, R.id.reset
     };
+    private View.OnTouchListener highlighter;
+
+    public float dp2px(float dp){
+        return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +62,22 @@ public class StopWatch extends Activity {
         resetButton = (Button)findViewById(R.id.reset);
         startButton = (Button)findViewById(R.id.start);
         stopwatch = new MyChrono(this, options, chrono1, chrono2, (TextView)findViewById(R.id.fraction));
+        highlighter = new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    GradientDrawable gd = (GradientDrawable) view.getBackground();
+                    gd.setStroke((int)dp2px(selectedThickness), Options.getForeColor(options));
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    GradientDrawable gd = (GradientDrawable) view.getBackground();
+                    gd.setStroke((int)dp2px(unselectedThickness), Options.getForeColor(options));
+                }
+                return false;
+            }
+        };
+        startButton.setOnTouchListener(highlighter);
+        resetButton.setOnTouchListener(highlighter);
     }
 
     void setColorScheme() {
@@ -62,17 +88,15 @@ public class StopWatch extends Activity {
 
         for (int id : RECOLORABLE_TEXTVIEW) {
             ((TextView)findViewById(id)).setTextColor(fore);
-           // ((TextView)findViewById(id)).setBackgroundColor(back);
-
         }
-        int buttonBack = fore == Color.WHITE ? 0xFFD0D0D0 :
-                         fore == Color.BLACK ? 0xFF303030 :
-                                 fore;
+
         for (int id : RECOLORABLE_BUTTON) {
             Button b = findViewById(id);
-            b.setTextColor(back);
-            b.setBackgroundColor(buttonBack);
+            b.setTextColor(fore);
+            GradientDrawable gd = (GradientDrawable)b.getBackground();
+            gd.setStroke((int)dp2px(unselectedThickness), fore);
         }
+
         ((ImageButton)findViewById(R.id.settings)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
     }
 

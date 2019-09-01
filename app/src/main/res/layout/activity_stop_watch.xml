@@ -38,19 +38,25 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/start"
-                android:layout_width="0sp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Start"
-                android:onClick="onButtonStart" />
+        <Button
+            android:id="@+id/start"
+            android:layout_width="0sp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/oval"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="8dp"
+            android:onClick="onButtonStart"
+            android:text="Start" />
 
             <Button
                 android:id="@+id/reset"
                 android:layout_width="0sp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/oval"
+                android:textColor="@android:color/white"
+                android:layout_marginRight="8dp"
                 android:text="Reset"
                 android:onClick="onButtonReset" />
         <ImageButton
