@@ -2,29 +2,22 @@ package omegacentauri.mobi.simplestopwatch;
 //
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static java.lang.Float.max;
-
 public class MyChrono {
     private final Activity context;
-    ShortTextView mainView;
+    BigTextView mainView;
     TextView fractionView;
     public long baseTime;
     public long pauseTime;
@@ -38,7 +31,7 @@ public class MyChrono {
     public int precision = 100;
 
     @SuppressLint("NewApi")
-    public MyChrono(Activity context, SharedPreferences options, ShortTextView mainView, TextView fractionView) {
+    public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView) {
         this.mainView = mainView;
         this.context = context;
         this.options = options;
@@ -56,6 +49,7 @@ public class MyChrono {
     public void updateViews() {
         long t = active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
         String line1 = formatTime(t);
+        Log.v("chrono", "update");
         maximizeSize(mainView, line1, 0.96f, 10);
         fractionView.setText(formatTimeFraction(t));
     }
@@ -113,11 +107,10 @@ public class MyChrono {
     }
 
     @SuppressLint("ResourceType")
-    private void maximizeSize(ShortTextView v, String text, float scale, int prec) {
-        float curSize = v.getTextSize();
+    private void maximizeSize(BigTextView v, String text, float scale, int prec) {
+        float curSize = v.getTextSizePixels();
 
-        if (! v.getText().equals(text))
-            v.setText(text);
+        v.setText(text);
 
         if (text.length() == 0) {
             return;
@@ -127,7 +120,7 @@ public class MyChrono {
         if (vWidth == 0 || vHeight == 0) {
             return;
         }
-        Rect bounds = new Rect();
+        RectF bounds = new RectF();
         v.measureText(bounds);
         float textWidth = bounds.width();
         float textHeight = bounds.height();
@@ -143,7 +136,7 @@ public class MyChrono {
         Log.v("chrono", "screen height " +context.getWindow().getDecorView().getHeight());
         Log.v("chrono", "activity height " +context.findViewById(R.id.main).getHeight());
 
-        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
+        v.setTextSizePixels(newSize);
     }
 
     public void resetButton() {
@@ -208,7 +201,6 @@ public class MyChrono {
 
     public void stopUpdating() {
         if (timer != null) {
-            Log.v("chrono", "stop update");
             timer.cancel();
             timer = null;
         }

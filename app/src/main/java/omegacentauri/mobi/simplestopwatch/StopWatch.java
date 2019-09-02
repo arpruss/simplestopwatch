@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -18,10 +15,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -32,14 +26,14 @@ public class StopWatch extends Activity {
     boolean active = false;
     boolean paused = false;
     boolean chronoStarted = false;
-    private ShortTextView chrono = null;
+    private BigTextView chrono = null;
     private MyChrono stopwatch;
     private Button resetButton;
     private Button startButton;
     private float unselectedThickness = 2f;
     private float selectedThickness = 6f;
     private static final int RECOLORABLE_TEXTVIEW[] = {
-        R.id.chrono, R.id.fraction
+        R.id.fraction
     };
     private static final int RECOLORABLE_BUTTON[] = {
             R.id.start, R.id.reset
@@ -57,7 +51,7 @@ public class StopWatch extends Activity {
         options = PreferenceManager.getDefaultSharedPreferences(this);
         MyChrono.detectBoot(options);
         setContentView(R.layout.activity_stop_watch);
-        chrono = (ShortTextView)findViewById(R.id.chrono);
+        chrono = (BigTextView)findViewById(R.id.chrono);
         resetButton = (Button)findViewById(R.id.reset);
         startButton = (Button)findViewById(R.id.start);
         stopwatch = new MyChrono(this, options, chrono, (TextView)findViewById(R.id.fraction));
@@ -88,6 +82,8 @@ public class StopWatch extends Activity {
         for (int id : RECOLORABLE_TEXTVIEW) {
             ((TextView)findViewById(id)).setTextColor(fore);
         }
+
+        chrono.setTextColor(fore);
 
         for (int id : RECOLORABLE_BUTTON) {
             Button b = findViewById(id);

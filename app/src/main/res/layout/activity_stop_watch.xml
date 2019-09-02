@@ -9,15 +9,13 @@
     android:id="@+id/main"
     tools:context=".StopWatch">
 
-    <omegacentauri.mobi.simplestopwatch.ShortTextView
+    <omegacentauri.mobi.simplestopwatch.BigTextView
         android:id="@+id/chrono"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="1"
         android:gravity="center"
         android:text=""
-        android:fontFamily="sans-serif"
-        android:textColor="#FFFFFF"
         android:textSize="50sp"
         android:padding="0sp"
 />

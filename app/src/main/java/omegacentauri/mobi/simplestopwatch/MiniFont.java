@@ -26,7 +26,7 @@ public class MiniFont {
         defaultFontSize = s;
     }
 
-    public void measureText(String text, int start, int end, RectF bounds, float scale) {
+    public void getTextBounds(Paint paint, String text, int start, int end, RectF bounds) {
         float x = 0;
         if (end == start) {
             bounds.set(0, 0, 0, 0);
@@ -40,13 +40,9 @@ public class MiniFont {
             try {
                 Glyph g = map.get(c);
                 glyphBounds.set(g.bounds);
-                glyphBounds.left *= scale;
-                glyphBounds.right *= scale;
-                glyphBounds.top *= scale;
-                glyphBounds.bottom *= scale;
                 glyphBounds.left += x;
                 glyphBounds.right += x;
-                x += g.width * scale;
+                x += g.width;
                 if (i == start)
                     bounds.set(glyphBounds);
                 else
@@ -55,22 +51,25 @@ public class MiniFont {
             catch(Exception e) {
             }
         }
+
+        float scale = paint.getTextSize() / defaultFontSize;
+        bounds.left *= scale;
+        bounds.right *= scale;
+        bounds.bottom *= scale;
+        bounds.top *= scale;
     }
 
-    public void drawText(Canvas canvas, String text, int start, int end, RectF bounds, float scale, Paint paint) {
-        float x = 0;
-        if (end == start) {
-            return;
-        }
+    public void drawText(Canvas canvas, String text, float x, float y, Paint paint) {
+        Matrix m = new Matrix();
+        float scale = paint.getTextSize() / defaultFontSize;
 
-        for (int i=start; i<start+end; i++) {
+        for (int i=0; i<text.length(); i++) {
             char c = text.charAt(i);
             try {
                 Glyph g = map.get(c);
                 Path p = new Path(g.path);
-                Matrix m = new Matrix();
                 m.setScale(scale, scale);
-                m.postTranslate(x, 0f);
+                m.postTranslate(x, y);
                 p.transform(m);
                 canvas.drawPath(p, paint);
                 x += g.width * scale;
