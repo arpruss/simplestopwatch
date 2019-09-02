@@ -14,8 +14,10 @@ import android.widget.TextView;
 public class ShortTextView extends TextView {
     Rect bounds = new Rect();
     public float lineSpacing = 1.05f;
+    final MiniFont mf = new SansDigitsColon();
 
     public ShortTextView(Context context, AttributeSet attrs) {
+
         super(context, attrs);
     }
 
@@ -58,5 +60,8 @@ public class ShortTextView extends TextView {
         for (int i = 0 ; i < n ; i++) {
             canvas.drawText(lines[i], xOffsets[i], dy + yOffsets[i], p);
         }
+//        p.setColor(Color.RED);
+//        p.setStyle(Paint.Style.FILL);
+//        canvas.drawPath(mf.map.get('5').path, p);
     }
 }
