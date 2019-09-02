@@ -10,6 +10,10 @@
         android:defaultValue="h:m:s"
         android:entries="@array/formatValues"
         android:entryValues="@array/formatValues" />
+    <CheckBoxPreference android:title="Allow three line"
+        android:key="threeLine"
+        android:defaultValue="true"
+        android:summary="Use three lines for h:m:s portrait display."></CheckBoxPreference>
     <ListPreference android:title="Display Precision"
         android:summary="Set precision in seconds"
         android:key="precision"

@@ -61,6 +61,7 @@ public class MyChrono {
     }
 
     String formatTime(long t) {
+        //t+=1000*60*60*60;
         String format = options.getString(Options.PREF_FORMAT, "h:m:s");
         t /= 1000;
         if (format.equals("s")) {
@@ -80,8 +81,13 @@ public class MyChrono {
             h = 0;
         }
         if (mainView.getHeight() > mainView.getWidth()) {
-            if (h != 0)
-                return String.format("%d:%02d\n%02d", h, m, s);
+            Boolean threeLine = options.getBoolean(Options.PREF_THREE_LINE, true);
+            if (h != 0) {
+                if (threeLine)
+                    return String.format("%02d\n%02d\n%02d", h, m, s);
+                else
+                    return String.format("%d:%02d\n%02d", h, m, s);
+            }
             else
                 return String.format("%02d\n%02d", m, s);
         }

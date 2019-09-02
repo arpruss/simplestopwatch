@@ -30,6 +30,7 @@ public class Options extends PreferenceActivity {
     public static final String PREFS_ORIENTATION = "orientation";
     public static final String PREF_FORMAT = "format";
     public static final String PREF_FONT = "font";
+    public static final String PREF_THREE_LINE = "threeLine";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
 

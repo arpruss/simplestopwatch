@@ -101,5 +101,3 @@ for c in charsToDump:
     print("    });")
 print("  }")
 print("}")
-    
-    
