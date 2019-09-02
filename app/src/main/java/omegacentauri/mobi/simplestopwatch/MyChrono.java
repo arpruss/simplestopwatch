@@ -36,7 +36,6 @@ public class MyChrono {
         this.context = context;
         this.options = options;
         this.fractionView = fractionView;
-        this.maxSize = Integer.parseInt(options.getString(Options.PREF_MAX_SIZE, "1200"));
         Log.v("chrono", "maxSize " +this.maxSize);
 
         updateHandler = new Handler() {
@@ -49,7 +48,6 @@ public class MyChrono {
     public void updateViews() {
         long t = active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
         String line1 = formatTime(t);
-        Log.v("chrono", "update");
         maximizeSize(mainView, line1, 0.96f, 10);
         fractionView.setText(formatTimeFraction(t));
     }
@@ -127,7 +125,7 @@ public class MyChrono {
         if (textWidth == 0 || textHeight == 0)
             return;
 
-        float newSize = Math.min(maxSize, Math.min(vWidth/textWidth, vHeight/textHeight) * curSize * scale);
+        float newSize = Math.min(vWidth/textWidth, vHeight/textHeight) * curSize * scale;
 
         if (Math.abs(newSize-curSize) < prec)
             return;
@@ -172,7 +170,6 @@ public class MyChrono {
     }
 
     public void restore() {
-        maxSize = Integer.parseInt(options.getString(Options.PREF_MAX_SIZE, "1200"));
         baseTime = options.getLong(Options.PREFS_START_TIME, 0);
         pauseTime = options.getLong(Options.PREFS_PAUSED_TIME, 0);
         active = options.getBoolean(Options.PREFS_ACTIVE, false);

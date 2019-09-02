@@ -4,18 +4,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.widget.TextView;
 
 public class BigTextView extends View {
     RectF bounds = new RectF();
     float lineSpacing = 1.05f;
-    final MiniFont mf = new SansDigitsColon();
+    MiniFont miniFont;
     Paint paint;
     String text;
     String replacedText;
@@ -29,6 +25,7 @@ public class BigTextView extends View {
         super(context, attrs);
 
         paint = new Paint();
+        miniFont = new SansDigitsColon();
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
@@ -36,6 +33,11 @@ public class BigTextView extends View {
         equalizeDigits = true;
 
         setText("", true);
+    }
+
+    public void setFont(MiniFont mf) {
+        this.miniFont = mf;
+        invalidate();
     }
 
     public void setTextSizePixels(float size) {
@@ -81,7 +83,7 @@ public class BigTextView extends View {
         int n = tweakedLines.length;
         for (int i = 0 ; i < n ; i++) {
             String line = tweakedLines[i];
-            mf.getTextBounds(paint, line, 0, line.length(), lineBounds);
+            miniFont.getTextBounds(paint, line, 0, line.length(), lineBounds);
             bounds.bottom += (int)(lineBounds.height() * (i==n-1 ? 1 : lineSpacing));
             bounds.right = Math.max(bounds.right, lineBounds.width());
         }
@@ -97,14 +99,14 @@ public class BigTextView extends View {
         int height = 0;
         for (int i = 0 ; i < n ; i++) {
             String line = tweakedLines[i];
-            mf.getTextBounds(paint, line, 0, line.length(), bounds);
+            miniFont.getTextBounds(paint, line, 0, line.length(), bounds);
             yOffsets[i] = height - bounds.top;
             height += (int)(bounds.height() * (i==n-1 ? 1 : lineSpacing));
             xOffsets[i] = canvas.getWidth()/2 - bounds.centerX();
         }
         int dy = canvas.getHeight()/2 - height/2;
         for (int i = 0 ; i < n ; i++) {
-            mf.drawText(canvas, lines[i], xOffsets[i], dy + yOffsets[i], paint);
+            miniFont.drawText(canvas, lines[i], xOffsets[i], dy + yOffsets[i], paint);
         }
     }
 

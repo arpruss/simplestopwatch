@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.text.Html;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class Options extends PreferenceActivity {
     public static final String PREFS_COLOR = "color";
     public static final String PREFS_ORIENTATION = "orientation";
     public static final String PREF_FORMAT = "format";
-    public static final String PREF_MAX_SIZE = "maxSize";
+    public static final String PREF_FONT = "font";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
 
@@ -40,6 +41,18 @@ public class Options extends PreferenceActivity {
         addColor("white on black", Color.WHITE, Color.BLACK);
         addColor("green on black", Color.GREEN, Color.BLACK);
         addColor("red on black", Color.RED, Color.BLACK);
+    }
+
+    static MiniFont getFont(SharedPreferences options) {
+        String f = options.getString(PREF_FONT, "regular");
+        if (f.equals("regular")) {
+            Log.v("chrono", "regular");
+            return new SansDigitsColon();
+        }
+        else {
+            Log.v("chrono", "bold");
+            return new SansBoldDigitsColon();
+        }
     }
 
     static int getForeColor(SharedPreferences options) {

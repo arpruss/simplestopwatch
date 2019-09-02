@@ -73,7 +73,9 @@ public class StopWatch extends Activity {
         resetButton.setOnTouchListener(highlighter);
     }
 
-    void setColorScheme() {
+    void setTheme() {
+        chrono.setFont(Options.getFont(options));
+
         int fore = Options.getForeColor(options);
         int back = Options.getBackColor(options);
 
@@ -107,7 +109,8 @@ public class StopWatch extends Activity {
         else
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
-        setColorScheme();
+        Log.v("chrono", "theme");
+        setTheme();
         int orientation = getResources().getConfiguration().orientation;
         chrono.post(new Runnable() {
             @Override

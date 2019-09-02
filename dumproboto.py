@@ -1,8 +1,12 @@
 from fontTools.ttLib import TTFont
 from fontTools.pens.basePen import decomposeQuadraticSegment
+from sys import argv
 
 charsToDump = "0123456789:"
-ttf = TTFont("Roboto-Regular.ttf")
+fontName = "Roboto-Regular.ttf" if len(argv) < 2 else argv[1]
+className = "SansDigitsColon" if len(argv) < 3 else argv[2]
+
+ttf = TTFont(fontName)
 glyphs = ttf.getGlyphSet()
 map = ttf.getBestCmap()
 
@@ -72,19 +76,30 @@ glyphs["M"].draw(plPen)
 glyphs["y"].draw(plPen)
 minY = min(p[1] for p in plPen.pointList)
 maxY = max(p[1] for p in plPen.pointList)
-print("  defineFontSize(%gf);" % (maxY-minY))
+
+print("""package omegacentauri.mobi.simplestopwatch;
+
+import android.graphics.Path;
+
+public class %s extends MiniFont {
+  public %s() {
+    defineFontSize(%gf);
+""" % (className, className, maxY-minY))
 
 for c in charsToDump:
     glyph = glyphs[map[ord(c)]]
 
     print("  addCharacter((char)%d,%gf,%gf,new PathMaker() {" % (ord(c),glyph.width,glyph.lsb))
-    print("    @Override public Path makePath() {")
+    print("    @Override")
+    print("    public Path makePath() {")
     print("      Path path = new Path();")
     
     glyph.draw(MyPen(indent="      "))
     
     print("      return path;")
-    print("    }")
-    print("  });")
+    print("      }")
+    print("    });")
+print("  }")
+print("}")
     
     

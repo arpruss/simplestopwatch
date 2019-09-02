@@ -4,12 +4,6 @@
         android:key="screenOn"
         android:defaultValue="false"
         android:summary="Do not allow device to go to sleep while stopwatch is running"></CheckBoxPreference>
-    <ListPreference android:title="Maximum Size"
-        android:summary="Some devices have trouble drawing extremely large digits and need a limitation."
-        android:key="maxSize"
-        android:defaultValue="1200"
-        android:entries="@array/maximumValues"
-        android:entryValues="@array/maximumValues" />
     <ListPreference android:title="Display Format"
         android:summary="Choose display format (shorter formats may be used to save space as needed)"
         android:key="format"
@@ -22,6 +16,12 @@
         android:defaultValue="100"
         android:entries="@array/precisionDisplayValues"
         android:entryValues="@array/precisionValues" />
+    <ListPreference android:title="Font"
+        android:summary="Choose display font for large numerals"
+        android:key="font"
+        android:defaultValue="regular"
+        android:entries="@array/fontValues"
+        android:entryValues="@array/fontValues" />
     <ListPreference android:title="Color Scheme"
         android:summary="Set color scheme"
         android:key="color"

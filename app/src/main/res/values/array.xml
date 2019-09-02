@@ -25,6 +25,11 @@
         <item>s</item>
     </string-array>
 
+    <string-array name="fontValues">
+        <item>bold</item>
+        <item>regular</item>
+    </string-array>
+
     <string-array name="maximumValues">
         <item>800</item>
         <item>900</item>
