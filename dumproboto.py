@@ -2,7 +2,7 @@ from fontTools.ttLib import TTFont
 from fontTools.pens.basePen import decomposeQuadraticSegment
 
 charsToDump = "0123456789:"
-ttf = TTFont("Roboto-Medium.ttf")
+ttf = TTFont("Roboto-Regular.ttf")
 glyphs = ttf.getGlyphSet()
 map = ttf.getBestCmap()
 
@@ -42,6 +42,37 @@ class MyPen(object):
     def addComponent(self, glyphName, t):
         print(self.indent+"// addComponent", glyphName, t)
         glyphs[glyphName].draw(MyPen(indent=self.indent,transformation=multiply(self.transformation,[ [t[0],t[2],t[4]],[t[1],t[3],t[5]],[0,0,1] ])))
+
+class PointListPen(object):
+    def __init__(self, transformation=[[1,0,0],[0,-1,0],[0,0,1]], pointList=[]):
+        self.transformation = transformation
+        self.pointList = pointList
+    def update(self, point):
+        p = apply2d(self.transformation,point)
+        self.pointList.append(p)
+    def moveTo(self, point):
+        self.update(point)
+#    def curveTo(self, *points):
+#        print(self.indent+"curveTo", self.shift(*points))
+    def qCurveTo(self, *points):
+        decomp = decomposeQuadraticSegment(points)
+        for pair in decomp:
+            self.update(pair[1])
+    def lineTo(self, point):
+        self.update(point)
+    def closePath(self):
+        pass
+    def endPath(self):
+        pass
+    def addComponent(self, glyphName, t):
+        glyphs[glyphName].draw(PointListPen(pointList=self.pointList, transformation=multiply(self.transformation,[ [t[0],t[2],t[4]],[t[1],t[3],t[5]],[0,0,1] ])))
+        
+plPen = PointListPen()
+glyphs["M"].draw(plPen)
+glyphs["y"].draw(plPen)
+minY = min(p[1] for p in plPen.pointList)
+maxY = max(p[1] for p in plPen.pointList)
+print("  defineFontSize(%gf);" % (maxY-minY))
 
 for c in charsToDump:
     glyph = glyphs[map[ord(c)]]

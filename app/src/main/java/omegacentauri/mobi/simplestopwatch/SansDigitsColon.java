@@ -4,335 +4,323 @@ import android.graphics.Path;
 
 public class SansDigitsColon extends MiniFont {
     public SansDigitsColon() {
-        addCharacter((char) 48, 1164f, 105f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        defineFontSize(1893f);
+        addCharacter((char)48,1150f,115f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(1058f, -613f);
-                path.quadTo(1058f, -299f, 940.5f, -139.5f);
-                path.quadTo(823f, 20f, 583f, 20f);
-                path.quadTo(347f, 20f, 227.5f, -135.5f);
-                path.quadTo(108f, -291f, 105f, -596f);
-                path.lineTo(105f, -848f);
-                path.quadTo(105f, -1162f, 222.5f, -1319f);
-                path.quadTo(340f, -1476f, 581f, -1476f);
-                path.quadTo(820f, -1476f, 937.5f, -1323f);
-                path.quadTo(1055f, -1170f, 1058f, -865f);
-                path.lineTo(1058f, -613f);
+                path.moveTo(1034f,-621f);
+                path.quadTo(1034f,-296f,923f,-138f);
+                path.quadTo(812f,20f,576f,20f);
+                path.quadTo(343f,20f,231f,-134.5f);
+                path.quadTo(119f,-289f,115f,-596f);
+                path.lineTo(115f,-843f);
+                path.quadTo(115f,-1164f,226f,-1320f);
+                path.quadTo(337f,-1476f,574f,-1476f);
+                path.quadTo(809f,-1476f,920f,-1325.5f);
+                path.quadTo(1031f,-1175f,1034f,-861f);
+                path.lineTo(1034f,-621f);
                 path.close();
-                path.moveTo(815f, -885f);
-                path.quadTo(815f, -1090f, 759f, -1185.5f);
-                path.quadTo(703f, -1281f, 581f, -1281f);
-                path.quadTo(462f, -1281f, 406f, -1190.5f);
-                path.quadTo(350f, -1100f, 347f, -908f);
-                path.lineTo(347f, -578f);
-                path.quadTo(347f, -374f, 404f, -274f);
-                path.quadTo(461f, -174f, 583f, -174f);
-                path.quadTo(700f, -174f, 756f, -266.5f);
-                path.quadTo(812f, -359f, 815f, -556f);
-                path.lineTo(815f, -885f);
+                path.moveTo(849f,-874f);
+                path.quadTo(849f,-1109f,783f,-1216.5f);
+                path.quadTo(717f,-1324f,574f,-1324f);
+                path.quadTo(432f,-1324f,367f,-1217f);
+                path.quadTo(302f,-1110f,300f,-888f);
+                path.lineTo(300f,-592f);
+                path.quadTo(300f,-356f,368.5f,-243.5f);
+                path.quadTo(437f,-131f,576f,-131f);
+                path.quadTo(713f,-131f,779.5f,-237f);
+                path.quadTo(846f,-343f,849f,-571f);
+                path.lineTo(849f,-874f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 49, 1164f, 168f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)49,1150f,170f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(767f, 0f);
-                path.lineTo(525f, 0f);
-                path.lineTo(525f, -1169f);
-                path.lineTo(168f, -1047f);
-                path.lineTo(168f, -1252f);
-                path.lineTo(736f, -1461f);
-                path.lineTo(767f, -1461f);
-                path.lineTo(767f, 0f);
+                path.moveTo(729f,0f);
+                path.lineTo(543f,0f);
+                path.lineTo(543f,-1233f);
+                path.lineTo(170f,-1096f);
+                path.lineTo(170f,-1264f);
+                path.lineTo(700f,-1463f);
+                path.lineTo(729f,-1463f);
+                path.lineTo(729f,0f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 50, 1164f, 81f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)50,1150f,93f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(1088f, 0f);
-                path.lineTo(109f, 0f);
-                path.lineTo(109f, -167f);
-                path.lineTo(594f, -696f);
-                path.quadTo(699f, -813f, 743.5f, -891.5f);
-                path.quadTo(788f, -970f, 788f, -1049f);
-                path.quadTo(788f, -1153f, 729.5f, -1217f);
-                path.quadTo(671f, -1281f, 572f, -1281f);
-                path.quadTo(454f, -1281f, 389f, -1209f);
-                path.quadTo(324f, -1137f, 324f, -1012f);
-                path.lineTo(81f, -1012f);
-                path.quadTo(81f, -1145f, 141.5f, -1251.5f);
-                path.quadTo(202f, -1358f, 314.5f, -1417f);
-                path.quadTo(427f, -1476f, 574f, -1476f);
-                path.quadTo(786f, -1476f, 908.5f, -1369.5f);
-                path.quadTo(1031f, -1263f, 1031f, -1075f);
-                path.quadTo(1031f, -966f, 969.5f, -846.5f);
-                path.quadTo(908f, -727f, 768f, -575f);
-                path.lineTo(412f, -194f);
-                path.lineTo(1088f, -194f);
-                path.lineTo(1088f, 0f);
+                path.moveTo(1075f,0f);
+                path.lineTo(121f,0f);
+                path.lineTo(121f,-133f);
+                path.lineTo(625f,-693f);
+                path.quadTo(737f,-820f,779.5f,-899.5f);
+                path.quadTo(822f,-979f,822f,-1064f);
+                path.quadTo(822f,-1178f,753f,-1251f);
+                path.quadTo(684f,-1324f,569f,-1324f);
+                path.quadTo(431f,-1324f,354.5f,-1245.5f);
+                path.quadTo(278f,-1167f,278f,-1027f);
+                path.lineTo(93f,-1027f);
+                path.quadTo(93f,-1228f,222.5f,-1352f);
+                path.quadTo(352f,-1476f,569f,-1476f);
+                path.quadTo(772f,-1476f,890f,-1369.5f);
+                path.quadTo(1008f,-1263f,1008f,-1086f);
+                path.quadTo(1008f,-871f,734f,-574f);
+                path.lineTo(344f,-151f);
+                path.lineTo(1075f,-151f);
+                path.lineTo(1075f,0f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 51, 1164f, 79f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)51,1150f,94f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(390f, -839f);
-                path.lineTo(538f, -839f);
-                path.quadTo(650f, -840f, 715.5f, -897f);
-                path.quadTo(781f, -954f, 781f, -1062f);
-                path.quadTo(781f, -1166f, 726.5f, -1223.5f);
-                path.quadTo(672f, -1281f, 560f, -1281f);
-                path.quadTo(462f, -1281f, 399f, -1224.5f);
-                path.quadTo(336f, -1168f, 336f, -1077f);
-                path.lineTo(93f, -1077f);
-                path.quadTo(93f, -1189f, 152.5f, -1281f);
-                path.quadTo(212f, -1373f, 318.5f, -1424.5f);
-                path.quadTo(425f, -1476f, 557f, -1476f);
-                path.quadTo(775f, -1476f, 899.5f, -1366.5f);
-                path.quadTo(1024f, -1257f, 1024f, -1062f);
-                path.quadTo(1024f, -964f, 961.5f, -877.5f);
-                path.quadTo(899f, -791f, 800f, -747f);
-                path.quadTo(920f, -706f, 982.5f, -618f);
-                path.quadTo(1045f, -530f, 1045f, -408f);
-                path.quadTo(1045f, -212f, 910.5f, -96f);
-                path.quadTo(776f, 20f, 557f, 20f);
-                path.quadTo(347f, 20f, 213f, -92f);
-                path.quadTo(79f, -204f, 79f, -390f);
-                path.lineTo(322f, -390f);
-                path.quadTo(322f, -294f, 386.5f, -234f);
-                path.quadTo(451f, -174f, 560f, -174f);
-                path.quadTo(673f, -174f, 738f, -234f);
-                path.quadTo(803f, -294f, 803f, -408f);
-                path.quadTo(803f, -523f, 735f, -585f);
-                path.quadTo(667f, -647f, 533f, -647f);
-                path.lineTo(390f, -647f);
-                path.lineTo(390f, -839f);
+                path.moveTo(390f,-818f);
+                path.lineTo(529f,-818f);
+                path.quadTo(660f,-820f,735f,-887f);
+                path.quadTo(810f,-954f,810f,-1068f);
+                path.quadTo(810f,-1324f,555f,-1324f);
+                path.quadTo(435f,-1324f,363.5f,-1255.5f);
+                path.quadTo(292f,-1187f,292f,-1074f);
+                path.lineTo(107f,-1074f);
+                path.quadTo(107f,-1247f,233.5f,-1361.5f);
+                path.quadTo(360f,-1476f,555f,-1476f);
+                path.quadTo(761f,-1476f,878f,-1367f);
+                path.quadTo(995f,-1258f,995f,-1064f);
+                path.quadTo(995f,-969f,933.5f,-880f);
+                path.quadTo(872f,-791f,766f,-747f);
+                path.quadTo(886f,-709f,951.5f,-621f);
+                path.quadTo(1017f,-533f,1017f,-406f);
+                path.quadTo(1017f,-210f,889f,-95f);
+                path.quadTo(761f,20f,556f,20f);
+                path.quadTo(351f,20f,222.5f,-91f);
+                path.quadTo(94f,-202f,94f,-384f);
+                path.lineTo(280f,-384f);
+                path.quadTo(280f,-269f,355f,-200f);
+                path.quadTo(430f,-131f,556f,-131f);
+                path.quadTo(690f,-131f,761f,-201f);
+                path.quadTo(832f,-271f,832f,-402f);
+                path.quadTo(832f,-529f,754f,-597f);
+                path.quadTo(676f,-665f,529f,-667f);
+                path.lineTo(390f,-667f);
+                path.lineTo(390f,-818f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 52, 1164f, 52f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)52,1150f,53f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(931f, -519f);
-                path.lineTo(1112f, -519f);
-                path.lineTo(1112f, -324f);
-                path.lineTo(931f, -324f);
-                path.lineTo(931f, 0f);
-                path.lineTo(688f, 0f);
-                path.lineTo(688f, -324f);
-                path.lineTo(59f, -324f);
-                path.lineTo(52f, -472f);
-                path.lineTo(680f, -1456f);
-                path.lineTo(931f, -1456f);
-                path.lineTo(931f, -519f);
+                path.moveTo(902f,-489f);
+                path.lineTo(1104f,-489f);
+                path.lineTo(1104f,-338f);
+                path.lineTo(902f,-338f);
+                path.lineTo(902f,0f);
+                path.lineTo(716f,0f);
+                path.lineTo(716f,-338f);
+                path.lineTo(53f,-338f);
+                path.lineTo(53f,-447f);
+                path.lineTo(705f,-1456f);
+                path.lineTo(902f,-1456f);
+                path.lineTo(902f,-489f);
                 path.close();
-                path.moveTo(307f, -519f);
-                path.lineTo(688f, -519f);
-                path.lineTo(688f, -1127f);
-                path.lineTo(670f, -1095f);
-                path.lineTo(307f, -519f);
+                path.moveTo(263f,-489f);
+                path.lineTo(716f,-489f);
+                path.lineTo(716f,-1203f);
+                path.lineTo(694f,-1163f);
+                path.lineTo(263f,-489f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 53, 1164f, 129f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)53,1150f,154f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(174f, -722f);
-                path.lineTo(253f, -1456f);
-                path.lineTo(1035f, -1456f);
-                path.lineTo(1035f, -1246f);
-                path.lineTo(455f, -1246f);
-                path.lineTo(415f, -898f);
-                path.quadTo(516f, -956f, 643f, -956f);
-                path.quadTo(851f, -956f, 966.5f, -823f);
-                path.quadTo(1082f, -690f, 1082f, -465f);
-                path.quadTo(1082f, -243f, 954f, -111.5f);
-                path.quadTo(826f, 20f, 603f, 20f);
-                path.quadTo(403f, 20f, 271.5f, -93.5f);
-                path.quadTo(140f, -207f, 129f, -393f);
-                path.lineTo(364f, -393f);
-                path.quadTo(378f, -287f, 440f, -230.5f);
-                path.quadTo(502f, -174f, 602f, -174f);
-                path.quadTo(714f, -174f, 776.5f, -254f);
-                path.quadTo(839f, -334f, 839f, -472f);
-                path.quadTo(839f, -605f, 770f, -682.5f);
-                path.quadTo(701f, -760f, 580f, -760f);
-                path.quadTo(514f, -760f, 468f, -742.5f);
-                path.quadTo(422f, -725f, 368f, -674f);
-                path.lineTo(174f, -722f);
+                path.moveTo(206f,-730f);
+                path.lineTo(280f,-1456f);
+                path.lineTo(1026f,-1456f);
+                path.lineTo(1026f,-1285f);
+                path.lineTo(437f,-1285f);
+                path.lineTo(393f,-888f);
+                path.quadTo(500f,-951f,636f,-951f);
+                path.quadTo(835f,-951f,952f,-819.5f);
+                path.quadTo(1069f,-688f,1069f,-464f);
+                path.quadTo(1069f,-239f,947.5f,-109.5f);
+                path.quadTo(826f,20f,608f,20f);
+                path.quadTo(415f,20f,293f,-87f);
+                path.quadTo(171f,-194f,154f,-383f);
+                path.lineTo(329f,-383f);
+                path.quadTo(346f,-258f,418f,-194.5f);
+                path.quadTo(490f,-131f,608f,-131f);
+                path.quadTo(737f,-131f,810.5f,-219f);
+                path.quadTo(884f,-307f,884f,-462f);
+                path.quadTo(884f,-608f,804.5f,-696.5f);
+                path.quadTo(725f,-785f,593f,-785f);
+                path.quadTo(472f,-785f,403f,-732f);
+                path.lineTo(354f,-692f);
+                path.lineTo(206f,-730f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 54, 1164f, 117f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)54,1150f,132f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(865f, -1463f);
-                path.lineTo(865f, -1262f);
-                path.lineTo(835f, -1262f);
-                path.quadTo(631f, -1259f, 509f, -1150f);
-                path.quadTo(387f, -1041f, 364f, -841f);
-                path.quadTo(481f, -964f, 663f, -964f);
-                path.quadTo(856f, -964f, 967.5f, -828f);
-                path.quadTo(1079f, -692f, 1079f, -477f);
-                path.quadTo(1079f, -255f, 948.5f, -117.5f);
-                path.quadTo(818f, 20f, 606f, 20f);
-                path.quadTo(388f, 20f, 252.5f, -141f);
-                path.quadTo(117f, -302f, 117f, -563f);
-                path.lineTo(117f, -646f);
-                path.quadTo(117f, -1029f, 303.5f, -1246f);
-                path.quadTo(490f, -1463f, 840f, -1463f);
-                path.lineTo(865f, -1463f);
+                path.moveTo(847f,-1457f);
+                path.lineTo(847f,-1300f);
+                path.lineTo(813f,-1300f);
+                path.quadTo(597f,-1296f,469f,-1172f);
+                path.quadTo(341f,-1048f,321f,-823f);
+                path.quadTo(436f,-955f,635f,-955f);
+                path.quadTo(825f,-955f,938.5f,-821f);
+                path.quadTo(1052f,-687f,1052f,-475f);
+                path.quadTo(1052f,-250f,929.5f,-115f);
+                path.quadTo(807f,20f,601f,20f);
+                path.quadTo(392f,20f,262f,-140.5f);
+                path.quadTo(132f,-301f,132f,-554f);
+                path.lineTo(132f,-625f);
+                path.quadTo(132f,-1027f,303.5f,-1239.5f);
+                path.quadTo(475f,-1452f,814f,-1457f);
+                path.lineTo(847f,-1457f);
                 path.close();
-                path.moveTo(604f, -768f);
-                path.quadTo(524f, -768f, 457.5f, -723f);
-                path.quadTo(391f, -678f, 360f, -603f);
-                path.lineTo(360f, -529f);
-                path.quadTo(360f, -367f, 428f, -271.5f);
-                path.quadTo(496f, -176f, 604f, -176f);
-                path.quadTo(712f, -176f, 775f, -257f);
-                path.quadTo(838f, -338f, 838f, -470f);
-                path.quadTo(838f, -602f, 774f, -685f);
-                path.quadTo(710f, -768f, 604f, -768f);
+                path.moveTo(604f,-801f);
+                path.quadTo(509f,-801f,429f,-744f);
+                path.quadTo(349f,-687f,318f,-601f);
+                path.lineTo(318f,-533f);
+                path.quadTo(318f,-353f,399f,-243f);
+                path.quadTo(480f,-133f,601f,-133f);
+                path.quadTo(726f,-133f,797.5f,-225f);
+                path.quadTo(869f,-317f,869f,-466f);
+                path.quadTo(869f,-616f,796.5f,-708.5f);
+                path.quadTo(724f,-801f,604f,-801f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 55, 1164f, 69f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)55,1150f,77f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(1078f, -1321f);
-                path.lineTo(496f, 0f);
-                path.lineTo(241f, 0f);
-                path.lineTo(822f, -1261f);
-                path.lineTo(69f, -1261f);
-                path.lineTo(69f, -1456f);
-                path.lineTo(1078f, -1456f);
-                path.lineTo(1078f, -1321f);
+                path.moveTo(1061f,-1352f);
+                path.lineTo(458f,0f);
+                path.lineTo(264f,0f);
+                path.lineTo(865f,-1304f);
+                path.lineTo(77f,-1304f);
+                path.lineTo(77f,-1456f);
+                path.lineTo(1061f,-1456f);
+                path.lineTo(1061f,-1352f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 56, 1164f, 104f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)56,1150f,112f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(1026f, -1072f);
-                path.quadTo(1026f, -965f, 971f, -881.5f);
-                path.quadTo(916f, -798f, 821f, -750f);
-                path.quadTo(935f, -697f, 996.5f, -605f);
-                path.quadTo(1058f, -513f, 1058f, -397f);
-                path.quadTo(1058f, -205f, 928f, -92.5f);
-                path.quadTo(798f, 20f, 582f, 20f);
-                path.quadTo(365f, 20f, 234.5f, -93f);
-                path.quadTo(104f, -206f, 104f, -397f);
-                path.quadTo(104f, -514f, 166f, -607f);
-                path.quadTo(228f, -700f, 340f, -750f);
-                path.quadTo(246f, -798f, 191.5f, -881.5f);
-                path.quadTo(137f, -965f, 137f, -1072f);
-                path.quadTo(137f, -1258f, 257f, -1367f);
-                path.quadTo(377f, -1476f, 581f, -1476f);
-                path.quadTo(786f, -1476f, 906f, -1367f);
-                path.quadTo(1026f, -1258f, 1026f, -1072f);
+                path.moveTo(1004f,-1076f);
+                path.quadTo(1004f,-967f,946.5f,-882f);
+                path.quadTo(889f,-797f,791f,-749f);
+                path.quadTo(905f,-700f,971.5f,-606f);
+                path.quadTo(1038f,-512f,1038f,-393f);
+                path.quadTo(1038f,-204f,910.5f,-92f);
+                path.quadTo(783f,20f,575f,20f);
+                path.quadTo(365f,20f,238.5f,-92.5f);
+                path.quadTo(112f,-205f,112f,-393f);
+                path.quadTo(112f,-511f,176.5f,-606f);
+                path.quadTo(241f,-701f,355f,-750f);
+                path.quadTo(258f,-798f,202f,-883f);
+                path.quadTo(146f,-968f,146f,-1076f);
+                path.quadTo(146f,-1260f,264f,-1368f);
+                path.quadTo(382f,-1476f,575f,-1476f);
+                path.quadTo(767f,-1476f,885.5f,-1368f);
+                path.quadTo(1004f,-1260f,1004f,-1076f);
                 path.close();
-                path.moveTo(815f, -409f);
-                path.quadTo(815f, -517f, 750.5f, -583.5f);
-                path.quadTo(686f, -650f, 580f, -650f);
-                path.quadTo(474f, -650f, 410.5f, -584f);
-                path.quadTo(347f, -518f, 347f, -409f);
-                path.quadTo(347f, -302f, 409.5f, -238f);
-                path.quadTo(472f, -174f, 582f, -174f);
-                path.quadTo(692f, -174f, 753.5f, -236f);
-                path.quadTo(815f, -298f, 815f, -409f);
+                path.moveTo(853f,-397f);
+                path.quadTo(853f,-519f,775.5f,-596f);
+                path.quadTo(698f,-673f,573f,-673f);
+                path.quadTo(448f,-673f,372.5f,-597f);
+                path.quadTo(297f,-521f,297f,-397f);
+                path.quadTo(297f,-273f,370.5f,-202f);
+                path.quadTo(444f,-131f,575f,-131f);
+                path.quadTo(705f,-131f,779f,-202.5f);
+                path.quadTo(853f,-274f,853f,-397f);
                 path.close();
-                path.moveTo(784f, -1063f);
-                path.quadTo(784f, -1158f, 729f, -1219.5f);
-                path.quadTo(674f, -1281f, 581f, -1281f);
-                path.quadTo(488f, -1281f, 434f, -1222.5f);
-                path.quadTo(380f, -1164f, 380f, -1063f);
-                path.quadTo(380f, -963f, 434.5f, -904f);
-                path.quadTo(489f, -845f, 582f, -845f);
-                path.quadTo(675f, -845f, 729.5f, -904f);
-                path.quadTo(784f, -963f, 784f, -1063f);
+                path.moveTo(575f,-1324f);
+                path.quadTo(466f,-1324f,398.5f,-1256.5f);
+                path.quadTo(331f,-1189f,331f,-1073f);
+                path.quadTo(331f,-962f,397.5f,-893.5f);
+                path.quadTo(464f,-825f,575f,-825f);
+                path.quadTo(686f,-825f,752.5f,-893.5f);
+                path.quadTo(819f,-962f,819f,-1073f);
+                path.quadTo(819f,-1184f,750f,-1254f);
+                path.quadTo(681f,-1324f,575f,-1324f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 57, 1164f, 93f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)57,1150f,100f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                path.moveTo(798f, -609f);
-                path.quadTo(676f, -480f, 513f, -480f);
-                path.quadTo(321f, -480f, 207f, -614.5f);
-                path.quadTo(93f, -749f, 93f, -968f);
-                path.quadTo(93f, -1112f, 151f, -1229f);
-                path.quadTo(209f, -1346f, 316f, -1411f);
-                path.quadTo(423f, -1476f, 564f, -1476f);
-                path.quadTo(784f, -1476f, 913f, -1312f);
-                path.quadTo(1042f, -1148f, 1042f, -873f);
-                path.lineTo(1042f, -805f);
-                path.quadTo(1042f, -411f, 864f, -204f);
-                path.quadTo(686f, 3f, 333f, 6f);
-                path.lineTo(304f, 6f);
-                path.lineTo(304f, -195f);
-                path.lineTo(339f, -195f);
-                path.quadTo(554f, -198f, 669f, -298.5f);
-                path.quadTo(784f, -399f, 798f, -609f);
+                path.moveTo(830f,-640f);
+                path.quadTo(772f,-571f,691.5f,-529f);
+                path.quadTo(611f,-487f,515f,-487f);
+                path.quadTo(389f,-487f,295.5f,-549f);
+                path.quadTo(202f,-611f,151f,-723.5f);
+                path.quadTo(100f,-836f,100f,-972f);
+                path.quadTo(100f,-1118f,155.5f,-1235f);
+                path.quadTo(211f,-1352f,313f,-1414f);
+                path.quadTo(415f,-1476f,551f,-1476f);
+                path.quadTo(767f,-1476f,891.5f,-1314.5f);
+                path.quadTo(1016f,-1153f,1016f,-874f);
+                path.lineTo(1016f,-820f);
+                path.quadTo(1016f,-395f,848f,-199.5f);
+                path.quadTo(680f,-4f,341f,1f);
+                path.lineTo(305f,1f);
+                path.lineTo(305f,-155f);
+                path.lineTo(344f,-155f);
+                path.quadTo(573f,-159f,696f,-274.5f);
+                path.quadTo(819f,-390f,830f,-640f);
                 path.close();
-                path.moveTo(564f, -670f);
-                path.quadTo(637f, -670f, 701f, -712f);
-                path.quadTo(765f, -754f, 800f, -828f);
-                path.lineTo(800f, -923f);
-                path.quadTo(800f, -1084f, 734f, -1182f);
-                path.quadTo(668f, -1280f, 563f, -1280f);
-                path.quadTo(458f, -1280f, 395.5f, -1193.5f);
-                path.quadTo(333f, -1107f, 333f, -975f);
-                path.quadTo(333f, -838f, 396f, -754f);
-                path.quadTo(459f, -670f, 564f, -670f);
+                path.moveTo(545f,-640f);
+                path.quadTo(638f,-640f,716.5f,-697f);
+                path.quadTo(795f,-754f,831f,-838f);
+                path.lineTo(831f,-912f);
+                path.quadTo(831f,-1094f,752f,-1208f);
+                path.quadTo(673f,-1322f,552f,-1322f);
+                path.quadTo(430f,-1322f,356f,-1228.5f);
+                path.quadTo(282f,-1135f,282f,-982f);
+                path.quadTo(282f,-833f,353.5f,-736.5f);
+                path.quadTo(425f,-640f,545f,-640f);
                 path.close();
                 return path;
             }
         });
-        addCharacter((char) 58, 543f, 130f, new PathMaker() {
-            @Override
-            public Path makePath() {
+        addCharacter((char)58,496f,134f,new PathMaker() {
+            @Override public Path makePath() {
                 Path path = new Path();
-                // addComponent period (1, 0, 0, 1, -5, 0)
-                path.moveTo(271f, -256f);
-                path.quadTo(339f, -256f, 376f, -217.5f);
-                path.quadTo(413f, -179f, 413f, -121f);
-                path.quadTo(413f, -64f, 376f, -26.5f);
-                path.quadTo(339f, 11f, 271f, 11f);
-                path.quadTo(206f, 11f, 168f, -26f);
-                path.quadTo(130f, -63f, 130f, -121f);
-                path.quadTo(130f, -179f, 167f, -217.5f);
-                path.quadTo(204f, -256f, 271f, -256f);
+                // addComponent period (1, 0, 0, 1, -10, 0)
+                path.moveTo(134f,-97f);
+                path.quadTo(134f,-145f,162.5f,-177f);
+                path.quadTo(191f,-209f,248f,-209f);
+                path.quadTo(305f,-209f,334.5f,-177f);
+                path.quadTo(364f,-145f,364f,-97f);
+                path.quadTo(364f,-51f,334.5f,-20f);
+                path.quadTo(305f,11f,248f,11f);
+                path.quadTo(191f,11f,162.5f,-20f);
+                path.quadTo(134f,-51f,134f,-97f);
                 path.close();
-                // addComponent period (1, 0, 0, 1, -5, 849)
-                path.moveTo(271f, -1105f);
-                path.quadTo(339f, -1105f, 376f, -1066.5f);
-                path.quadTo(413f, -1028f, 413f, -970f);
-                path.quadTo(413f, -913f, 376f, -875.5f);
-                path.quadTo(339f, -838f, 271f, -838f);
-                path.quadTo(206f, -838f, 168f, -875f);
-                path.quadTo(130f, -912f, 130f, -970f);
-                path.quadTo(130f, -1028f, 167f, -1066.5f);
-                path.quadTo(204f, -1105f, 271f, -1105f);
+                // addComponent period (1, 0, 0, 1, -9, 883)
+                path.moveTo(135f,-980f);
+                path.quadTo(135f,-1028f,163.5f,-1060f);
+                path.quadTo(192f,-1092f,249f,-1092f);
+                path.quadTo(306f,-1092f,335.5f,-1060f);
+                path.quadTo(365f,-1028f,365f,-980f);
+                path.quadTo(365f,-934f,335.5f,-903f);
+                path.quadTo(306f,-872f,249f,-872f);
+                path.quadTo(192f,-872f,163.5f,-903f);
+                path.quadTo(135f,-934f,135f,-980f);
                 path.close();
                 return path;
             }

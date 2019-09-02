@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MiniFont {
+    public float defaultFontSize = 1;
+
     interface PathMaker {
         Path makePath();
     }
@@ -18,6 +20,10 @@ public class MiniFont {
 
     public void addCharacter(char c, float width, float lsb, PathMaker pm) {
         map.put(c, new Glyph(width, lsb, pm.makePath()));
+    }
+
+    public void defineFontSize(float s) {
+        defaultFontSize = s;
     }
 
     public void measureText(String text, int start, int end, RectF bounds, float scale) {
@@ -33,7 +39,7 @@ public class MiniFont {
             char c = text.charAt(i);
             try {
                 Glyph g = map.get(c);
-                g.path.computeBounds(glyphBounds, false);
+                glyphBounds.set(g.bounds);
                 glyphBounds.left *= scale;
                 glyphBounds.right *= scale;
                 glyphBounds.top *= scale;
@@ -78,11 +84,14 @@ public class MiniFont {
         public final Path path;
         private final float width;
         private final float lsb;
+        RectF bounds;
 
         public Glyph(float width, float lsb, Path path) {
             this.width = width;
             this.lsb = lsb;
             this.path = path;
+            bounds = new RectF();
+            path.computeBounds(bounds, true);
         }
     }
 }
