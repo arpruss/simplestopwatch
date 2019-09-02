@@ -1,10 +1,19 @@
 package omegacentauri.mobi.simplestopwatch;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.text.Html;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +64,55 @@ public class Options extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.options);
+
+        Preference lb = (Preference) findPreference("license");
+        lb.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showLicenses();
+
+                return false;
+            }
+        });
+
         //getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+    }
+
+    static public String getAssetFile(Context context, String assetName) {
+        try {
+            return getStreamFile(context.getAssets().open(assetName));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            return "";
+        }
+    }
+
+    static private String getStreamFile(InputStream stream) {
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(stream));
+
+            String text = "";
+            String line;
+            while (null != (line=reader.readLine()))
+                text = text + line;
+            return text;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            return "";
+        }
+    }
+
+    public void showLicenses() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Licenses and copyrights");
+        alertDialog.setMessage(Html.fromHtml(getAssetFile(this, "license.html")));
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {} });
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {} });
+        alertDialog.show();
     }
 
 /*    public static class MyPreferenceFragment extends PreferenceFragment

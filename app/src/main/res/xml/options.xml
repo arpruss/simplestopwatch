@@ -34,4 +34,5 @@
         android:defaultValue="automatic"
         android:entries="@array/orientationValues"
         android:entryValues="@array/orientationValues" />
+    <Preference android:key="license" android:title="Licenses and Copyrights"/>
 </PreferenceScreen>
