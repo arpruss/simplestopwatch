@@ -49,6 +49,9 @@ public class Options extends PreferenceActivity {
             Log.v("chrono", "regular");
             return new SansDigitsColon();
         }
+        else if (f.equals("7 segment")) {
+            return new DSEG7ClassicBoldItalicDigitsColon();
+        }
         else {
             Log.v("chrono", "bold");
             return new SansBoldDigitsColon();

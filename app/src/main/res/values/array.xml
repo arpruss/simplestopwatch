@@ -26,6 +26,7 @@
     </string-array>
 
     <string-array name="fontValues">
+        <item>7 segment</item>
         <item>bold</item>
         <item>regular</item>
     </string-array>
