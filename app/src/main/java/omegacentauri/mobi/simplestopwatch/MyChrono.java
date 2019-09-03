@@ -26,7 +26,7 @@ public class MyChrono {
     public long baseTime;
     public long pauseTime;
     public long delayTime;
-    static final long delayTimes[] = { 0, -3000, -5000, -10000 };
+    static final long delayTimes[] = { 0, -3000, -5000, -9000 };
     public boolean paused = false;
     public boolean active = false;
     TextView view;
@@ -53,7 +53,7 @@ public class MyChrono {
     }
 
     public long getTime() {
-        return active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
+        return active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : delayTime;
     }
 
     public void updateViews() {
@@ -70,8 +70,18 @@ public class MyChrono {
 
     }
 
+    static final long floorDiv(long a, long b) {
+        long q = a/b;
+        if (q*b > a)
+            return q-1;
+        else
+            return q;
+    }
+
     String formatTime(long t, boolean multiline) {
         //t+=1000*60*60*60;
+        if (t<0)
+            return String.format("\u2212%d", -floorDiv(t,1000));
         String format = options.getString(Options.PREF_FORMAT, "h:m:s");
         t /= 1000;
         if (format.equals("s")) {
@@ -110,6 +120,8 @@ public class MyChrono {
     }
 
     String formatTimeFraction(long t) {
+        if (t<0)
+            return "";
         if (precision == 100)
             return String.format(".%01d", (int)((t / 100) % 10));
         else if (precision == 10)
@@ -123,8 +135,20 @@ public class MyChrono {
     public void resetButton() {
         if (! paused)
             return;
-        active = false;
-        stopUpdating();
+        if (active) {
+            active = false;
+            stopUpdating();
+        }
+        else {
+            int i = 0;
+            for (i = 0; i < delayTimes.length; i++) {
+                if (delayTimes[i] == delayTime) {
+                    i = (i+1) % delayTimes.length;
+                    break;
+                }
+            }
+            delayTime = delayTimes[i];
+        }
         save();
         updateViews();
     }
@@ -137,7 +161,7 @@ public class MyChrono {
             save();
         }
         else if (!active) {
-            baseTime = SystemClock.elapsedRealtime();
+            baseTime = SystemClock.elapsedRealtime() - delayTime;
             paused = false;
             active = true;
             startUpdating();
@@ -155,6 +179,7 @@ public class MyChrono {
     public void restore() {
         baseTime = options.getLong(Options.PREFS_START_TIME, 0);
         pauseTime = options.getLong(Options.PREFS_PAUSED_TIME, 0);
+        delayTime = options.getLong(Options.PREF_DELAY, 0);
         active = options.getBoolean(Options.PREFS_ACTIVE, false);
         paused = options.getBoolean(Options.PREFS_PAUSED, false);
         precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
@@ -176,6 +201,7 @@ public class MyChrono {
         ed.putLong(Options.PREFS_PAUSED_TIME, pauseTime);
         ed.putBoolean(Options.PREFS_ACTIVE, active);
         ed.putBoolean(Options.PREFS_PAUSED, paused);
+        ed.putLong(Options.PREF_DELAY, delayTime);
         ed.apply();
     }
 

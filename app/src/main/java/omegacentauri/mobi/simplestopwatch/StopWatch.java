@@ -159,6 +159,7 @@ public class StopWatch extends Activity {
         else {
             if (stopwatch.paused) {
                 startButton.setText("Continue");
+                resetButton.setText("Reset");
                 resetButton.setVisibility(View.VISIBLE);
             } else {
                 startButton.setText("Stop");
