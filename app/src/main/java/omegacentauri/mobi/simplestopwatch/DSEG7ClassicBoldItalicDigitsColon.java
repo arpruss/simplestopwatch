@@ -550,5 +550,20 @@ public class DSEG7ClassicBoldItalicDigitsColon extends MiniFont {
       return path;
       }
     });
+  addCharacter((char)8722,816f,175f,new PathMaker() {
+    @Override
+    public Path makePath() {
+      Path path = new Path();
+      path.moveTo(583f,-562f);
+      path.lineTo(640f,-499f);
+      path.lineTo(573f,-438f);
+      path.lineTo(232f,-438f);
+      path.lineTo(175f,-500f);
+      path.lineTo(243f,-562f);
+      path.lineTo(583f,-562f);
+      path.close();
+      return path;
+      }
+    });
   }
 }

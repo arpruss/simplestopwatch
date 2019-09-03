@@ -2,7 +2,7 @@ from fontTools.ttLib import TTFont
 from fontTools.pens.basePen import decomposeQuadraticSegment
 from sys import argv
 
-charsToDump = "0123456789:"
+charsToDump = "0123456789:\u2212"
 fontName = "Roboto-Regular.ttf" if len(argv) < 2 else argv[1]
 className = "SansDigitsColon" if len(argv) < 3 else argv[2]
 
@@ -87,14 +87,23 @@ public class %s extends MiniFont {
 """ % (className, className, maxY-minY))
 
 for c in charsToDump:
-    glyph = glyphs[map[ord(c)]]
+    forcePath = None
+    try:
+        glyph = glyphs[map[ord(c)]]
+    except:
+        if c == '\u2212':
+            glyph = glyphs[map[ord('-')]]
+        
 
     print("  addCharacter((char)%d,%gf,%gf,new PathMaker() {" % (ord(c),glyph.width,glyph.lsb))
     print("    @Override")
     print("    public Path makePath() {")
     print("      Path path = new Path();")
     
-    glyph.draw(MyPen(indent="      "))
+    if forcePath:
+        print(path)
+    else:
+        glyph.draw(MyPen(indent="      "))
     
     print("      return path;")
     print("      }")

@@ -25,6 +25,8 @@ public class MyChrono {
     TextView fractionView;
     public long baseTime;
     public long pauseTime;
+    public long delayTime;
+    static final long delayTimes[] = { 0, -3000, -5000, -10000 };
     public boolean paused = false;
     public boolean active = false;
     TextView view;
@@ -39,6 +41,7 @@ public class MyChrono {
         this.mainView = mainView;
         this.context = context;
         this.options = options;
+        this.delayTime = options.getLong(Options.PREF_DELAY, 0);
         this.fractionView = fractionView;
         Log.v("chrono", "maxSize " +this.maxSize);
 

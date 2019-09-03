@@ -342,5 +342,18 @@ public class SansBoldDigitsColon extends MiniFont {
       return path;
       }
     });
+  addCharacter((char)8722,1138f,147f,new PathMaker() {
+    @Override
+    public Path makePath() {
+      Path path = new Path();
+      path.moveTo(1010f,-596f);
+      path.lineTo(147f,-596f);
+      path.lineTo(147f,-832f);
+      path.lineTo(1010f,-832f);
+      path.lineTo(1010f,-596f);
+      path.close();
+      return path;
+      }
+    });
   }
 }

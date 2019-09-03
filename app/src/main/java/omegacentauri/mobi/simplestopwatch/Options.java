@@ -34,6 +34,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_KEEP_ASPECT = "keepAspect";
     public static final String PREF_LINE_SPACING = "lineSpacing";
     public static final String PREF_LETTER_SPACING = "letterSpacing";
+    public static final String PREF_DELAY = "delay";
     public static final String PREF_SCALE = "scale";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
