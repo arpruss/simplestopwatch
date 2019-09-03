@@ -122,10 +122,10 @@ public class MyChrono {
     String formatTimeFraction(long t) {
         if (t<0)
             return "";
-        if (precision == 100)
-            return String.format(".%01d", (int)((t / 100) % 10));
-        else if (precision == 10)
+        if (precision == 10 || (precision > 10 && active && paused))
             return String.format(".%02d", (int)((t / 10) % 100));
+        else if (precision == 100)
+            return String.format(".%01d", (int)((t / 100) % 10));
         else if (precision == 1)
             return String.format(".%03d", (int)(t % 1000));
         else
@@ -222,7 +222,7 @@ public class MyChrono {
                 public void run() {
                     updateHandler.obtainMessage(1).sendToTarget();
                 }
-            }, 0, precision);
+            }, 0, precision<=10 ? precision : 50); // avoid off-by-1 errors at lower precisions, at cost of some battery life
         }
         if (options.getBoolean(Options.PREFS_SCREEN_ON, false))
             ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
