@@ -47,8 +47,7 @@ public class MyChrono {
 
     public void updateViews() {
         long t = active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
-        String line1 = formatTime(t);
-        maximizeSize(mainView, line1, 0.96f, 10);
+        mainView.setText(formatTime(t));
         fractionView.setText(formatTimeFraction(t));
     }
 
@@ -108,39 +107,6 @@ public class MyChrono {
             return String.format(".%03d", (int)(t % 1000));
         else
             return "";
-    }
-
-    @SuppressLint("ResourceType")
-    private void maximizeSize(BigTextView v, String text, float scale, int prec) {
-        float curSize = v.getTextSizePixels();
-
-        v.setText(text);
-
-        if (text.length() == 0) {
-            return;
-        }
-        float vWidth = v.getWidth();
-        float vHeight = v.getHeight();
-        if (vWidth == 0 || vHeight == 0) {
-            return;
-        }
-        RectF bounds = new RectF();
-        v.measureText(bounds);
-        float textWidth = bounds.width();
-        float textHeight = bounds.height();
-        if (textWidth == 0 || textHeight == 0)
-            return;
-
-        float newSize = Math.min(vWidth/textWidth, vHeight/textHeight) * curSize * scale;
-
-        if (Math.abs(newSize-curSize) < prec)
-            return;
-
-        Log.v("chrono", "new size "+newSize+ " on height "+v.getHeight());
-        Log.v("chrono", "screen height " +context.getWindow().getDecorView().getHeight());
-        Log.v("chrono", "activity height " +context.findViewById(R.id.main).getHeight());
-
-        v.setTextSizePixels(newSize);
     }
 
     public void resetButton() {

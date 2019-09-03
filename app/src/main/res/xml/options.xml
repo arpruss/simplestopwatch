@@ -32,6 +32,10 @@
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />
+    <CheckBoxPreference android:title="Keep aspect"
+        android:key="keepAspect"
+        android:defaultValue="true"
+        android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)."></CheckBoxPreference>
     <ListPreference android:title="Orientation"
         android:summary="Set display orientation"
         android:key="orientation"

@@ -26,7 +26,7 @@ public class MiniFont {
         defaultFontSize = s;
     }
 
-    public void getTextBounds(Paint paint, String text, int start, int end, RectF bounds) {
+    public void getTextBounds(Paint paint, float letterSpacing, String text, int start, int end, RectF bounds) {
         float x = 0;
         if (end == start) {
             bounds.set(0, 0, 0, 0);
@@ -42,7 +42,7 @@ public class MiniFont {
                 glyphBounds.set(g.bounds);
                 glyphBounds.left += x;
                 glyphBounds.right += x;
-                x += g.width;
+                x += letterSpacing * g.width;
                 if (i == start)
                     bounds.set(glyphBounds);
                 else
@@ -53,26 +53,27 @@ public class MiniFont {
         }
 
         float scale = paint.getTextSize() / defaultFontSize;
-        bounds.left *= scale;
-        bounds.right *= scale;
+        bounds.left *= scale * paint.getTextScaleX();
+        bounds.right *= scale * paint.getTextScaleX();;
         bounds.bottom *= scale;
         bounds.top *= scale;
     }
 
-    public void drawText(Canvas canvas, String text, float x, float y, Paint paint) {
+    public void drawText(Canvas canvas, String text, float x, float y, Paint paint, float letterSpacing) {
         Matrix m = new Matrix();
-        float scale = paint.getTextSize() / defaultFontSize;
+        float scaleY = paint.getTextSize() / defaultFontSize;
+        float scaleX = scaleY * paint.getTextScaleX();
 
         for (int i=0; i<text.length(); i++) {
             char c = text.charAt(i);
             try {
                 Glyph g = map.get(c);
                 Path p = new Path(g.path);
-                m.setScale(scale, scale);
+                m.setScale(scaleX, scaleY);
                 m.postTranslate(x, y);
                 p.transform(m);
                 canvas.drawPath(p, paint);
-                x += g.width * scale;
+                x += g.width * letterSpacing * scaleX;
             }
             catch(Exception e) {
             }
