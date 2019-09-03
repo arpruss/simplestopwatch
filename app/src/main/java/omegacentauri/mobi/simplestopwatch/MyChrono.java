@@ -26,7 +26,8 @@ public class MyChrono {
     public long baseTime;
     public long pauseTime;
     public long delayTime;
-    static final long delayTimes[] = { 0, -3000, -5000, -9000 };
+    static final long MIN_DELAY_TIME = -9000;
+    static final long delayTimes[] = { 0, -3000, -6000, MIN_DELAY_TIME };
     public boolean paused = false;
     public boolean active = false;
     TextView view;
@@ -183,7 +184,7 @@ public class MyChrono {
         active = options.getBoolean(Options.PREFS_ACTIVE, false);
         paused = options.getBoolean(Options.PREFS_PAUSED, false);
         precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
-        if (SystemClock.elapsedRealtime() <= baseTime)
+        if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME)
             active = false;
 
         if (active && !paused) {
