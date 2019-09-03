@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +64,8 @@ public class MiniFont {
         Matrix m = new Matrix();
         float scaleY = paint.getTextSize() / defaultFontSize;
         float scaleX = scaleY * paint.getTextScaleX();
+
+        Log.v("chrono", "scale "+scaleX+" "+scaleY);
 
         for (int i=0; i<text.length(); i++) {
             char c = text.charAt(i);

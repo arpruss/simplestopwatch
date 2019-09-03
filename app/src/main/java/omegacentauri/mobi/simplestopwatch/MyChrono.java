@@ -2,6 +2,9 @@ package omegacentauri.mobi.simplestopwatch;
 //
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.os.Handler;
@@ -11,6 +14,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,9 +49,13 @@ public class MyChrono {
         };
     }
 
+    public long getTime() {
+        return active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
+    }
+
     public void updateViews() {
-        long t = active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : 0;
-        mainView.setText(formatTime(t));
+        long t = getTime();
+        mainView.setText(formatTime(t,mainView.getHeight() > mainView.getWidth()));
         fractionView.setText(formatTimeFraction(t));
     }
 
@@ -59,7 +67,7 @@ public class MyChrono {
 
     }
 
-    String formatTime(long t) {
+    String formatTime(long t, boolean multiline) {
         //t+=1000*60*60*60;
         String format = options.getString(Options.PREF_FORMAT, "h:m:s");
         t /= 1000;
@@ -79,7 +87,7 @@ public class MyChrono {
             m = (int) t;
             h = 0;
         }
-        if (mainView.getHeight() > mainView.getWidth()) {
+        if (multiline) {
             Boolean threeLine = options.getBoolean(Options.PREF_THREE_LINE, true);
             if (h != 0) {
                 if (threeLine)
@@ -211,5 +219,16 @@ public class MyChrono {
         }
         ed.putLong(Options.PREFS_BOOT_TIME, bootTime);
         ed.apply(); */
+    }
+
+    public void copyToClipboard() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            long t = getTime();
+            String s = formatTime(t, false) + formatTimeFraction(t);
+            ClipboardManager clip = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData data = ClipData.newPlainText("time", s);
+            clip.setPrimaryClip(data);
+//            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT);
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference android:title="Keep screen on"
+    <CheckBoxPreference android:title="Keep Screen On"
         android:key="screenOn"
         android:defaultValue="false"
         android:summary="Do not allow device to go to sleep while stopwatch is running"></CheckBoxPreference>
@@ -10,7 +10,7 @@
         android:defaultValue="h:m:s"
         android:entries="@array/formatValues"
         android:entryValues="@array/formatValues" />
-    <CheckBoxPreference android:title="Allow three line"
+    <CheckBoxPreference android:title="Allow Three Line"
         android:key="threeLine"
         android:defaultValue="true"
         android:summary="Use three lines for h:m:s portrait display."></CheckBoxPreference>
@@ -21,7 +21,7 @@
         android:entries="@array/precisionDisplayValues"
         android:entryValues="@array/precisionValues" />
     <ListPreference android:title="Font"
-        android:summary="Choose display font for large numerals"
+        android:summary="Choose display font for large digits"
         android:key="font"
         android:defaultValue="regular"
         android:entries="@array/fontValues"
@@ -32,10 +32,28 @@
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />
-    <CheckBoxPreference android:title="Keep aspect"
+    <ListPreference android:title="Digit Spacing"
+        android:summary="Set spacing of large digits"
+        android:key="letterSpacing"
+        android:defaultValue="95%"
+        android:entries="@array/letterSpacingValues"
+        android:entryValues="@array/letterSpacingValues" />
+    <ListPreference android:title="Line Spacing"
+        android:summary="Set spacing between portrait mode lines"
+        android:key="lineSpacing"
+        android:defaultValue="105%"
+        android:entries="@array/lineSpacingValues"
+        android:entryValues="@array/lineSpacingValues" />
+    <ListPreference android:title="Display Scale"
+        android:summary="Set scale for large digits"
+        android:key="scale"
+        android:defaultValue="96%"
+        android:entries="@array/scaleValues"
+        android:entryValues="@array/scaleValues" />
+    <CheckBoxPreference android:title="Keep Aspect"
         android:key="keepAspect"
         android:defaultValue="true"
-        android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)."></CheckBoxPreference>
+        android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)"></CheckBoxPreference>
     <ListPreference android:title="Orientation"
         android:summary="Set display orientation"
         android:key="orientation"

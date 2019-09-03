@@ -43,6 +43,31 @@
         <item>100000</item>
     </string-array>
 
+    <string-array name="letterSpacingValues">
+        <item>85%</item>
+        <item>90%</item>
+        <item>95%</item>
+        <item>100%</item>
+    </string-array>
+
+    <string-array name="lineSpacingValues">
+        <item>102%</item>
+        <item>105%</item>
+        <item>110%</item>
+        <item>120%</item>
+    </string-array>
+
+    <string-array name="scaleValues">
+        <item>50%</item>
+        <item>60%</item>
+        <item>70%</item>
+        <item>80%</item>
+        <item>90%</item>
+        <item>94%</item>
+        <item>96%</item>
+        <item>98%</item>
+    </string-array>
+
     <string-array name="colorSchemes">
         <item>black on white</item>
         <item>green on black</item>
