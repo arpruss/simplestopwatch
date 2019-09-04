@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    android:id="@+id/main"
+    android:orientation="vertical"
     tools:context=".StopWatch">
 
     <omegacentauri.mobi.simplestopwatch.BigTextView
@@ -15,10 +15,23 @@
         android:layout_height="0px"
         android:layout_weight="1"
         android:gravity="center"
-        android:text=""
-        android:textSize="50sp"
         android:padding="0sp"
-/>
+        android:text=""
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/laps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:maxLines="3"
+        android:textSize="14sp"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:fadeScrollbars="true"
+        android:fadingEdge="vertical"
+        android:gravity="bottom"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,39 +43,42 @@
             android:id="@+id/start"
             android:layout_width="0sp"
             android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:background="@drawable/oval"
-            android:textColor="@android:color/white"
-            android:layout_marginRight="8dp"
             android:onClick="onButtonStart"
-            android:text="Start" />
+            android:text="Start"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/reset"
-                android:layout_width="0sp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:background="@drawable/oval"
-                android:textColor="@android:color/white"
-                android:layout_marginRight="8dp"
-                android:text="Reset"
-                android:onClick="onButtonReset" />
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="0sp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/oval"
+            android:onClick="onButtonReset"
+            android:text="Reset"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/fraction"
-            android:layout_weight="1"
-            android:gravity="center"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text=".0"
             android:textColor="#FFFFFF"
-            android:textSize="30sp" />
+            android:textSize="32sp" />
 
         <ImageButton
             android:id="@+id/settings"
-            android:onClick="onButtonSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:onClick="onButtonSettings"
             android:src="@drawable/settings" />
 
     </LinearLayout>

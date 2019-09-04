@@ -33,12 +33,13 @@ public class StopWatch extends Activity {
     private float unselectedThickness = 2f;
     private float selectedThickness = 6f;
     private static final int RECOLORABLE_TEXTVIEW[] = {
-        R.id.fraction
+        R.id.fraction, R.id.laps
     };
     private static final int RECOLORABLE_BUTTON[] = {
             R.id.start, R.id.reset
     };
     private View.OnTouchListener highlighter;
+    private TextView laps;
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
@@ -54,7 +55,9 @@ public class StopWatch extends Activity {
         chrono = (BigTextView)findViewById(R.id.chrono);
         resetButton = (Button)findViewById(R.id.reset);
         startButton = (Button)findViewById(R.id.start);
-        stopwatch = new MyChrono(this, options, chrono, (TextView)findViewById(R.id.fraction));
+        laps = (TextView)findViewById(R.id.laps);
+        stopwatch = new MyChrono(this, options, chrono, (TextView)findViewById(R.id.fraction),
+                laps);
         highlighter = new View.OnTouchListener() {
 
             @Override
@@ -75,6 +78,13 @@ public class StopWatch extends Activity {
             @Override
             public boolean onLongClick(View view) {
                 stopwatch.copyToClipboard();
+                return false;
+            }
+        });
+        laps.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                stopwatch.copyLapsToClipboard();
                 return false;
             }
         });
@@ -160,21 +170,21 @@ public class StopWatch extends Activity {
             if (stopwatch.paused) {
                 startButton.setText("Continue");
                 resetButton.setText("Reset");
-                resetButton.setVisibility(View.VISIBLE);
+                //resetButton.setVisibility(View.VISIBLE);
             } else {
                 startButton.setText("Stop");
-                resetButton.setVisibility(View.INVISIBLE);
+                resetButton.setText("Lap");
             }
         }
     }
 
     void pressReset() {
-        stopwatch.resetButton();
+        stopwatch.secondButton();
         updateButtons();
     }
 
     void pressStart() {
-        stopwatch.startStopButton();
+        stopwatch.firstButton();
         updateButtons();
     }
 
