@@ -3,6 +3,7 @@ from fontTools.pens.basePen import decomposeQuadraticSegment
 from sys import argv
 
 charsToDump = "0123456789:\u2212"
+maximizeDigitBounds = True
 fontName = "Roboto-Regular.ttf" if len(argv) < 2 else argv[1]
 className = "SansDigitsColon" if len(argv) < 3 else argv[2]
 
@@ -82,9 +83,13 @@ print("""package omegacentauri.mobi.simplestopwatch;
 import android.graphics.Path;
 
 public class %s extends MiniFont {
+  public %s() {
+    super(%s);
+  }
+  
   public void addFontData() {
     defineFontSize(%gf);
-""" % (className, maxY-minY))
+""" % (className, className, "true" if maximizeDigitBounds else "false", maxY-minY))
 
 for c in charsToDump:
     forcePath = None

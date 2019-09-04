@@ -44,10 +44,10 @@
         android:defaultValue="105%"
         android:entries="@array/lineSpacingValues"
         android:entryValues="@array/lineSpacingValues" />
-    <ListPreference android:title="Display Scale"
+    <ListPreference android:title="Large Digit Scale"
         android:summary="Set scale for large digits"
         android:key="scale"
-        android:defaultValue="96%"
+        android:defaultValue="98%"
         android:entries="@array/scaleValues"
         android:entryValues="@array/scaleValues" />
     <CheckBoxPreference android:title="Keep Aspect"

@@ -95,7 +95,7 @@ public class StopWatch extends Activity {
         chrono.setKeepAspect(options.getBoolean(Options.PREF_KEEP_ASPECT, true));
         chrono.setLineSpacing(Float.parseFloat(options.getString(Options.PREF_LINE_SPACING, "105%").replace("%",""))/100f);
         chrono.setLetterSpacing(Float.parseFloat(options.getString(Options.PREF_LETTER_SPACING, "95%").replace("%",""))/100f);
-        chrono.setScale(Float.parseFloat(options.getString(Options.PREF_SCALE, "96%").replace("%",""))/100f);
+        chrono.setScale(Float.parseFloat(options.getString(Options.PREF_SCALE, "98%").replace("%",""))/100f);
 
         int fore = Options.getForeColor(options);
         int back = Options.getBackColor(options);

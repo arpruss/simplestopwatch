@@ -18,12 +18,10 @@ public class BigTextView extends View {
     Paint basePaint;
     String text;
     String[] lines;
-    String[] tweakedLines;
-    Boolean equalizeDigits = true;
     Boolean keepAspect = true;
     float yOffsets[];
     float xOffsets[];
-    float scale = 0.96f;
+    float scale = 0.98f;
     static final float BASE_FONT_SIZE = 50f;
 
     public BigTextView(Context context, AttributeSet attrs) {
@@ -58,11 +56,6 @@ public class BigTextView extends View {
         invalidate();
     }
 
-    public void setEqualizeDigits(Boolean v) {
-        equalizeDigits = v;
-        setText(text, true);
-    }
-
     public void setLineSpacing(float l) {
         lineSpacing = l;
         invalidate();
@@ -84,7 +77,6 @@ public class BigTextView extends View {
         text = new String(s);
 
         lines = text.split("\\n");
-        tweakedLines = equalizeDigits ? text.replaceAll("[0-9]", "0").split("\\n") : lines;
 
         int n = lines.length;
         xOffsets = new float[n];
@@ -124,7 +116,7 @@ public class BigTextView extends View {
         float maxWidth = 0;
 
         for (int i = 0 ; i < n ; i++) {
-            String line = tweakedLines[i];
+            String line = lines[i];
             miniFont.getTextBounds(basePaint, letterSpacing, line, 0, line.length(), bounds);
             yOffsets[i] = height - bounds.top;
             height += bounds.height() * (i==n-1 ? 1 : lineSpacing);

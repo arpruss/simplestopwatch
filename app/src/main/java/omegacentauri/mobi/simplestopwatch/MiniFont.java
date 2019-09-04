@@ -13,10 +13,14 @@ import java.util.Map;
 abstract public class MiniFont {
     public float defaultFontSize = 1;
     public Map<Character, Glyph> map;
+    public boolean maximizeDigitBounds;
 
-    public MiniFont() {
+    public MiniFont(boolean maximizeDigitBounds) {
         map = new HashMap<Character, Glyph>();
         addFontData();
+        this.maximizeDigitBounds = maximizeDigitBounds;
+        if (maximizeDigitBounds)
+            doMaximizeDigitBounds();
     }
 
     interface PathMaker {
@@ -24,6 +28,40 @@ abstract public class MiniFont {
     }
 
     abstract protected void addFontData();
+
+    public void setMaximizeNumericBounds(boolean m) {
+        if (maximizeDigitBounds == m)
+            return;
+        maximizeDigitBounds = m;
+        map.clear();
+        addFontData();
+        if (maximizeDigitBounds) {
+            doMaximizeDigitBounds();
+        }
+    }
+
+    private void doMaximizeDigitBounds() {
+        RectF bounds = null;
+
+        for (Character i='0' ; i <= '9' ; i++) {
+            if (map.containsKey(i)) {
+                RectF glyphBounds = map.get(i).bounds;
+                if (bounds == null)
+                    bounds = new RectF(glyphBounds);
+                else
+                    bounds.union(glyphBounds);
+            }
+        }
+
+        if (bounds == null)
+            return;
+
+        for (Character i='0' ; i <= '9' ; i++) {
+            if (map.containsKey(i)) {
+                map.get(i).bounds = bounds;
+            }
+        }
+    }
 
     public void addCharacter(char c, float width, float lsb, PathMaker pm) {
         map.put(c, new Glyph(width, lsb, pm.makePath()));

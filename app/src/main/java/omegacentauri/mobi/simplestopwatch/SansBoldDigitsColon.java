@@ -3,6 +3,10 @@ package omegacentauri.mobi.simplestopwatch;
 import android.graphics.Path;
 
 public class SansBoldDigitsColon extends MiniFont {
+  public SansBoldDigitsColon() {
+    super(true);
+  }
+  
   public void addFontData() {
     defineFontSize(1893f);
 

@@ -3,6 +3,10 @@ package omegacentauri.mobi.simplestopwatch;
 import android.graphics.Path;
 
 public class DSEG7ClassicBoldItalicDigitsColon extends MiniFont {
+  public DSEG7ClassicBoldItalicDigitsColon() {
+    super(true);
+  }
+  
   public void addFontData() {
     defineFontSize(1000f);
 
