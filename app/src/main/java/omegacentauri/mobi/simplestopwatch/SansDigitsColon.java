@@ -3,7 +3,7 @@ package omegacentauri.mobi.simplestopwatch;
 import android.graphics.Path;
 
 public class SansDigitsColon extends MiniFont {
-  public SansDigitsColon() {
+  public void addFontData() {
     defineFontSize(1893f);
 
   addCharacter((char)48,1150f,115f,new PathMaker() {

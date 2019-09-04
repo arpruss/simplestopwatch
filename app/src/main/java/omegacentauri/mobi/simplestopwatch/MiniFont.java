@@ -10,14 +10,20 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MiniFont {
+abstract public class MiniFont {
     public float defaultFontSize = 1;
+    public Map<Character, Glyph> map;
+
+    public MiniFont() {
+        map = new HashMap<Character, Glyph>();
+        addFontData();
+    }
 
     interface PathMaker {
         Path makePath();
     }
 
-    public Map<Character, Glyph> map = new HashMap<Character, Glyph>();
+    abstract protected void addFontData();
 
     public void addCharacter(char c, float width, float lsb, PathMaker pm) {
         map.put(c, new Glyph(width, lsb, pm.makePath()));

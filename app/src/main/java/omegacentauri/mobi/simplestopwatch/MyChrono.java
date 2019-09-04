@@ -155,9 +155,9 @@ public class MyChrono {
     String formatTimeFull(long t) {
         if (t<0) {
             if (precision == 1)
-                return String.format("%.03d", (int) t);
+                return String.format("%.03f", (float)(t/1000.));
             else
-                return String.format("%.02d", (int) t);
+                return String.format("%.02f", (float)(t/1000.));
         }
         return formatTime(t, false)+formatTimeFraction(t,true );
     }

@@ -82,9 +82,9 @@ print("""package omegacentauri.mobi.simplestopwatch;
 import android.graphics.Path;
 
 public class %s extends MiniFont {
-  public %s() {
+  public void addFontData() {
     defineFontSize(%gf);
-""" % (className, className, maxY-minY))
+""" % (className, maxY-minY))
 
 for c in charsToDump:
     forcePath = None
