@@ -152,6 +152,16 @@ public class MyChrono {
             return "";
     }
 
+    String formatTimeFull(long t) {
+        if (t<0) {
+            if (precision == 1)
+                return String.format("%.03d", (int) t);
+            else
+                return String.format("%.02d", (int) t);
+        }
+        return formatTime(t, false)+formatTimeFraction(t,true );
+    }
+
     public int getNumberOfLaps() {
         if (lapData.length() == 0)
             return 0;
@@ -161,15 +171,14 @@ public class MyChrono {
     public void secondButton() {
         if (! paused) {
             long t = getTime();
-            String l = String.format("#%d %s%s", getNumberOfLaps()+1, formatTime(t, false), formatTimeFraction(t, true));
+            String l = String.format("#%d %s", getNumberOfLaps()+1, formatTimeFull(t));
             if (lapData.length() > 0)
                 lapData += "\n" + l;
             else
                 lapData = l;
             updateViews();
-            return;
         }
-        if (active) {
+        else if (active) {
             active = false;
             lapData = "";
             stopUpdating();
@@ -218,7 +227,6 @@ public class MyChrono {
         active = options.getBoolean(Options.PREFS_ACTIVE, false);
         paused = options.getBoolean(Options.PREFS_PAUSED, false);
         lapData = options.getString(Options.PREF_LAPS, "");
-        Log.v("chrono", "restore lapdata "+lapData);
 
         precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
         if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME)

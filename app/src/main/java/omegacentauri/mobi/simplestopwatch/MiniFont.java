@@ -65,8 +65,6 @@ public class MiniFont {
         float scaleY = paint.getTextSize() / defaultFontSize;
         float scaleX = scaleY * paint.getTextScaleX();
 
-        Log.v("chrono", "scale "+scaleX+" "+scaleY);
-
         for (int i=0; i<text.length(); i++) {
             char c = text.charAt(i);
             try {

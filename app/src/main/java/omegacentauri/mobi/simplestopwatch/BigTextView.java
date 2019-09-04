@@ -113,8 +113,6 @@ public class BigTextView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Log.v("chrono", "onDraw" + text);
-
         int n = lines.length;
         if (n==0)
             return;
