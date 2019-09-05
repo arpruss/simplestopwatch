@@ -10,7 +10,10 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.TabStopSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -23,6 +26,7 @@ import java.util.TimerTask;
 
 public class MyChrono {
     private final Activity context;
+    private String currentLapViewText;
     BigTextView mainView;
     TextView fractionView;
     public long baseTime;
@@ -31,6 +35,7 @@ public class MyChrono {
     String lapData;
     static final long MIN_DELAY_TIME = -9000;
     static final long delayTimes[] = { 0, -3000, -6000, MIN_DELAY_TIME };
+    long lastLapTime;
     public boolean paused = false;
     public boolean active = false;
     TextView lapView;
@@ -48,7 +53,10 @@ public class MyChrono {
         this.lapData = "";
         this.delayTime = options.getLong(Options.PREF_DELAY, 0);
         this.fractionView = fractionView;
+        this.lastLapTime = 0;
         this.lapView = lapView;
+        this.lapView.setText("");
+        this.currentLapViewText = "";
         this.lapView.setMovementMethod(new ScrollingMovementMethod());
 
         Log.v("chrono", "maxSize " +this.maxSize);
@@ -73,24 +81,31 @@ public class MyChrono {
                 lapView.setVisibility(View.GONE);
         }
         else {
-            if (lapView.getVisibility() == View.GONE || ! lapView.getText().toString().equals(lapData)) {
-                lapView.setText(lapData);
+            String adjLapData;
+            if (paused && active && lapData.length() > 0) {
+                adjLapData = lapData + "\n" + formatLapTime(pauseTime-baseTime);
+            }
+            else {
+                adjLapData = lapData;
+            }
+
+            if (lapView.getVisibility() == View.GONE || ! currentLapViewText.equals(adjLapData)) {
+                SpannableStringBuilder span = new SpannableStringBuilder(adjLapData);
+                int w1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 30, context.getResources().getDisplayMetrics());
+                int w2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 110, context.getResources().getDisplayMetrics());
+                span.setSpan(new TabStopSpan.Standard(w1), 0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE );
+                span.setSpan(new TabStopSpan.Standard(w2), 0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE );
+
+                lapView.setText(span);
+                currentLapViewText = adjLapData;
                 lapView.setMaxLines(Math.min(5,getNumberOfLaps()));
                 lapView.setVisibility(View.VISIBLE);
-                this.lapView.setMovementMethod(new ScrollingMovementMethod());
+//                this.lapView.setMovementMethod(new ScrollingMovementMethod());
             }
         }
     }
 
-    static private void optionalSetSizeAndText(TextView v, float newSize, String text) {
-        if (Math.abs(newSize - v.getTextSize()) > 10)
-            v.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
-        if (! v.getText().equals(text))
-            v.setText(text);
-
-    }
-
-    static final long floorDiv(long a, long b) {
+   static final long floorDiv(long a, long b) {
         long q = a/b;
         if (q*b > a)
             return q-1;
@@ -168,19 +183,27 @@ public class MyChrono {
         return lapData.split("\\n").length;
     }
 
+    private String formatLapTime(long t) {
+        return String.format("#%d\t%s\t%s", getNumberOfLaps() + 1, formatTimeFull(t), formatTimeFull(t-lastLapTime));
+    }
+
     public void secondButton() {
         if (! paused) {
             long t = getTime();
-            String l = String.format("#%d %s", getNumberOfLaps()+1, formatTimeFull(t));
-            if (lapData.length() > 0)
-                lapData += "\n" + l;
-            else
-                lapData = l;
+            if (0 <= t) {
+                String l = formatLapTime(t);
+                if (lapData.length() > 0)
+                    lapData += "\n" + l;
+                else
+                    lapData = l;
+                lastLapTime = t;
+            }
             updateViews();
         }
         else if (active) {
             active = false;
             lapData = "";
+            lastLapTime = 0;
             stopUpdating();
         }
         else {
@@ -205,6 +228,7 @@ public class MyChrono {
             save();
         }
         else if (!active) {
+            lastLapTime = 0;
             baseTime = SystemClock.elapsedRealtime() - delayTime;
             paused = false;
             active = true;
@@ -227,6 +251,7 @@ public class MyChrono {
         active = options.getBoolean(Options.PREFS_ACTIVE, false);
         paused = options.getBoolean(Options.PREFS_PAUSED, false);
         lapData = options.getString(Options.PREF_LAPS, "");
+        lastLapTime = options.getLong(Options.PREF_LAST_LAP_TIME, 0);
 
         precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
         if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME)
@@ -249,6 +274,7 @@ public class MyChrono {
         ed.putBoolean(Options.PREFS_PAUSED, paused);
         ed.putLong(Options.PREF_DELAY, delayTime);
         ed.putString(Options.PREF_LAPS, lapData);
+        ed.putLong(Options.PREF_LAST_LAP_TIME, lastLapTime);
         ed.apply();
     }
 
@@ -311,7 +337,7 @@ public class MyChrono {
     public void copyLapsToClipboard() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             ClipboardManager clip = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData data = ClipData.newPlainText("laps", lapData);
+            ClipData data = ClipData.newPlainText("laps", currentLapViewText.replace('\t', ' '));
             clip.setPrimaryClip(data);
 //            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT);
         }
