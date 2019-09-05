@@ -31,18 +31,6 @@
         <item>regular</item>
     </string-array>
 
-    <string-array name="maximumValues">
-        <item>800</item>
-        <item>900</item>
-        <item>1000</item>
-        <item>1100</item>
-        <item>1200</item>
-        <item>1300</item>
-        <item>1400</item>
-        <item>2000</item>
-        <item>100000</item>
-    </string-array>
-
     <string-array name="letterSpacingValues">
         <item>85%</item>
         <item>90%</item>
@@ -74,5 +62,6 @@
         <item>green on black</item>
         <item>red on black</item>
         <item>white on black</item>
+        <item>yellow on black</item>
     </string-array>
 </resources>

@@ -46,9 +46,10 @@ public class Options extends PreferenceActivity {
     }
     static {
         addColor("black on white", Color.BLACK, Color.WHITE);
-        addColor("white on black", Color.WHITE, Color.BLACK);
         addColor("green on black", Color.GREEN, Color.BLACK);
         addColor("red on black", Color.RED, Color.BLACK);
+        addColor("yellow on black", Color.YELLOW, Color.BLACK);
+        addColor("white on black", Color.WHITE, Color.BLACK);
     }
 
     static MiniFont getFont(SharedPreferences options) {
