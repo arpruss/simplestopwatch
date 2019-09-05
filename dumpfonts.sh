@@ -1,5 +1,7 @@
 echo Roboto-Regular
 python3 dumpfont.py Roboto-Regular.ttf SansDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/SansDigitsColon.java
+echo Roboto-Medium
+python3 dumpfont.py Roboto-Medium.ttf SansMediumDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/SansMediumDigitsColon.java
 echo Roboto-Bold
 python3 dumpfont.py Roboto-Bold.ttf SansBoldDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/SansBoldDigitsColon.java
 echo DSEG7

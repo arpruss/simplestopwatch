@@ -61,6 +61,9 @@ public class Options extends PreferenceActivity {
         else if (f.equals("7 segment")) {
             return new DSEG7ClassicBoldItalicDigitsColon();
         }
+        else if (f.equals("medium")) {
+            return new SansMediumDigitsColon();
+        }
         else {
             Log.v("chrono", "bold");
             return new SansBoldDigitsColon();
