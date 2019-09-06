@@ -342,4 +342,11 @@ public class MyChrono {
 //            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT);
         }
     }
+
+    public void clearLapData() {
+        lapData = "";
+        lastLapTime = 0;
+        save();
+        updateViews();
+    }
 }
