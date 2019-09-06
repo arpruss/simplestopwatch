@@ -243,4 +243,10 @@ public class StopWatch extends Activity {
     public void onButtonSettings(View view) {
         startActivity(new Intent(this, Options.class));
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopwatch.destroy();
+    }
 }

@@ -7,9 +7,13 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.RectF;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
@@ -21,11 +25,13 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MyChrono {
     private final Activity context;
+    private ToneGenerator toneG = null;
     private String currentLapViewText;
     BigTextView mainView;
     TextView fractionView;
@@ -38,12 +44,16 @@ public class MyChrono {
     long lastLapTime;
     public boolean paused = false;
     public boolean active = false;
+    boolean quiet = false;
+    long lastAnnounced = 0;
     TextView lapView;
     Timer timer;
     int maxSize;
     Handler updateHandler;
     SharedPreferences options;
     public int precision = 100;
+    private TextToSpeech tts = null;
+    private boolean ttsMode;
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView) {
@@ -58,6 +68,8 @@ public class MyChrono {
         this.lapView.setText("");
         this.currentLapViewText = "";
         this.lapView.setMovementMethod(new ScrollingMovementMethod());
+        toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+        tts = null;
 
         Log.v("chrono", "maxSize " +this.maxSize);
 
@@ -72,8 +84,46 @@ public class MyChrono {
         return active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : delayTime;
     }
 
-    public void updateViews() {
+    private void announce(long t) {
+        if (quiet)
+            return;
+        if (t < -3000 || t >= 1000) {
+            lastAnnounced = floorDiv(t, 1000)*1000;
+        }
+        else if (t < 0) {
+            if (tts != null && ttsMode) {
+                String msg;
+                if (-1000 <= t) {
+                    msg = "1";
+                }
+                else if (-2000 <= t) {
+                    msg = "2";
+                }
+                else {
+                    msg = "3";
+                }
+                Log.v("chrono", "say: "+msg);
+                tts.speak(msg,TextToSpeech.QUEUE_FLUSH, null);
+            }
+            else {
+                if (toneG != null)
+                    toneG.startTone(ToneGenerator.TONE_DTMF_S, 50);
+            }
+            lastAnnounced = floorDiv(t, 1000)*1000;
+        }
+        else if (t >= 0) {
+            if (toneG != null) {
+                toneG.startTone(ToneGenerator.TONE_DTMF_S, 600);
+            }
+            lastAnnounced = 0;
+        }
+    }
+
+    protected void updateViews() {
         long t = getTime();
+        if (lastAnnounced < 0 && lastAnnounced + 1000 <= t) {
+            announce(t+10);
+        }
         mainView.setText(formatTime(t,mainView.getHeight() > mainView.getWidth()));
         fractionView.setText(formatTimeFraction(t, active && paused));
         if (lapData.length() == 0) {
@@ -229,6 +279,10 @@ public class MyChrono {
         }
         else if (!active) {
             lastLapTime = 0;
+            if (delayTime < 0)
+                lastAnnounced = delayTime - 1000;
+            else
+                lastAnnounced = 1000;
             baseTime = SystemClock.elapsedRealtime() - delayTime;
             paused = false;
             active = true;
@@ -252,6 +306,39 @@ public class MyChrono {
         paused = options.getBoolean(Options.PREFS_PAUSED, false);
         lapData = options.getString(Options.PREF_LAPS, "");
         lastLapTime = options.getLong(Options.PREF_LAST_LAP_TIME, 0);
+        lastAnnounced = options.getLong(Options.PREF_LAST_ANNOUNCED, 0);
+        String soundMode = options.getString(Options.PREF_SOUND, "voice");
+        if (soundMode.equals("voice")) {
+            quiet = false;
+            ttsMode = true;
+            if (tts == null)
+                tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if(status == TextToSpeech.SUCCESS){
+    /*                    int result=tts.setLanguage(Locale.US);
+                        if(result==TextToSpeech.LANG_MISSING_DATA ||
+                                result==TextToSpeech.LANG_NOT_SUPPORTED){
+                            Log.e("chrono", "Language is not supported");
+                        }
+                        else{
+                            Log.v("chrono", "success");
+                         */
+                        }
+                        else {
+                            tts = null;
+                        }
+                    }
+                });
+
+        }
+        else if (soundMode.equals("beeps")) {
+            quiet = false;
+            ttsMode = false;
+        }
+        else {
+            quiet = true;
+        }
 
         precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
         if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME)
@@ -275,6 +362,7 @@ public class MyChrono {
         ed.putLong(Options.PREF_DELAY, delayTime);
         ed.putString(Options.PREF_LAPS, lapData);
         ed.putLong(Options.PREF_LAST_LAP_TIME, lastLapTime);
+        ed.putLong(Options.PREF_LAST_ANNOUNCED, lastAnnounced);
         ed.apply();
     }
 
@@ -287,6 +375,8 @@ public class MyChrono {
     }
 
     public void startUpdating() {
+        if (delayTime < 0 && lastAnnounced < 0 && !quiet) {
+        }
         if (timer == null) {
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -348,5 +438,16 @@ public class MyChrono {
         lastLapTime = 0;
         save();
         updateViews();
+    }
+
+    public void destroy() {
+        if (toneG != null) {
+            toneG.release();
+            toneG = null;
+        }
+        if (tts != null) {
+            tts.shutdown();
+            tts = null;
+        }
     }
 }

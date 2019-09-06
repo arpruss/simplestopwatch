@@ -54,6 +54,11 @@
         android:key="keepAspect"
         android:defaultValue="true"
         android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)"></CheckBoxPreference>
+    <ListPreference android:title="Countdown sounds"
+        android:key="sounds"
+        android:defaultValue="voice"
+        android:entries="@array/soundValues"
+        android:entryValues="@array/soundValues" />
     <ListPreference android:title="Orientation"
         android:summary="Set display orientation"
         android:key="orientation"
