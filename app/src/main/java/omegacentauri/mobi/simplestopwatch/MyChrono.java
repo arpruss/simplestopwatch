@@ -25,7 +25,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -54,6 +56,7 @@ public class MyChrono {
     public int precision = 100;
     private TextToSpeech tts = null;
     private boolean ttsMode;
+    HashMap<String,String> ttsParams = new HashMap<String,String>();
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView) {
@@ -103,7 +106,7 @@ public class MyChrono {
                     msg = "3";
                 }
                 Log.v("chrono", "say: "+msg);
-                tts.speak(msg,TextToSpeech.QUEUE_FLUSH, null);
+                tts.speak(msg,TextToSpeech.QUEUE_FLUSH, ttsParams);
             }
             else {
                 if (toneG != null)
@@ -330,7 +333,7 @@ public class MyChrono {
                         }
                     }
                 });
-
+                ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_ALARM));
         }
         else if (soundMode.equals("beeps")) {
             quiet = false;
