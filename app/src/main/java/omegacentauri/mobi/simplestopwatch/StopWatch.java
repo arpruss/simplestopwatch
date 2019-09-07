@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class StopWatch extends Activity {
+    private static final boolean DEBUG = true;
     SharedPreferences options;
     long baseTime = 0;
     long pausedTime = 0;
@@ -151,6 +152,8 @@ public class StopWatch extends Activity {
     protected void onResume() {
         super.onResume();
 
+        setVolumeControlStream(Options.getStream(options));
+
         String o = options.getString(Options.PREFS_ORIENTATION, "automatic");
         if (o.equals("landscape"))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -159,7 +162,7 @@ public class StopWatch extends Activity {
         else
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
-        Log.v("chrono", "theme");
+        debug("theme");
         setTheme();
         int orientation = getResources().getConfiguration().orientation;
         chrono.post(new Runnable() {
@@ -169,7 +172,7 @@ public class StopWatch extends Activity {
             }
         });
 
-        Log.v("chrono", "onResume");
+        debug("onResume");
 
         stopwatch.restore();
         stopwatch.updateViews();
@@ -178,7 +181,7 @@ public class StopWatch extends Activity {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Log.v("chrono", "onConfChanged");
+        debug("onConfChanged");
         super.onConfigurationChanged(newConfig);
         stopwatch.updateViews();
     }
@@ -226,14 +229,23 @@ public class StopWatch extends Activity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() != KeyEvent.ACTION_DOWN)
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (!options.getBoolean(Options.PREF_VOLUME, true))
             return false;
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP /*|| keyCode == KeyEvent.KEYCODE_A*/) {
+        return keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (!options.getBoolean(Options.PREF_VOLUME, true))
+            return false;
+        if (event.getAction() != KeyEvent.ACTION_DOWN)
+            return keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN;
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
             pressStart();
             return true;
         }
-        else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN /*|| keyCode == KeyEvent.KEYCODE_C*/) {
+        else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             pressReset();
             return true;
         }
@@ -248,5 +260,10 @@ public class StopWatch extends Activity {
     public void onDestroy() {
         super.onDestroy();
         stopwatch.destroy();
+    }
+
+    public static void debug(String s) {
+        if (DEBUG)
+            Log.v("chrono", s);
     }
 }

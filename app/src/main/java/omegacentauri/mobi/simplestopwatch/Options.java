@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
 
@@ -41,6 +43,8 @@ public class Options extends PreferenceActivity {
     public static final String PREF_LAST_ANNOUNCED = "lastAnnounced";
     public static final String PREF_SOUND = "sounds";
     public static final String PREF_BOOST = "boost";
+    public static final String PREF_ALARM = "alarm";
+    public static final String PREF_VOLUME = "volume";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
 
@@ -56,7 +60,7 @@ public class Options extends PreferenceActivity {
     }
 
     static MiniFont getFont(SharedPreferences options) {
-        String f = options.getString(PREF_FONT, "regular");
+        String f = options.getString(PREF_FONT, "medium");
         if (f.equals("regular")) {
             Log.v("chrono", "regular");
             return new SansDigitsColon();
@@ -144,6 +148,13 @@ public class Options extends PreferenceActivity {
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface dialog) {} });
         alertDialog.show();
+    }
+
+    public static int getStream(SharedPreferences options) {
+        if (options.getBoolean(Options.PREF_ALARM, true))
+            return AudioManager.STREAM_ALARM;
+        else
+            return AudioManager.STREAM_MUSIC;
     }
 
 /*    public static class MyPreferenceFragment extends PreferenceFragment

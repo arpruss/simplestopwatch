@@ -10,10 +10,6 @@
         android:defaultValue="h:m:s"
         android:entries="@array/formatValues"
         android:entryValues="@array/formatValues" />
-    <CheckBoxPreference android:title="Allow Three Line"
-        android:key="threeLine"
-        android:defaultValue="true"
-        android:summary="Use three lines for h:m:s portrait display."></CheckBoxPreference>
     <ListPreference android:title="Display Precision"
         android:summary="Set precision in seconds"
         android:key="precision"
@@ -23,7 +19,7 @@
     <ListPreference android:title="Font"
         android:summary="Choose display font for large digits"
         android:key="font"
-        android:defaultValue="regular"
+        android:defaultValue="medium"
         android:entries="@array/fontValues"
         android:entryValues="@array/fontValues" />
     <ListPreference android:title="Color Scheme"
@@ -32,33 +28,12 @@
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />
-    <ListPreference android:title="Digit Spacing"
-        android:summary="Set spacing of large digits"
-        android:key="letterSpacing"
-        android:defaultValue="95%"
-        android:entries="@array/letterSpacingValues"
-        android:entryValues="@array/letterSpacingValues" />
-    <ListPreference android:title="Line Spacing"
-        android:summary="Set spacing between portrait mode lines"
-        android:key="lineSpacing"
-        android:defaultValue="105%"
-        android:entries="@array/lineSpacingValues"
-        android:entryValues="@array/lineSpacingValues" />
-    <ListPreference android:title="Large Digit Scale"
-        android:summary="Set scale for large digits"
-        android:key="scale"
-        android:defaultValue="98%"
-        android:entries="@array/scaleValues"
-        android:entryValues="@array/scaleValues" />
-    <CheckBoxPreference android:title="Boost Audio"
-        android:key="boost"
-        android:defaultValue="false"
-        />
-    <CheckBoxPreference android:title="Keep Aspect"
-        android:key="keepAspect"
+    <CheckBoxPreference android:title="Use Volume Keys"
+        android:key="volume"
         android:defaultValue="true"
-        android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)"></CheckBoxPreference>
-    <ListPreference android:title="Countdown sounds"
+        android:summary="Volume Up = Start/Stop/Continue and Volume Down = Delay/Lap/Reset"
+        />
+    <ListPreference android:title="Countdown Sounds"
         android:key="sounds"
         android:defaultValue="voice"
         android:entries="@array/soundValues"
@@ -69,5 +44,45 @@
         android:defaultValue="automatic"
         android:entries="@array/orientationValues"
         android:entryValues="@array/orientationValues" />
-    <Preference android:key="license" android:title="Licenses and Copyrights"/>
+    <PreferenceCategory android:title="Advanced">
+        <CheckBoxPreference android:title="Keep Aspect"
+            android:key="keepAspect"
+            android:defaultValue="true"
+            android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)"></CheckBoxPreference>
+        <CheckBoxPreference android:title="Allow Three Line"
+            android:key="threeLine"
+            android:defaultValue="true"
+            android:summary="Use three lines for h:m:s portrait display."></CheckBoxPreference>
+        <ListPreference android:title="Digit Spacing"
+            android:summary="Set spacing of large digits"
+            android:key="letterSpacing"
+            android:defaultValue="95%"
+            android:entries="@array/letterSpacingValues"
+            android:entryValues="@array/letterSpacingValues" />
+        <ListPreference android:title="Line Spacing"
+            android:summary="Set spacing between portrait mode lines"
+            android:key="lineSpacing"
+            android:defaultValue="105%"
+            android:entries="@array/lineSpacingValues"
+            android:entryValues="@array/lineSpacingValues" />
+        <ListPreference android:title="Large Digit Scale"
+            android:summary="Set scale for large digits"
+            android:key="scale"
+            android:defaultValue="98%"
+            android:entries="@array/scaleValues"
+            android:entryValues="@array/scaleValues" />
+        <CheckBoxPreference android:title="Boost Countdown Audio"
+            android:key="boost"
+            android:defaultValue="false"
+            android:summary="USE AT YOUR OWN RISK. Boosted audio could damage speakers, earphones or hearing."
+            />
+        <CheckBoxPreference android:title="Use Alarm Stream"
+            android:key="alarm"
+            android:defaultValue="true"
+            android:summary="If this is turned off, the media stream will be used."
+            />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Licenses and Copyrights">
+    <Preference android:key="license" android:title="View Licenses and Copyrights"/>
+    </PreferenceCategory>
 </PreferenceScreen>

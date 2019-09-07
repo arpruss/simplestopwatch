@@ -7,7 +7,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.RectF;
+import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.media.ToneGenerator;
 import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
@@ -35,7 +37,6 @@ import java.util.TimerTask;
 
 public class MyChrono {
     private final Activity context;
-    private ToneGenerator toneG = null;
     private String currentLapViewText;
     BigTextView mainView;
     TextView fractionView;
@@ -58,11 +59,16 @@ public class MyChrono {
     public int precision = 100;
     private TextToSpeech tts = null;
     private boolean ttsMode;
+    int STREAM = AudioManager.STREAM_ALARM;;
     private boolean boostAudio = false;
     private static final int GAIN = 2000;
     HashMap<String,String> ttsParams = new HashMap<String,String>();
     private LoudnessEnhancer loudnessEnhancer = null;
-    private LoudnessEnhancer loudnessEnhancer2 = null;
+    private static final long SHORT_TONE_LENGTH = 75;
+    private static final long LONG_TONE_LENGTH = 600;
+    private static final float TONE_FREQUENCY = 2000;
+    private AudioTrack shortTone;
+    private AudioTrack longTone;
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView) {
@@ -77,10 +83,9 @@ public class MyChrono {
         this.lapView.setText("");
         this.currentLapViewText = "";
         this.lapView.setMovementMethod(new ScrollingMovementMethod());
-        toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
         tts = null;
 
-        Log.v("chrono", "maxSize " +this.maxSize);
+        StopWatch.debug("maxSize " +this.maxSize);
 
         updateHandler = new Handler() {
             public void handleMessage(Message m) {
@@ -94,7 +99,7 @@ public class MyChrono {
     }
 
     private void announce(long t) {
-        if (quiet)
+        if (quiet || !active || paused)
             return;
         if (t < -3000 || t >= 1000) {
             lastAnnounced = floorDiv(t, 1000)*1000;
@@ -111,19 +116,20 @@ public class MyChrono {
                 else {
                     msg = "3";
                 }
-                Log.v("chrono", "say: "+msg);
+                StopWatch.debug("say: "+msg);
                 tts.speak(msg,TextToSpeech.QUEUE_FLUSH, ttsParams);
             }
             else {
-                if (toneG != null)
-                    toneG.startTone(ToneGenerator.TONE_DTMF_S, 50);
+                shortTone.stop();
+                shortTone.reloadStaticData();
+                shortTone.play();
             }
             lastAnnounced = floorDiv(t, 1000)*1000;
         }
         else if (t >= 0) {
-            if (toneG != null) {
-                toneG.startTone(ToneGenerator.TONE_DTMF_S, 600);
-            }
+            longTone.stop();
+            longTone.reloadStaticData();
+            longTone.play();
             lastAnnounced = 0;
         }
     }
@@ -279,6 +285,15 @@ public class MyChrono {
         updateViews();
     }
 
+    private short[] sinewave(float frequency, long duration) {
+        int numSamples = (int)(44.100 * duration);
+        double alpha = frequency / 44100 * 2 * Math.PI;
+        short[] samples = new short[numSamples];
+        for (int i = 0 ; i < numSamples ; i++)
+            samples[i] = (short) (32767. * Math.sin(alpha * i));
+        return samples;
+    }
+
     public void firstButton() {
         if (active && paused) {
             baseTime += SystemClock.elapsedRealtime() - pauseTime;
@@ -308,70 +323,63 @@ public class MyChrono {
     }
 
     public void setAudio(String soundMode) {
-        if (soundMode.equals("voice")) {
-            quiet = false;
-            ttsMode = true;
-            if (tts == null)
-                tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(int status) {
-                        if(status == TextToSpeech.SUCCESS){
-    /*                    int result=tts.setLanguage(Locale.US);
-                        if(result==TextToSpeech.LANG_MISSING_DATA ||
-                                result==TextToSpeech.LANG_NOT_SUPPORTED){
-                            Log.e("chrono", "Language is not supported");
-                        }
-                        else{
-                            Log.v("chrono", "success");
-                         */
-                        }
-                        else {
-                            tts = null;
-                        }
-                    }
-                });
-            loudnessEnhancer = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && boostAudio) {
-                try {
-                    Log.v("chrono", "trying to boost");
-                    int id = ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).generateAudioSessionId();
-                    if (id != 0) {
-                        loudnessEnhancer = new LoudnessEnhancer(id);
-                        loudnessEnhancer.setTargetGain(GAIN);
-                        loudnessEnhancer.setEnabled(true);
-                        if (loudnessEnhancer.getEnabled()) {
-                            ttsParams.put(TextToSpeech.Engine.KEY_PARAM_SESSION_ID, "" + id);
-                            Log.v("chrono", "loudness!");
-                        } else {
-                            Log.v("chrono", "no loudness!");
-                            loudnessEnhancer = null;
-                        }
-                    }
-                }
-                catch (Exception e) {
-                    Log.v("chrono", "failed boost");
-                    loudnessEnhancer = null;
-                }
-            }
-            ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_ALARM));
-        }
-        else if (soundMode.equals("beeps")) {
-            quiet = false;
-            ttsMode = false;
-        }
-        else {
+        boostAudio = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && options.getBoolean(Options.PREF_BOOST, false);
+        STREAM = Options.getStream(options);
+
+        if (soundMode.equals("none")) {
             quiet = true;
+            ttsMode = false;
+            return;
         }
 
-  /*      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && boostAudio && !quiet) {
-            Log.v("chrono", "tone session "+toneG.getAudioSessionId());
-            try ...
-            loudnessEnhancer2 = new LoudnessEnhancer(toneG.getAudioSessionId());
-            loudnessEnhancer2.setTargetGain(GAIN);
-            loudnessEnhancer2.setEnabled(true);
-            if (!loudnessEnhancer2.getEnabled())
-                loudnessEnhancer2 = null;
-        } */
+        quiet = false;
+
+        short[] tone = sinewave(TONE_FREQUENCY, LONG_TONE_LENGTH);
+        longTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, tone.length * 2, AudioTrack.MODE_STATIC);
+        longTone.write(tone, 0, tone.length);
+        int sessionId = longTone.getAudioSessionId();
+        int shortLength = Math.min(tone.length, (int) (44.100 * SHORT_TONE_LENGTH));
+        shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC, sessionId);
+        shortTone.write(tone, 0, shortLength);
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        am.setStreamVolume(STREAM, am.getStreamMaxVolume(STREAM), 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && boostAudio) {
+            try {
+                StopWatch.debug("trying to boost");
+                loudnessEnhancer = new LoudnessEnhancer(sessionId);
+                loudnessEnhancer.setTargetGain(GAIN);
+                loudnessEnhancer.setEnabled(true);
+                if (!loudnessEnhancer.getEnabled()) {
+                    loudnessEnhancer = null;
+                }
+                else {
+                    StopWatch.debug("loudness success");
+                }
+            }
+            catch(Exception e) {
+            }
+        }
+
+        if (soundMode.equals("voice")) {
+            ttsMode = true;
+            tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if(status != TextToSpeech.SUCCESS){
+                        tts = null;
+                    }
+                }
+            });
+            ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(STREAM));
+            if (loudnessEnhancer != null)
+                ttsParams.put(TextToSpeech.Engine.KEY_PARAM_SESSION_ID, String.valueOf(sessionId));
+        }
+        else if (soundMode.equals("beeps")) {
+            ttsMode = false;
+        }
     }
 
     public void restore() {
@@ -383,7 +391,6 @@ public class MyChrono {
         lapData = options.getString(Options.PREF_LAPS, "");
         lastLapTime = options.getLong(Options.PREF_LAST_LAP_TIME, 0);
         lastAnnounced = options.getLong(Options.PREF_LAST_ANNOUNCED, 0);
-        boostAudio = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && options.getBoolean(Options.PREF_BOOST, false);
         setAudio(options.getString(Options.PREF_SOUND, "voice"));
 
         precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
@@ -443,7 +450,7 @@ public class MyChrono {
         SharedPreferences.Editor ed = pref.edit();
         ed.putBoolean(Options.PREFS_ACTIVE, false);
         ed.apply();
-        Log.v("chrono", "cleared "+Options.PREFS_ACTIVE);
+        StopWatch.debug("cleared "+Options.PREFS_ACTIVE);
     }
 
     public static void detectBoot(SharedPreferences options) {
@@ -491,13 +498,13 @@ public class MyChrono {
             loudnessEnhancer.setEnabled(false);
             loudnessEnhancer = null;
         }
-        if (loudnessEnhancer2 != null) {
-            loudnessEnhancer2.setEnabled(false);
-            loudnessEnhancer2 = null;
+        if (shortTone != null) {
+            shortTone.release();
+            shortTone = null;
         }
-        if (toneG != null) {
-            toneG.release();
-            toneG = null;
+        if (longTone != null) {
+            longTone.release();
+            longTone = null;
         }
         if (tts != null) {
             tts.shutdown();
