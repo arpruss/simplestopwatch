@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.media.audiofx.LoudnessEnhancer;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -56,7 +58,11 @@ public class MyChrono {
     public int precision = 100;
     private TextToSpeech tts = null;
     private boolean ttsMode;
+    private boolean boostAudio = false;
+    private static final int GAIN = 2000;
     HashMap<String,String> ttsParams = new HashMap<String,String>();
+    private LoudnessEnhancer loudnessEnhancer = null;
+    private LoudnessEnhancer loudnessEnhancer2 = null;
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView) {
@@ -301,16 +307,7 @@ public class MyChrono {
         updateViews();
     }
 
-    public void restore() {
-        baseTime = options.getLong(Options.PREFS_START_TIME, 0);
-        pauseTime = options.getLong(Options.PREFS_PAUSED_TIME, 0);
-        delayTime = options.getLong(Options.PREF_DELAY, 0);
-        active = options.getBoolean(Options.PREFS_ACTIVE, false);
-        paused = options.getBoolean(Options.PREFS_PAUSED, false);
-        lapData = options.getString(Options.PREF_LAPS, "");
-        lastLapTime = options.getLong(Options.PREF_LAST_LAP_TIME, 0);
-        lastAnnounced = options.getLong(Options.PREF_LAST_ANNOUNCED, 0);
-        String soundMode = options.getString(Options.PREF_SOUND, "voice");
+    public void setAudio(String soundMode) {
         if (soundMode.equals("voice")) {
             quiet = false;
             ttsMode = true;
@@ -333,7 +330,30 @@ public class MyChrono {
                         }
                     }
                 });
-                ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_ALARM));
+            loudnessEnhancer = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && boostAudio) {
+                try {
+                    Log.v("chrono", "trying to boost");
+                    int id = ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).generateAudioSessionId();
+                    if (id != 0) {
+                        loudnessEnhancer = new LoudnessEnhancer(id);
+                        loudnessEnhancer.setTargetGain(GAIN);
+                        loudnessEnhancer.setEnabled(true);
+                        if (loudnessEnhancer.getEnabled()) {
+                            ttsParams.put(TextToSpeech.Engine.KEY_PARAM_SESSION_ID, "" + id);
+                            Log.v("chrono", "loudness!");
+                        } else {
+                            Log.v("chrono", "no loudness!");
+                            loudnessEnhancer = null;
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    Log.v("chrono", "failed boost");
+                    loudnessEnhancer = null;
+                }
+            }
+            ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_ALARM));
         }
         else if (soundMode.equals("beeps")) {
             quiet = false;
@@ -342,6 +362,29 @@ public class MyChrono {
         else {
             quiet = true;
         }
+
+  /*      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && boostAudio && !quiet) {
+            Log.v("chrono", "tone session "+toneG.getAudioSessionId());
+            try ...
+            loudnessEnhancer2 = new LoudnessEnhancer(toneG.getAudioSessionId());
+            loudnessEnhancer2.setTargetGain(GAIN);
+            loudnessEnhancer2.setEnabled(true);
+            if (!loudnessEnhancer2.getEnabled())
+                loudnessEnhancer2 = null;
+        } */
+    }
+
+    public void restore() {
+        baseTime = options.getLong(Options.PREFS_START_TIME, 0);
+        pauseTime = options.getLong(Options.PREFS_PAUSED_TIME, 0);
+        delayTime = options.getLong(Options.PREF_DELAY, 0);
+        active = options.getBoolean(Options.PREFS_ACTIVE, false);
+        paused = options.getBoolean(Options.PREFS_PAUSED, false);
+        lapData = options.getString(Options.PREF_LAPS, "");
+        lastLapTime = options.getLong(Options.PREF_LAST_LAP_TIME, 0);
+        lastAnnounced = options.getLong(Options.PREF_LAST_ANNOUNCED, 0);
+        boostAudio = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && options.getBoolean(Options.PREF_BOOST, false);
+        setAudio(options.getString(Options.PREF_SOUND, "voice"));
 
         precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
         if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME)
@@ -378,8 +421,8 @@ public class MyChrono {
     }
 
     public void startUpdating() {
-        if (delayTime < 0 && lastAnnounced < 0 && !quiet) {
-        }
+//        if (delayTime < 0 && lastAnnounced < 0 && !quiet) {
+//        }
         if (timer == null) {
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -444,6 +487,14 @@ public class MyChrono {
     }
 
     public void destroy() {
+        if (loudnessEnhancer != null) {
+            loudnessEnhancer.setEnabled(false);
+            loudnessEnhancer = null;
+        }
+        if (loudnessEnhancer2 != null) {
+            loudnessEnhancer2.setEnabled(false);
+            loudnessEnhancer2 = null;
+        }
         if (toneG != null) {
             toneG.release();
             toneG = null;
@@ -452,5 +503,6 @@ public class MyChrono {
             tts.shutdown();
             tts = null;
         }
+
     }
 }

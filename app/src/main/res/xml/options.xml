@@ -50,6 +50,10 @@
         android:defaultValue="98%"
         android:entries="@array/scaleValues"
         android:entryValues="@array/scaleValues" />
+    <CheckBoxPreference android:title="Boost Audio"
+        android:key="boost"
+        android:defaultValue="false"
+        />
     <CheckBoxPreference android:title="Keep Aspect"
         android:key="keepAspect"
         android:defaultValue="true"
