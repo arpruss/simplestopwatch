@@ -2,6 +2,7 @@ package omegacentauri.mobi.simplestopwatch;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,19 +12,30 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class StopWatch extends Activity {
     private static final boolean DEBUG = true;
+    private static final int MENU_COPY_TIME = 0;
+    private static final int MENU_COPY_LAP_DATA = 1;
+    private static final int MENU_CLEAR_LAP_DATA = 2;
+    private static final int MENU_PACE = 3;
     SharedPreferences options;
     long baseTime = 0;
     long pausedTime = 0;
@@ -146,6 +158,7 @@ public class StopWatch extends Activity {
         }
 
         ((ImageButton)findViewById(R.id.settings)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
+        ((ImageButton)findViewById(R.id.menu)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -265,5 +278,84 @@ public class StopWatch extends Activity {
     public static void debug(String s) {
         if (DEBUG)
             Log.v("chrono", s);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        debug("options menu "+item.getItemId());
+        switch (item.getItemId()) {
+            case MENU_COPY_TIME:
+                stopwatch.copyToClipboard();
+                return true;
+            case MENU_COPY_LAP_DATA:
+                stopwatch.copyLapsToClipboard();
+                return true;
+            case MENU_CLEAR_LAP_DATA:
+                stopwatch.clearLapData();
+                return true;
+            case MENU_PACE:
+                pace();
+                return true;
+        }
+        return false;
+    }
+
+    public void pace() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setTitle("Pace Calculator");
+        dialog.setContentView(R.layout.pace);
+        final EditText input = (EditText)dialog.getWindow().findViewById(R.id.distance);
+        final TextView message = (TextView)dialog.getWindow().findViewById(R.id.message);
+        final String defaultMessage = "";
+        message.setText(defaultMessage);
+
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String msg;
+                try {
+                    double distance = Double.parseDouble(editable.toString());
+                    long t = stopwatch.getTime();
+                    msg = String.format("Pace: %s/%s = %s /unit\n" +
+                                        "Speed: %g units/hour", stopwatch.formatTimeFull(t), editable.toString(),
+                                        stopwatch.formatTimeFull((long)(t/distance)), distance/(t/(1000.*60*60)));
+                }
+                catch(Exception e) {
+                    msg = defaultMessage;
+                }
+                message.setText(msg);
+            }
+        });
+
+        input.requestFocus();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+        debug("pace");
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        menu.add(0, MENU_COPY_TIME, 00, "Copy time to clipboard");
+        if (stopwatch.lapData.length()>0) {
+            menu.add(0, MENU_COPY_LAP_DATA, 0, "Copy laps to clipboard");
+            menu.add(0, MENU_CLEAR_LAP_DATA, 0, "Clear lap data");
+        }
+        menu.add(0, MENU_PACE, 0, "Calculate pace");
+        return true;
+    }
+
+    public void onButtonMenu(View view) {
+        openOptionsMenu();
     }
 }

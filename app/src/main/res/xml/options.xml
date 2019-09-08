@@ -23,7 +23,6 @@
         android:entries="@array/fontValues"
         android:entryValues="@array/fontValues" />
     <ListPreference android:title="Color Scheme"
-        android:summary="Set color scheme"
         android:key="color"
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"

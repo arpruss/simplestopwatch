@@ -43,7 +43,7 @@ public class MyChrono {
     public long baseTime;
     public long pauseTime;
     public long delayTime;
-    String lapData;
+    public String lapData;
     static final long MIN_DELAY_TIME = -9000;
     static final long delayTimes[] = { 0, -3000, -6000, MIN_DELAY_TIME };
     long lastLapTime;
@@ -259,8 +259,12 @@ public class MyChrono {
                 String l = formatLapTime(t);
                 if (lapData.length() > 0)
                     lapData += "\n" + l;
-                else
+                else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                        context.invalidateOptionsMenu();
+                    }
                     lapData = l;
+                }
                 lastLapTime = t;
             }
             updateViews();
@@ -268,6 +272,9 @@ public class MyChrono {
         else if (active) {
             active = false;
             lapData = "";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                context.invalidateOptionsMenu();
+            }
             lastLapTime = 0;
             stopUpdating();
         }
@@ -487,6 +494,9 @@ public class MyChrono {
     }
 
     public void clearLapData() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            context.invalidateOptionsMenu();
+        }
         lapData = "";
         lastLapTime = 0;
         save();
