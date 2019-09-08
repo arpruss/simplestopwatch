@@ -98,7 +98,7 @@ public class StopWatch extends Activity {
                 return false;
             }
         };
-        secondButton.setOnLongClickListener(new View.OnLongClickListener() {
+/*        secondButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 if (stopwatch.active && stopwatch.lapData.length() > 0) {
@@ -106,7 +106,7 @@ public class StopWatch extends Activity {
                 }
                 return true;
             }
-        });
+        }); */
         firstButton.setOnTouchListener(highlighter);
         secondButton.setOnTouchListener(highlighter);
         chrono.setOnLongClickListener(new View.OnLongClickListener() {
