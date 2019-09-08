@@ -311,6 +311,11 @@ public class StopWatch extends Activity {
     }
 
     public void pace() {
+        if (stopwatch.getTime() < 0 || !stopwatch.active) {
+            Toast.makeText(StopWatch.this, "Stopwatch time not available", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pace/Speed Calculator");
         final long currentTime1000 = stopwatch.getTime();
@@ -410,7 +415,7 @@ public class StopWatch extends Activity {
             menu.add(0, MENU_COPY_LAP_DATA, 0, "Copy laps to clipboard");
             menu.add(0, MENU_CLEAR_LAP_DATA, 0, "Clear lap data");
         }
-        menu.add(0, MENU_PACE, 0, "Calculate pace");
+        menu.add(0, MENU_PACE, 0, "Pace and speed");
         return true;
     }
 
