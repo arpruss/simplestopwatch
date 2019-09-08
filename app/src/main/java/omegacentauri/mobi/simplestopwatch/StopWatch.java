@@ -302,11 +302,14 @@ public class StopWatch extends Activity {
 
     public void pace() {
         final Dialog dialog = new Dialog(this);
+        final long currentTime1000 = stopwatch.getTime();
+        final String currentTimeString = stopwatch.formatTimeFull(currentTime1000);
+        final double currentTime = currentTime1000/1000.;
         dialog.setTitle("Pace Calculator");
         dialog.setContentView(R.layout.pace);
         final EditText input = (EditText)dialog.getWindow().findViewById(R.id.distance);
         final TextView message = (TextView)dialog.getWindow().findViewById(R.id.message);
-        final String defaultMessage = "";
+        final String defaultMessage = "Time: " + currentTimeString;
         message.setText(defaultMessage);
 
         input.addTextChangedListener(new TextWatcher() {
@@ -325,10 +328,12 @@ public class StopWatch extends Activity {
                 String msg;
                 try {
                     double distance = Double.parseDouble(editable.toString());
-                    long t = stopwatch.getTime();
-                    msg = String.format("Pace: %s/%s = %s /unit\n" +
-                                        "Speed: %g units/hour", stopwatch.formatTimeFull(t), editable.toString(),
-                                        stopwatch.formatTimeFull((long)(t/distance)), distance/(t/(1000.*60*60)));
+                    msg = String.format("Time: %s\n" +
+                                        "Units: %s\n" +
+                                        "Pace: %s /unit\n" +
+                                        "Speed: %g units/hour", currentTimeString, editable.toString(),
+                                        stopwatch.formatTimeFull((long)(currentTime1000/distance)),
+                                        distance/(currentTime/(60*60)));
                 }
                 catch(Exception e) {
                     msg = defaultMessage;
