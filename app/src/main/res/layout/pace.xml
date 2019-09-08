@@ -19,7 +19,7 @@
             android:text="Units (distance or reps): "/>
     <EditText
         android:id="@+id/distance"
-        android:layout_width="wrap_content"
+        android:layout_width="70sp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:inputType="numberDecimal"
@@ -31,5 +31,22 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text=""/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/copy_pace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Copy pace"
+            />
+        <Button
+            android:id="@+id/copy_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Copy speed"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

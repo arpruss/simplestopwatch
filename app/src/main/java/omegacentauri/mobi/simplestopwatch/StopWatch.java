@@ -1,8 +1,12 @@
 package omegacentauri.mobi.simplestopwatch;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,14 +14,19 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.TabStopSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +38,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StopWatch extends Activity {
     private static final boolean DEBUG = true;
@@ -301,16 +311,56 @@ public class StopWatch extends Activity {
     }
 
     public void pace() {
-        final Dialog dialog = new Dialog(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pace/Speed Calculator");
         final long currentTime1000 = stopwatch.getTime();
         final String currentTimeString = stopwatch.formatTimeFull(currentTime1000);
         final double currentTime = currentTime1000/1000.;
-        dialog.setTitle("Pace Calculator");
-        dialog.setContentView(R.layout.pace);
-        final EditText input = (EditText)dialog.getWindow().findViewById(R.id.distance);
-        final TextView message = (TextView)dialog.getWindow().findViewById(R.id.message);
+        builder.setTitle("Pace Calculator");
+        View content = getLayoutInflater().inflate(R.layout.pace, null);
+        builder.setView(content);
+        final EditText input = (EditText)content.findViewById(R.id.distance);
+        final TextView message = (TextView)content.findViewById(R.id.message);
         final String defaultMessage = "Time: " + currentTimeString;
+        final Button copyPace = (Button)content.findViewById(R.id.copy_pace);
+        final Button copySpeed = (Button)content.findViewById(R.id.copy_speed);
         message.setText(defaultMessage);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            copyPace.setOnClickListener(new View.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                @Override
+                public void onClick(View view) {
+                    try {
+                        double distance = Double.parseDouble(input.getEditableText().toString());
+                        ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData data = ClipData.newPlainText("pace", stopwatch.formatTimeFull((long)(currentTime1000 / distance)));
+                        clip.setPrimaryClip(data);
+                    }
+                    catch(Exception e) {
+                        Toast.makeText(StopWatch.this, "Units not validly set", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            copySpeed.setOnClickListener(new View.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                @Override
+                public void onClick(View view) {
+                    try {
+                        double distance = Double.parseDouble(input.getEditableText().toString());
+                        ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData data = ClipData.newPlainText("speed", String.format("%g", distance/(currentTime/(60*60))));
+                        clip.setPrimaryClip(data);
+                    }
+                    catch(Exception e) {
+                        Toast.makeText(StopWatch.this, "Units not validly set", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+        else {
+            copySpeed.setVisibility(View.GONE);
+            copyPace.setVisibility(View.GONE);
+        }
 
         input.addTextChangedListener(new TextWatcher() {
             @Override
@@ -328,21 +378,25 @@ public class StopWatch extends Activity {
                 String msg;
                 try {
                     double distance = Double.parseDouble(editable.toString());
-                    msg = String.format("Time: %s\n" +
-                                        "Units: %s\n" +
-                                        "Pace: %s /unit\n" +
-                                        "Speed: %g units/hour", currentTimeString, editable.toString(),
+                    msg = String.format("Time:\t%s\n" +
+                                        "Pace:\t%s /unit\n" +
+                                        "Speed:\t%g units/hour", currentTimeString,
                                         stopwatch.formatTimeFull((long)(currentTime1000/distance)),
                                         distance/(currentTime/(60*60)));
                 }
                 catch(Exception e) {
                     msg = defaultMessage;
                 }
-                message.setText(msg);
+                SpannableStringBuilder span = new SpannableStringBuilder(msg);
+                int w1 = (int) message.getPaint().measureText("Speed: ");
+                //int w1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 80, StopWatch.this.getResources().getDisplayMetrics());
+                span.setSpan(new TabStopSpan.Standard(w1), 0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE );
+                message.setText(span);
             }
         });
 
         input.requestFocus();
+        AlertDialog dialog = builder.create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
         debug("pace");
