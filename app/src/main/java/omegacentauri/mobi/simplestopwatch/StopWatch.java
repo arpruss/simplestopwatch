@@ -409,13 +409,22 @@ public class StopWatch extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
+        menu.findItem(R.id.copy_laps).setVisible(stopwatch.lapData.length()>0);
+        menu.findItem(R.id.clear_laps).setVisible(stopwatch.lapData.length()>0);
+
+/*        menu.clear();
         menu.add(0, MENU_COPY_TIME, 00, "Copy time to clipboard");
         if (stopwatch.lapData.length()>0) {
             menu.add(0, MENU_COPY_LAP_DATA, 0, "Copy laps to clipboard");
             menu.add(0, MENU_CLEAR_LAP_DATA, 0, "Clear lap data");
         }
-        menu.add(0, MENU_PACE, 0, "Pace and speed");
+        menu.add(0, MENU_PACE, 0, "Pace and speed"); */
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 

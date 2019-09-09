@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/copy_time" android:title="Copy time to clipboard"   />
+    <item android:id="@+id/copy_laps" android:title="Copy lap data to clipboard"   />
+    <item android:id="@+id/clear_laps" android:title="Clear lap data" />
+    <item android:id="@+id/pace" android:title="Pace and speed"   />
+    </menu>
