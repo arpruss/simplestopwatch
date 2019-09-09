@@ -474,23 +474,13 @@ public class MyChrono {
     }
 
     public void copyToClipboard() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            long t = getTime();
-            String s = formatTime(t, false) + formatTimeFraction(t, true);
-            ClipboardManager clip = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData data = ClipData.newPlainText("time", s);
-            clip.setPrimaryClip(data);
-//            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT);
-        }
+        long t = getTime();
+        StopWatch.clip(context, formatTime(t, false) + formatTimeFraction(t, true));
     }
 
     public void copyLapsToClipboard() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            ClipboardManager clip = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData data = ClipData.newPlainText("laps", currentLapViewText.replace('\t', ' '));
-            clip.setPrimaryClip(data);
+        StopWatch.clip(context, currentLapViewText.replace('\t', ' '));
 //            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT);
-        }
     }
 
     public void clearLapData() {
@@ -504,7 +494,7 @@ public class MyChrono {
     }
 
     public void destroy() {
-        if (loudnessEnhancer != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && loudnessEnhancer != null) {
             loudnessEnhancer.setEnabled(false);
             loudnessEnhancer = null;
         }

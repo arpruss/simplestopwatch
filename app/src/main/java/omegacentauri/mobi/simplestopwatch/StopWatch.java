@@ -312,19 +312,21 @@ public class StopWatch extends Activity {
     }
 
     public void lockOrientation() {
-        switch(((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation()) {
-            case Surface.ROTATION_0:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                break;
-            case Surface.ROTATION_90:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                break;
-            case Surface.ROTATION_180:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                break;
-            case Surface.ROTATION_270:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                break;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+            switch(((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation()) {
+                case Surface.ROTATION_0:
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    break;
+                case Surface.ROTATION_90:
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    break;
+                case Surface.ROTATION_180:
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                    break;
+                case Surface.ROTATION_270:
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                    break;
+            }
         }
     }
 
@@ -350,42 +352,29 @@ public class StopWatch extends Activity {
         final Button copyPace = (Button)content.findViewById(R.id.copy_pace);
         final Button copySpeed = (Button)content.findViewById(R.id.copy_speed);
         message.setText(defaultMessage);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            copyPace.setOnClickListener(new View.OnClickListener() {
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                @Override
-                public void onClick(View view) {
-                    try {
-                        double distance = Double.parseDouble(input.getEditableText().toString());
-                        ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData data = ClipData.newPlainText("pace", stopwatch.formatTimeFull((long)(currentTime1000 / distance)));
-                        clip.setPrimaryClip(data);
-                    }
-                    catch(Exception e) {
-                        Toast.makeText(StopWatch.this, "Units not validly set", Toast.LENGTH_LONG).show();
-                    }
+        copyPace.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                try {
+                    double distance = Double.parseDouble(input.getEditableText().toString());
+                    clip(StopWatch.this, stopwatch.formatTimeFull((long)(currentTime1000 / distance)));
                 }
-            });
-            copySpeed.setOnClickListener(new View.OnClickListener() {
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                @Override
-                public void onClick(View view) {
-                    try {
-                        double distance = Double.parseDouble(input.getEditableText().toString());
-                        ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData data = ClipData.newPlainText("speed", String.format("%g", distance/(currentTime/(60*60))));
-                        clip.setPrimaryClip(data);
-                    }
-                    catch(Exception e) {
-                        Toast.makeText(StopWatch.this, "Units not validly set", Toast.LENGTH_LONG).show();
-                    }
+                catch(Exception e) {
+                    Toast.makeText(StopWatch.this, "Units not validly set", Toast.LENGTH_LONG).show();
                 }
-            });
-        }
-        else {
-            copySpeed.setVisibility(View.GONE);
-            copyPace.setVisibility(View.GONE);
-        }
+            }
+        });
+        copySpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    double distance = Double.parseDouble(input.getEditableText().toString());
+                    clip(StopWatch.this, String.format("%g", distance/(currentTime/(60*60))));
+                }
+                catch(Exception e) {
+                    Toast.makeText(StopWatch.this, "Units not validly set", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         input.addTextChangedListener(new TextWatcher() {
             @Override
@@ -450,5 +439,11 @@ public class StopWatch extends Activity {
 
     public void onButtonMenu(View view) {
         openOptionsMenu();
+    }
+
+    public static void clip(Context c, String s) {
+        android.text.ClipboardManager clip = (android.text.ClipboardManager)c.getSystemService(Context.CLIPBOARD_SERVICE);
+        clip.setText(s);
+        Toast.makeText(c, "Copied", Toast.LENGTH_SHORT).show();
     }
 }
