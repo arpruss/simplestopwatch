@@ -6,7 +6,6 @@
     <application
         android:allowBackup="true"
         android:label="Giant Stopwatch"
-        android:theme="@android:style/Theme.NoTitleBar"
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true">
         <activity android:name=".StopWatch">
