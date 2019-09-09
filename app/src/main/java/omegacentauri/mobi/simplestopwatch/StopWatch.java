@@ -42,10 +42,6 @@ import android.widget.Toast;
 
 public class StopWatch extends Activity {
     private static final boolean DEBUG = true;
-    private static final int MENU_COPY_TIME = 0;
-    private static final int MENU_COPY_LAP_DATA = 1;
-    private static final int MENU_CLEAR_LAP_DATA = 2;
-    private static final int MENU_PACE = 3;
     SharedPreferences options;
     long baseTime = 0;
     long pausedTime = 0;
@@ -123,23 +119,6 @@ public class StopWatch extends Activity {
                 return false;
             }
         });
-    }
-
-    private void askClearLapData() {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Clear lap data");
-        alertDialog.setMessage("Clear lap data?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        stopwatch.clearLapData();
-                    } });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {} });
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {} });
-        alertDialog.show();
     }
 
     void setTheme() {
@@ -294,16 +273,16 @@ public class StopWatch extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         debug("options menu "+item.getItemId());
         switch (item.getItemId()) {
-            case MENU_COPY_TIME:
+            case R.id.copy_time:
                 stopwatch.copyToClipboard();
                 return true;
-            case MENU_COPY_LAP_DATA:
+            case R.id.copy_laps:
                 stopwatch.copyLapsToClipboard();
                 return true;
-            case MENU_CLEAR_LAP_DATA:
+            case R.id.clear_laps:
                 stopwatch.clearLapData();
                 return true;
-            case MENU_PACE:
+            case R.id.pace:
                 pace();
                 return true;
         }
@@ -412,13 +391,6 @@ public class StopWatch extends Activity {
         menu.findItem(R.id.copy_laps).setVisible(stopwatch.lapData.length()>0);
         menu.findItem(R.id.clear_laps).setVisible(stopwatch.lapData.length()>0);
 
-/*        menu.clear();
-        menu.add(0, MENU_COPY_TIME, 00, "Copy time to clipboard");
-        if (stopwatch.lapData.length()>0) {
-            menu.add(0, MENU_COPY_LAP_DATA, 0, "Copy laps to clipboard");
-            menu.add(0, MENU_CLEAR_LAP_DATA, 0, "Clear lap data");
-        }
-        menu.add(0, MENU_PACE, 0, "Pace and speed"); */
         return true;
     }
 
