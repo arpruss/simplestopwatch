@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -150,12 +151,7 @@ public class StopWatch extends Activity {
         ((ImageButton)findViewById(R.id.menu)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        setVolumeControlStream(Options.getStream(options));
-
+    void setOrientation() {
         String o = options.getString(Options.PREFS_ORIENTATION, "automatic");
         if (o.equals("landscape"))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -164,6 +160,15 @@ public class StopWatch extends Activity {
         else
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setVolumeControlStream(Options.getStream(options));
+
+        setOrientation();
         debug("theme");
         setTheme();
         int orientation = getResources().getConfiguration().orientation;
@@ -289,11 +294,30 @@ public class StopWatch extends Activity {
         return false;
     }
 
+    public void lockOrientation() {
+        switch(((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation()) {
+            case Surface.ROTATION_0:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            case Surface.ROTATION_90:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case Surface.ROTATION_180:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_270:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+        }
+    }
+
     public void pace() {
         if (stopwatch.getTime() < 0 || !stopwatch.active) {
             Toast.makeText(StopWatch.this, "Stopwatch time not available", Toast.LENGTH_LONG).show();
             return;
         }
+
+        lockOrientation();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pace/Speed Calculator");
@@ -376,6 +400,13 @@ public class StopWatch extends Activity {
                 //int w1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 80, StopWatch.this.getResources().getDisplayMetrics());
                 span.setSpan(new TabStopSpan.Standard(w1), 0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE );
                 message.setText(span);
+            }
+        });
+
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                setOrientation();
             }
         });
 
