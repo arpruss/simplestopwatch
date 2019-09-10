@@ -67,7 +67,7 @@ public class Options extends PreferenceActivity {
             return new SansDigitsColon();
         }
         else if (f.equals("7 segment")) {
-            return new DSEG7ClassicBoldItalicDigitsColon();
+            return new SevenSegmentBoldItalicDigitsColon();
         }
         else if (f.equals("medium")) {
             return new SansMediumDigitsColon();

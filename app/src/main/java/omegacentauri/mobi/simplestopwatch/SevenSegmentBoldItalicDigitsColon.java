@@ -2,8 +2,8 @@ package omegacentauri.mobi.simplestopwatch;
 
 import android.graphics.Path;
 
-public class DSEG7ClassicBoldItalicDigitsColon extends MiniFont {
-  public DSEG7ClassicBoldItalicDigitsColon() {
+public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
+  public SevenSegmentBoldItalicDigitsColon() {
     super(true);
   }
   
