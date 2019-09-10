@@ -314,31 +314,31 @@ public class SansMediumDigitsColon extends MiniFont {
       return path;
       }
     });
-  addCharacter((char)58,543f,130f,new PathMaker() {
+  addCharacter((char)58,434.4f,130f,new PathMaker() {
     @Override
     public Path makePath() {
       Path path = new Path();
       // addComponent period (1, 0, 0, 1, -5, 0)
-      path.moveTo(271f,-256f);
-      path.quadTo(339f,-256f,376f,-217.5f);
-      path.quadTo(413f,-179f,413f,-121f);
-      path.quadTo(413f,-64f,376f,-26.5f);
-      path.quadTo(339f,11f,271f,11f);
-      path.quadTo(206f,11f,168f,-26f);
-      path.quadTo(130f,-63f,130f,-121f);
-      path.quadTo(130f,-179f,167f,-217.5f);
-      path.quadTo(204f,-256f,271f,-256f);
+      path.moveTo(216.7f,-256f);
+      path.quadTo(284.7f,-256f,321.7f,-217.5f);
+      path.quadTo(358.7f,-179f,358.7f,-121f);
+      path.quadTo(358.7f,-64f,321.7f,-26.5f);
+      path.quadTo(284.7f,11f,216.7f,11f);
+      path.quadTo(151.7f,11f,113.7f,-26f);
+      path.quadTo(75.7f,-63f,75.7f,-121f);
+      path.quadTo(75.7f,-179f,112.7f,-217.5f);
+      path.quadTo(149.7f,-256f,216.7f,-256f);
       path.close();
       // addComponent period (1, 0, 0, 1, -5, 849)
-      path.moveTo(271f,-1105f);
-      path.quadTo(339f,-1105f,376f,-1066.5f);
-      path.quadTo(413f,-1028f,413f,-970f);
-      path.quadTo(413f,-913f,376f,-875.5f);
-      path.quadTo(339f,-838f,271f,-838f);
-      path.quadTo(206f,-838f,168f,-875f);
-      path.quadTo(130f,-912f,130f,-970f);
-      path.quadTo(130f,-1028f,167f,-1066.5f);
-      path.quadTo(204f,-1105f,271f,-1105f);
+      path.moveTo(216.7f,-1105f);
+      path.quadTo(284.7f,-1105f,321.7f,-1066.5f);
+      path.quadTo(358.7f,-1028f,358.7f,-970f);
+      path.quadTo(358.7f,-913f,321.7f,-875.5f);
+      path.quadTo(284.7f,-838f,216.7f,-838f);
+      path.quadTo(151.7f,-838f,113.7f,-875f);
+      path.quadTo(75.7f,-912f,75.7f,-970f);
+      path.quadTo(75.7f,-1028f,112.7f,-1066.5f);
+      path.quadTo(149.7f,-1105f,216.7f,-1105f);
       path.close();
       return path;
       }

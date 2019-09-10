@@ -312,31 +312,31 @@ public class SansDigitsColon extends MiniFont {
       return path;
       }
     });
-  addCharacter((char)58,496f,134f,new PathMaker() {
+  addCharacter((char)58,396.8f,134f,new PathMaker() {
     @Override
     public Path makePath() {
       Path path = new Path();
       // addComponent period (1, 0, 0, 1, -10, 0)
-      path.moveTo(134f,-97f);
-      path.quadTo(134f,-145f,162.5f,-177f);
-      path.quadTo(191f,-209f,248f,-209f);
-      path.quadTo(305f,-209f,334.5f,-177f);
-      path.quadTo(364f,-145f,364f,-97f);
-      path.quadTo(364f,-51f,334.5f,-20f);
-      path.quadTo(305f,11f,248f,11f);
-      path.quadTo(191f,11f,162.5f,-20f);
-      path.quadTo(134f,-51f,134f,-97f);
+      path.moveTo(84.4f,-97f);
+      path.quadTo(84.4f,-145f,112.9f,-177f);
+      path.quadTo(141.4f,-209f,198.4f,-209f);
+      path.quadTo(255.4f,-209f,284.9f,-177f);
+      path.quadTo(314.4f,-145f,314.4f,-97f);
+      path.quadTo(314.4f,-51f,284.9f,-20f);
+      path.quadTo(255.4f,11f,198.4f,11f);
+      path.quadTo(141.4f,11f,112.9f,-20f);
+      path.quadTo(84.4f,-51f,84.4f,-97f);
       path.close();
       // addComponent period (1, 0, 0, 1, -9, 883)
-      path.moveTo(135f,-980f);
-      path.quadTo(135f,-1028f,163.5f,-1060f);
-      path.quadTo(192f,-1092f,249f,-1092f);
-      path.quadTo(306f,-1092f,335.5f,-1060f);
-      path.quadTo(365f,-1028f,365f,-980f);
-      path.quadTo(365f,-934f,335.5f,-903f);
-      path.quadTo(306f,-872f,249f,-872f);
-      path.quadTo(192f,-872f,163.5f,-903f);
-      path.quadTo(135f,-934f,135f,-980f);
+      path.moveTo(85.4f,-980f);
+      path.quadTo(85.4f,-1028f,113.9f,-1060f);
+      path.quadTo(142.4f,-1092f,199.4f,-1092f);
+      path.quadTo(256.4f,-1092f,285.9f,-1060f);
+      path.quadTo(315.4f,-1028f,315.4f,-980f);
+      path.quadTo(315.4f,-934f,285.9f,-903f);
+      path.quadTo(256.4f,-872f,199.4f,-872f);
+      path.quadTo(142.4f,-872f,113.9f,-903f);
+      path.quadTo(85.4f,-934f,85.4f,-980f);
       path.close();
       return path;
       }

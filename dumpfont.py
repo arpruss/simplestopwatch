@@ -3,6 +3,8 @@ from fontTools.pens.basePen import decomposeQuadraticSegment
 from sys import argv
 
 charsToDump = "0123456789:\u2212"
+charsToNarrow = ":"
+narrowFraction = 0.8
 maximizeDigitBounds = True
 fontName = "Roboto-Regular.ttf" if len(argv) < 2 else argv[1]
 className = "SansDigitsColon" if len(argv) < 3 else argv[2]
@@ -92,23 +94,25 @@ public class %s extends MiniFont {
 """ % (className, className, "true" if maximizeDigitBounds else "false", maxY-minY))
 
 for c in charsToDump:
-    forcePath = None
     try:
         glyph = glyphs[map[ord(c)]]
     except:
         if c == '\u2212':
             glyph = glyphs[map[ord('-')]]
-        
+    
+    if c in charsToNarrow:
+        dx = -glyph.width * (1-narrowFraction) * 0.5
+        w = glyph.width * narrowFraction
+    else:
+        dx = 0
+        w = glyph.width
 
-    print("  addCharacter((char)%d,%gf,%gf,new PathMaker() {" % (ord(c),glyph.width,glyph.lsb))
+    print("  addCharacter((char)%d,%gf,%gf,new PathMaker() {" % (ord(c),w,glyph.lsb))
     print("    @Override")
     print("    public Path makePath() {")
     print("      Path path = new Path();")
     
-    if forcePath:
-        print(path)
-    else:
-        glyph.draw(MyPen(indent="      "))
+    glyph.draw(MyPen(indent="      ", transformation=[[1,0,dx],[0,-1,0],[0,0,1]]))
     
     print("      return path;")
     print("      }")
