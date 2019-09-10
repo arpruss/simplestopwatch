@@ -67,7 +67,7 @@
             android:id="@+id/fraction"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:gravity="center"
             android:text=".0"
             android:textColor="#FFFFFF"
@@ -79,6 +79,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:onClick="onButtonSettings"
+            android:layout_marginRight="8dp"
             android:src="@drawable/settings" />
 
         <ImageButton

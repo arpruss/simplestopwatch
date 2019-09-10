@@ -45,6 +45,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_BOOST = "boost";
     public static final String PREF_ALARM = "alarm";
     public static final String PREF_VOLUME = "volume";
+    public static final int highlightPercent = 25;
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
 
@@ -93,6 +94,23 @@ public class Options extends PreferenceActivity {
         catch(Exception e) {
             return defaultColor[1];
         }
+    }
+
+    static int getHighlightColor(SharedPreferences options) {
+        int fore = getForeColor(options);
+        int back = getBackColor(options);
+
+        int high = 0;
+        for (int i = 0 ; i < 4 ; i++) {
+            int shift = i*8;
+            int mask = 0xFF << (i*8);
+            int f = (fore >> shift) & 0xFF;
+            int b = (back >> shift) & 0xFF;
+            int c = (b * highlightPercent + f * (100-highlightPercent)) / 100;
+            high |= c << shift;
+        }
+
+        return high;
     }
 
     @Override

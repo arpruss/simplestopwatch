@@ -67,6 +67,7 @@ public class StopWatch extends Activity {
     };
     private View.OnTouchListener highlighter;
     private TextView laps;
+    private View.OnTouchListener imageHighlighter;
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
@@ -100,17 +101,26 @@ public class StopWatch extends Activity {
                 return false;
             }
         };
-/*        secondButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (stopwatch.active && stopwatch.lapData.length() > 0) {
-                    askClearLapData();
-                }
-                return true;
-            }
-        }); */
         firstButton.setOnTouchListener(highlighter);
         secondButton.setOnTouchListener(highlighter);
+        /*
+        imageHighlighter = new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    ((ImageButton)view).setColorFilter(Options.getHighlightColor(options), PorterDuff.Mode.MULTIPLY);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    ((ImageButton)view).setColorFilter(Options.getForeColor(options), PorterDuff.Mode.MULTIPLY);
+                }
+                return false;
+            }
+        };
+
+        ((ImageButton)findViewById(R.id.settings)).setOnTouchListener(imageHighlighter);
+        ((ImageButton)findViewById(R.id.menu)).setOnTouchListener(imageHighlighter);
+        */
+
         chrono.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
