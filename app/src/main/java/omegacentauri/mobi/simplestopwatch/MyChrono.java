@@ -345,10 +345,17 @@ public class MyChrono {
         longTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, tone.length * 2, AudioTrack.MODE_STATIC);
         longTone.write(tone, 0, tone.length);
-        int sessionId = longTone.getAudioSessionId();
+        int sessionId = 0;
         int shortLength = Math.min(tone.length, (int) (44.100 * SHORT_TONE_LENGTH));
-        shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC, sessionId);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
+            sessionId = longTone.getAudioSessionId();
+            shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC, sessionId);
+        }
+        else {
+            shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC);
+        }
         shortTone.write(tone, 0, shortLength);
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         am.setStreamVolume(STREAM, am.getStreamMaxVolume(STREAM), 0);
