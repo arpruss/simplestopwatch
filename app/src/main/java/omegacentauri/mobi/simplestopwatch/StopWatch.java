@@ -1,11 +1,7 @@
 package omegacentauri.mobi.simplestopwatch;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,16 +15,12 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
-import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.TabStopSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +33,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -179,7 +170,7 @@ public class StopWatch extends Activity {
     }
 
     void setOrientation() {
-        String o = options.getString(Options.PREFS_ORIENTATION, "automatic");
+        String o = options.getString(Options.PREF_ORIENTATION, "automatic");
         if (o.equals("landscape"))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         else if (o.equals("portrait"))

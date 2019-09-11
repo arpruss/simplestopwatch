@@ -13,7 +13,8 @@ public class boot extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.v("chrono", "on boot");
         SharedPreferences options = PreferenceManager.getDefaultSharedPreferences(context);
-        MyChrono.clearSaved(options);
+        MyChrono.fixOnBoot(options);
+//        MyChrono.clearSaved(options);
     }
 }
 

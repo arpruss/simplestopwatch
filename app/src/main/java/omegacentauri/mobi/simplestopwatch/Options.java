@@ -9,7 +9,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
 
@@ -21,15 +20,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Options extends PreferenceActivity {
-    public static final String PREFS_START_TIME = "baseTime";
-    public static final String PREFS_PAUSED_TIME = "pausedTime";
-    public  static final String PREFS_ACTIVE = "active";
-    public static final String PREFS_PAUSED = "paused";
-    public static final String PREFS_BOOT_TIME = "boot";
-    public static final String PREFS_SCREEN_ON = "screenOn";
-    public static final String PREFS_PRECISION = "precision";
-    public static final String PREFS_COLOR = "color";
-    public static final String PREFS_ORIENTATION = "orientation";
+    public static final String PREF_START_TIME = "baseTime";
+    public static final String PREF_PAUSED_TIME = "pausedTime";
+    public static final String PREF_ACTIVE = "active";
+    public static final String PREF_PAUSED = "paused";
+    public static final String PREF_BOOT_TIME = "boot";
+    public static final String PREF_SCREEN_ON = "screenOn";
+    public static final String PREF_PRECISION = "precision";
+    public static final String PREF_COLOR = "color";
+    public static final String PREF_ORIENTATION = "orientation";
     public static final String PREF_FORMAT = "format";
     public static final String PREF_FONT = "font";
     public static final String PREF_THREE_LINE = "threeLine";
@@ -46,6 +45,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_ALARM = "alarm";
     public static final String PREF_VOLUME = "volume";
     public static final int highlightPercent = 25;
+    public static final String PREF_BOOT_ADJUSTED = "bootAdjusted";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
 
@@ -80,7 +80,7 @@ public class Options extends PreferenceActivity {
 
     static int getForeColor(SharedPreferences options) {
         try {
-            return colorMap.get(options.getString(PREFS_COLOR, "white on black"))[0];
+            return colorMap.get(options.getString(PREF_COLOR, "white on black"))[0];
         }
         catch(Exception e) {
             return defaultColor[0];
@@ -89,7 +89,7 @@ public class Options extends PreferenceActivity {
 
     static int getBackColor(SharedPreferences options) {
         try {
-            return colorMap.get(options.getString(PREFS_COLOR, "white on black"))[1];
+            return colorMap.get(options.getString(PREF_COLOR, "white on black"))[1];
         }
         catch(Exception e) {
             return defaultColor[1];

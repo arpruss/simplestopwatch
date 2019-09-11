@@ -2,19 +2,14 @@ package omegacentauri.mobi.simplestopwatch;
 //
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.RectF;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.ToneGenerator;
 import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
@@ -22,7 +17,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.TabStopSpan;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,8 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -163,7 +155,7 @@ public class MyChrono {
 
                 lapView.setText(span);
                 currentLapViewText = adjLapData;
-                lapView.setMaxLines(Math.min(5,getNumberOfLaps()));
+                lapView.setMaxLines(Math.min(5,getNumberOfLaps()+(paused?1:0)));
                 lapView.setVisibility(View.VISIBLE);
 //                this.lapView.setMovementMethod(new ScrollingMovementMethod());
             }
@@ -397,19 +389,30 @@ public class MyChrono {
     }
 
     public void restore() {
-        baseTime = options.getLong(Options.PREFS_START_TIME, 0);
-        pauseTime = options.getLong(Options.PREFS_PAUSED_TIME, 0);
+        baseTime = options.getLong(Options.PREF_START_TIME, 0);
+        pauseTime = options.getLong(Options.PREF_PAUSED_TIME, 0);
         delayTime = options.getLong(Options.PREF_DELAY, 0);
-        active = options.getBoolean(Options.PREFS_ACTIVE, false);
-        paused = options.getBoolean(Options.PREFS_PAUSED, false);
+        active = options.getBoolean(Options.PREF_ACTIVE, false);
+        paused = options.getBoolean(Options.PREF_PAUSED, false);
         lapData = options.getString(Options.PREF_LAPS, "");
         lastLapTime = options.getLong(Options.PREF_LAST_LAP_TIME, 0);
         lastAnnounced = options.getLong(Options.PREF_LAST_ANNOUNCED, 0);
         setAudio(options.getString(Options.PREF_SOUND, "voice"));
 
-        precision = Integer.parseInt(options.getString(Options.PREFS_PRECISION, "100"));
+        precision = Integer.parseInt(options.getString(Options.PREF_PRECISION, "100"));
         if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME)
             active = false;
+
+        if (options.getBoolean(Options.PREF_BOOT_ADJUSTED, false)) {
+            SharedPreferences.Editor ed = options.edit();
+            ed.putBoolean(Options.PREF_BOOT_ADJUSTED, false);
+            apply(ed);
+            StopWatch.debug("adjusted boot warn?");
+            if (active && !paused) {
+                StopWatch.debug("yeah");
+                Toast.makeText(context, "Reboot detected: Some precision may be lost", Toast.LENGTH_LONG).show();
+            }
+        }
 
         if (active && !paused) {
             startUpdating();
@@ -420,17 +423,33 @@ public class MyChrono {
         updateViews();
     }
 
+    public static void apply(SharedPreferences.Editor ed) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            ed.apply();
+        }
+        else {
+            ed.commit();
+        }
+    }
+
+    public static long getBootTime() {
+        return java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
+    }
+
     public void save() {
+        StopWatch.debug("saving");
         SharedPreferences.Editor ed = options.edit();
-        ed.putLong(Options.PREFS_START_TIME, baseTime);
-        ed.putLong(Options.PREFS_PAUSED_TIME, pauseTime);
-        ed.putBoolean(Options.PREFS_ACTIVE, active);
-        ed.putBoolean(Options.PREFS_PAUSED, paused);
+        ed.putLong(Options.PREF_START_TIME, baseTime);
+        ed.putLong(Options.PREF_PAUSED_TIME, pauseTime);
+        ed.putBoolean(Options.PREF_ACTIVE, active);
+        ed.putBoolean(Options.PREF_PAUSED, paused);
         ed.putLong(Options.PREF_DELAY, delayTime);
         ed.putString(Options.PREF_LAPS, lapData);
         ed.putLong(Options.PREF_LAST_LAP_TIME, lastLapTime);
         ed.putLong(Options.PREF_LAST_ANNOUNCED, lastAnnounced);
-        ed.apply();
+        ed.putLong(Options.PREF_BOOT_TIME, getBootTime());
+
+        apply(ed);
     }
 
     public void stopUpdating() {
@@ -454,7 +473,7 @@ public class MyChrono {
                 }
             }, 0, precision<=10 ? precision : 50); // avoid off-by-1 errors at lower precisions, at cost of some battery life
         }
-        if (options.getBoolean(Options.PREFS_SCREEN_ON, false))
+        if (options.getBoolean(Options.PREF_SCREEN_ON, false))
             ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -462,21 +481,21 @@ public class MyChrono {
 
     public static void clearSaved(SharedPreferences pref) {
         SharedPreferences.Editor ed = pref.edit();
-        ed.putBoolean(Options.PREFS_ACTIVE, false);
-        ed.apply();
-        StopWatch.debug("cleared "+Options.PREFS_ACTIVE);
+        ed.putBoolean(Options.PREF_ACTIVE, false);
+        apply(ed);
+        StopWatch.debug("cleared "+Options.PREF_ACTIVE);
     }
 
     public static void detectBoot(SharedPreferences options) {
         return;
         /*
         long bootTime = java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
-        long oldBootTime = options.getLong(Options.PREFS_BOOT_TIME, -100000);
+        long oldBootTime = options.getLong(Options.PREF_BOOT_TIME, -100000);
         SharedPreferences.Editor ed = options.edit();
         if (Math.abs(oldBootTime-bootTime)>60000) {
-            ed.putBoolean(Options.PREFS_ACTIVE, false);
+            ed.putBoolean(Options.PREF_ACTIVE, false);
         }
-        ed.putLong(Options.PREFS_BOOT_TIME, bootTime);
+        ed.putLong(Options.PREF_BOOT_TIME, bootTime);
         ed.apply(); */
     }
 
@@ -518,5 +537,31 @@ public class MyChrono {
             tts = null;
         }
 
+    }
+
+    public static void fixOnBoot(SharedPreferences options) {
+        if (! options.getBoolean(Options.PREF_ACTIVE, false)) {
+            StopWatch.debug("not active");
+            return;
+        }
+        long oldBootTime = options.getLong(Options.PREF_BOOT_TIME, 0);
+        SharedPreferences.Editor ed = options.edit();
+        if (oldBootTime == 0) {
+            ed.putBoolean(Options.PREF_ACTIVE, false);
+        }
+        else {
+            long delta = getBootTime() - oldBootTime;
+            if (delta == 0)
+                return;
+            adjust(options, ed, Options.PREF_START_TIME, -delta);
+            adjust(options, ed, Options.PREF_PAUSED_TIME, -delta);
+            ed.putBoolean(Options.PREF_BOOT_ADJUSTED, true);
+        }
+        apply(ed);
+    }
+
+    private static void adjust(SharedPreferences options, SharedPreferences.Editor ed, String opt, long delta) {
+        StopWatch.debug("opt "+opt+" "+delta);
+        ed.putLong(opt, options.getLong(opt, 0) + delta);
     }
 }
