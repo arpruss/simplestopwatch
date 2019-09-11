@@ -69,6 +69,9 @@ public class Options extends PreferenceActivity {
         else if (f.equals("7 segment")) {
             return new SevenSegmentBoldItalicDigitsColon();
         }
+        else if (f.equals("DIN 1451")) {
+            return new DINDigitsColon();
+        }
         else if (f.equals("medium")) {
             return new SansMediumDigitsColon();
         }

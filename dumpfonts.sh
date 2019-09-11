@@ -6,3 +6,5 @@ echo Roboto-Bold
 python3 dumpfont.py Roboto-Bold.ttf SansBoldDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/SansBoldDigitsColon.java
 echo DSEG7
 python3 dumpfont.py fonts-DSEG_v045/DSEG7-Classic/DSEG7Classic-BoldItalic.ttf SevenSegmentBoldItalicDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/SevenSegmentBoldItalicDigitsColon.java
+echo DIN
+python3 dumpfont.py "din1451alt G.ttf" DINDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/DINDigitsColon.java

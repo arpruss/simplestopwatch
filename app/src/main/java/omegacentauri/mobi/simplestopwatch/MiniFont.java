@@ -43,7 +43,7 @@ abstract public class MiniFont {
     private void doMaximizeDigitBounds() {
         RectF bounds = null;
 
-        for (Character i='0' ; i <= '9' ; i++) {
+        for (char i='0' ; i <= '9' ; i++) {
             if (map.containsKey(i)) {
                 RectF glyphBounds = map.get(i).bounds;
                 if (bounds == null)
@@ -56,7 +56,7 @@ abstract public class MiniFont {
         if (bounds == null)
             return;
 
-        for (Character i='0' ; i <= '9' ; i++) {
+        for (char i='0' ; i <= '9' ; i++) {
             if (map.containsKey(i)) {
                 map.get(i).bounds = bounds;
             }
@@ -65,6 +65,19 @@ abstract public class MiniFont {
 
     public void addCharacter(char c, float width, float lsb, PathMaker pm) {
         map.put(c, new Glyph(width, lsb, pm.makePath()));
+    }
+
+    protected void tweakWidth(char c, float newWidth) {
+        Glyph g = map.get(c);
+
+        if (g.width == newWidth)
+            return;
+
+        Matrix m = new Matrix();
+        m.setTranslate((newWidth - g.width)/2f, 0);
+        g.path.transform(m);
+
+        g.width = newWidth;
     }
 
     public void defineFontSize(float s) {
@@ -127,7 +140,7 @@ abstract public class MiniFont {
 
     static class Glyph {
         public final Path path;
-        private final float width;
+        private float width;
         private final float lsb;
         RectF bounds;
 

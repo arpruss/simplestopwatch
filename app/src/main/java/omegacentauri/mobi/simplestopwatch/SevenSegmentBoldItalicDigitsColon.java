@@ -508,48 +508,48 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       return path;
       }
     });
-  addCharacter((char)58,160f,20f,new PathMaker() {
+  addCharacter((char)58,200f,20f,new PathMaker() {
     @Override
     public Path makePath() {
       Path path = new Path();
-      path.moveTo(80f,-486f);
-      path.lineTo(80f,-486f);
+      path.moveTo(100f,-486f);
+      path.lineTo(100f,-486f);
       path.close();
-      path.moveTo(41f,-717f);
-      path.quadTo(45f,-728f,54f,-736f);
-      path.quadTo(64f,-746f,74f,-750f);
-      path.quadTo(83f,-754f,98f,-754f);
-      path.quadTo(113f,-754f,122f,-750f);
-      path.quadTo(133f,-746f,142f,-736f);
-      path.quadTo(150f,-728f,155f,-717f);
-      path.quadTo(160f,-705f,160f,-693f);
-      path.quadTo(160f,-681f,155f,-669f);
-      path.quadTo(150f,-657f,142f,-649f);
-      path.quadTo(134f,-641f,122f,-636f);
-      path.quadTo(110f,-631f,98f,-631f);
-      path.quadTo(86f,-631f,74f,-636f);
-      path.quadTo(62f,-641f,54f,-649f);
-      path.quadTo(46f,-657f,41f,-669f);
-      path.quadTo(36f,-681f,36f,-693f);
-      path.quadTo(36f,-705f,41f,-717f);
+      path.moveTo(61f,-717f);
+      path.quadTo(65f,-728f,74f,-736f);
+      path.quadTo(84f,-746f,94f,-750f);
+      path.quadTo(103f,-754f,118f,-754f);
+      path.quadTo(133f,-754f,142f,-750f);
+      path.quadTo(153f,-746f,162f,-736f);
+      path.quadTo(170f,-728f,175f,-717f);
+      path.quadTo(180f,-705f,180f,-693f);
+      path.quadTo(180f,-681f,175f,-669f);
+      path.quadTo(170f,-657f,162f,-649f);
+      path.quadTo(154f,-641f,142f,-636f);
+      path.quadTo(130f,-631f,118f,-631f);
+      path.quadTo(106f,-631f,94f,-636f);
+      path.quadTo(82f,-641f,74f,-649f);
+      path.quadTo(66f,-657f,61f,-669f);
+      path.quadTo(56f,-681f,56f,-693f);
+      path.quadTo(56f,-705f,61f,-717f);
       path.close();
-      path.moveTo(5f,-305f);
-      path.quadTo(9f,-316f,18f,-324f);
-      path.quadTo(28f,-334f,38f,-338f);
-      path.quadTo(47f,-342f,62f,-342f);
-      path.quadTo(77f,-342f,86f,-338f);
-      path.quadTo(96f,-334f,106f,-324f);
-      path.quadTo(114f,-316f,119f,-305f);
-      path.quadTo(124f,-293f,124f,-281f);
-      path.quadTo(124f,-269f,119f,-257f);
-      path.quadTo(114f,-245f,106f,-237f);
-      path.quadTo(98f,-229f,86f,-224f);
-      path.quadTo(74f,-219f,62f,-219f);
-      path.quadTo(50f,-219f,38f,-224f);
-      path.quadTo(26f,-229f,18f,-237f);
-      path.quadTo(10f,-245f,5f,-257f);
-      path.quadTo(3.55271e-15f,-269f,3.55271e-15f,-281f);
-      path.quadTo(3.55271e-15f,-293f,5f,-305f);
+      path.moveTo(25f,-305f);
+      path.quadTo(29f,-316f,38f,-324f);
+      path.quadTo(48f,-334f,58f,-338f);
+      path.quadTo(67f,-342f,82f,-342f);
+      path.quadTo(97f,-342f,106f,-338f);
+      path.quadTo(116f,-334f,126f,-324f);
+      path.quadTo(134f,-316f,139f,-305f);
+      path.quadTo(144f,-293f,144f,-281f);
+      path.quadTo(144f,-269f,139f,-257f);
+      path.quadTo(134f,-245f,126f,-237f);
+      path.quadTo(118f,-229f,106f,-224f);
+      path.quadTo(94f,-219f,82f,-219f);
+      path.quadTo(70f,-219f,58f,-224f);
+      path.quadTo(46f,-229f,38f,-237f);
+      path.quadTo(30f,-245f,25f,-257f);
+      path.quadTo(20f,-269f,20f,-281f);
+      path.quadTo(20f,-293f,25f,-305f);
       path.close();
       return path;
       }
@@ -569,5 +569,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       return path;
       }
     });
+  tweakWidth((char)58,160f);
   }
 }

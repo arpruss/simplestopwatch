@@ -6,6 +6,7 @@ charsToDump = "0123456789:\u2212"
 charsToNarrow = ":"
 narrowFraction = 0.8
 maximizeDigitBounds = True
+equalizeWidths = "0123456789"
 fontName = "Roboto-Regular.ttf" if len(argv) < 2 else argv[1]
 className = "SansDigitsColon" if len(argv) < 3 else argv[2]
 
@@ -93,29 +94,38 @@ public class %s extends MiniFont {
     defineFontSize(%gf);
 """ % (className, className, "true" if maximizeDigitBounds else "false", maxY-minY))
 
-for c in charsToDump:
+def getGlyph(c):
     try:
-        glyph = glyphs[map[ord(c)]]
+        return glyphs[map[ord(c)]]
     except:
         if c == '\u2212':
-            glyph = glyphs[map[ord('-')]]
-    
-    if c in charsToNarrow:
-        dx = -glyph.width * (1-narrowFraction) * 0.5
-        w = glyph.width * narrowFraction
-    else:
-        dx = 0
-        w = glyph.width
+            return glyphs[map[ord('-')]]
+        else:
+            raise KeyError()
 
-    print("  addCharacter((char)%d,%gf,%gf,new PathMaker() {" % (ord(c),w,glyph.lsb))
+for c in charsToDump:
+    glyph = getGlyph(c)
+    
+    print("  addCharacter((char)%d,%gf,%gf,new PathMaker() {" % (ord(c),glyph.width,glyph.lsb))
     print("    @Override")
     print("    public Path makePath() {")
     print("      Path path = new Path();")
     
-    glyph.draw(MyPen(indent="      ", transformation=[[1,0,dx],[0,-1,0],[0,0,1]]))
+    glyph.draw(MyPen(indent="      ", transformation=[[1,0,0],[0,-1,0],[0,0,1]]))
     
     print("      return path;")
     print("      }")
     print("    });")
+
+    
+for c in charsToNarrow:
+    print("  tweakWidth((char)%d,%gf);" % (ord(c),getGlyph(c).width*narrowFraction))
+    
+if equalizeWidths:
+    maxW = max(getGlyph(c).width for c in equalizeWidths)
+    for c in equalizeWidths:
+        if getGlyph(c).width != maxW:
+            print("  tweakWidth((char)%d,%gf);" % (ord(c),maxW))
+    
 print("  }")
 print("}")
