@@ -20,7 +20,7 @@
         android:summary="Choose display font for large digits"
         android:key="font"
         android:defaultValue="medium"
-        android:entries="@array/fontValues"
+        android:entries="@array/fontNames"
         android:entryValues="@array/fontValues" />
     <ListPreference android:title="Color Scheme"
         android:key="color"

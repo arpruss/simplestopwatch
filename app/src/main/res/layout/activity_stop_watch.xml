@@ -43,7 +43,7 @@
             android:id="@+id/start"
             android:layout_width="0sp"
             android:layout_height="match_parent"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/oval"
             android:onClick="onButtonStart"
@@ -55,7 +55,6 @@
             android:id="@+id/reset"
             android:layout_width="0sp"
             android:layout_height="match_parent"
-            android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:background="@drawable/oval"
             android:onClick="onButtonReset"
@@ -67,7 +66,7 @@
             android:id="@+id/fraction"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.9"
+            android:layout_weight="0.85"
             android:gravity="center"
             android:text=".0"
             android:textColor="#FFFFFF"
@@ -79,7 +78,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:onClick="onButtonSettings"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="6dp"
             android:src="@drawable/settings" />
 
         <ImageButton
