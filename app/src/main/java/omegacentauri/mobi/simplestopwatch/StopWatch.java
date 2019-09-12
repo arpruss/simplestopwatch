@@ -120,6 +120,8 @@ public class StopWatch extends Activity {
         chrono.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
+                    return;
                 SharedPreferences.Editor ed = options.edit();
                 ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
                 MyChrono.apply(ed);
@@ -189,6 +191,9 @@ public class StopWatch extends Activity {
 
     private void setFullScreen()
     {
+        if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
+            return;
+
         boolean fs = options.getBoolean(Options.PREF_FULLSCREEN, false);
         Window w = getWindow();
         WindowManager.LayoutParams attrs = w.getAttributes();
@@ -204,7 +209,7 @@ public class StopWatch extends Activity {
 
         View dv = w.getDecorView();
 
-        if(Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+        if(Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) {
             dv.setSystemUiVisibility(fs ? View.GONE : View.VISIBLE);
         } else if(Build.VERSION.SDK_INT >= 19) {
             int flags = dv.getSystemUiVisibility();
@@ -224,10 +229,11 @@ public class StopWatch extends Activity {
 
         setVolumeControlStream(Options.getStream(options));
 
-        setFullScreen();
         setOrientation();
-        debug("theme");
+
         setTheme();
+        setFullScreen();
+        debug("theme");
         int orientation = getResources().getConfiguration().orientation;
         chrono.post(new Runnable() {
             @Override

@@ -45,8 +45,9 @@ public class Options extends PreferenceActivity {
     public static final String PREF_ALARM = "alarm";
     public static final String PREF_VOLUME = "volume";
     public static final String PREF_FULLSCREEN = "fullscreen";
-    public static final int highlightPercent = 25;
+    public static String PREF_CONTROL_FULLSCREEN = "controlFS";
     public static final String PREF_BOOT_ADJUSTED = "bootAdjusted";
+    public static final int highlightPercent = 25;
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
 

@@ -135,8 +135,15 @@ public class BigTextView extends View {
             adjustY = adjustX;
         }
         else {
-            adjustX = scale * cWidth / maxWidth;
-            adjustY = scale * cHeight / height;
+            float adjust = scale * Math.max(cWidth / maxWidth, cHeight / height);
+            if (adjust * maxWidth > cWidth)
+                adjustX = cWidth / maxWidth;
+            else
+                adjustX = adjust;
+            if (adjust * height > cHeight)
+                adjustY = cHeight / height;
+            else
+                adjustY = adjust;
         }
 
         paint.setTextSize(adjustY * BASE_FONT_SIZE);

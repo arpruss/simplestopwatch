@@ -48,6 +48,10 @@
             android:key="keepAspect"
             android:defaultValue="true"
             android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)"></CheckBoxPreference>
+        <CheckBoxPreference android:title="Control Fullscreen"
+            android:key="controlFS"
+            android:defaultValue="true"
+            android:summary="Allow switching to fullscreen mode by tapping in middle of screen"></CheckBoxPreference>
         <CheckBoxPreference android:title="Allow Three Line"
             android:key="threeLine"
             android:defaultValue="true"
