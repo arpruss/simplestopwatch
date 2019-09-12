@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ public class StopWatch extends Activity {
     private View.OnTouchListener highlighter;
     private TextView laps;
     private View.OnTouchListener imageHighlighter;
+    private LinearLayout controlBar;
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
@@ -70,6 +72,7 @@ public class StopWatch extends Activity {
         chrono = (BigTextView)findViewById(R.id.chrono);
         secondButton = (Button)findViewById(R.id.reset);
         firstButton = (Button)findViewById(R.id.start);
+        controlBar = (LinearLayout)findViewById(R.id.controlBar);
         laps = (TextView)findViewById(R.id.laps);
         stopwatch = new MyChrono(this, options, chrono, (TextView)findViewById(R.id.fraction),
                 laps);
@@ -112,6 +115,15 @@ public class StopWatch extends Activity {
             public boolean onLongClick(View view) {
                 stopwatch.copyToClipboard();
                 return false;
+            }
+        });
+        chrono.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor ed = options.edit();
+                ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
+                MyChrono.apply(ed);
+                setFullScreen();
             }
         });
         laps.setOnLongClickListener(new View.OnLongClickListener() {
@@ -175,12 +187,44 @@ public class StopWatch extends Activity {
 
     }
 
+    private void setFullScreen()
+    {
+        boolean fs = options.getBoolean(Options.PREF_FULLSCREEN, false);
+        Window w = getWindow();
+        WindowManager.LayoutParams attrs = w.getAttributes();
+
+        if (options.getBoolean(Options.PREF_FULLSCREEN, false)) {
+            attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        }
+        else {
+            attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        }
+
+        w.setAttributes(attrs);
+
+        View dv = w.getDecorView();
+
+        if(Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            dv.setSystemUiVisibility(fs ? View.GONE : View.VISIBLE);
+        } else if(Build.VERSION.SDK_INT >= 19) {
+            int flags = dv.getSystemUiVisibility();
+            if (fs)
+                flags |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            else
+                flags &= ~(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            dv.setSystemUiVisibility(flags);
+        }
+
+        controlBar.setVisibility(fs ? View.GONE : View.VISIBLE);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
         setVolumeControlStream(Options.getStream(options));
 
+        setFullScreen();
         setOrientation();
         debug("theme");
         setTheme();
