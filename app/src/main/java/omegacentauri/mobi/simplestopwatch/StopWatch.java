@@ -37,13 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class StopWatch extends Activity {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     SharedPreferences options;
-    long baseTime = 0;
-    long pausedTime = 0;
-    boolean active = false;
-    boolean paused = false;
-    boolean chronoStarted = false;
     private BigTextView chrono = null;
     private MyChrono stopwatch;
     private Button secondButton;
