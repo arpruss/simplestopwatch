@@ -39,6 +39,24 @@
         <item>regular</item>
     </string-array>
 
+    <string-array name="fsControlBarBrightnessValues">
+        <item>0</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+    </string-array>
+
+    <string-array name="fsControlBarBrightnessDisplayValues">
+        <item>none</item>
+        <item>10%</item>
+        <item>20%</item>
+        <item>30%</item>
+        <item>40%</item>
+        <item>50%</item>
+    </string-array>
+
     <string-array name="fontNames">
         <item>7 segment</item>
         <item>DIN 1451</item>

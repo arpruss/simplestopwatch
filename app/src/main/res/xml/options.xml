@@ -52,6 +52,12 @@
             android:key="controlFS"
             android:defaultValue="true"
             android:summary="Allow switching to fullscreen mode by tapping in middle of screen"></CheckBoxPreference>
+    <ListPreference android:title="Fullscreen Control Bar Brightness"
+        android:summary="Set brightness of the bottom bar while in full screen mode"
+        android:key="fsBright"
+        android:defaultValue="0"
+        android:entries="@array/fsControlBarBrightnessDisplayValues"
+        android:entryValues="@array/fsControlBarBrightnessValues" />
         <CheckBoxPreference android:title="Allow Three Line"
             android:key="threeLine"
             android:defaultValue="true"

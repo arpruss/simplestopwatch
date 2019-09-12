@@ -136,12 +136,12 @@ public class BigTextView extends View {
         }
         else {
             float adjust = scale * Math.max(cWidth / maxWidth, cHeight / height);
-            if (adjust * maxWidth > cWidth)
-                adjustX = cWidth / maxWidth;
+            if (adjust * maxWidth > cWidth * scale)
+                adjustX = scale * cWidth / maxWidth;
             else
                 adjustX = adjust;
-            if (adjust * height > cHeight)
-                adjustY = cHeight / height;
+            if (adjust * height > cHeight * scale)
+                adjustY = scale * cHeight / height;
             else
                 adjustY = adjust;
         }

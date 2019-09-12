@@ -1,5 +1,6 @@
 package omegacentauri.mobi.simplestopwatch;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,11 +35,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class StopWatch extends Activity {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     SharedPreferences options;
     private BigTextView chrono = null;
     private MyChrono stopwatch;
@@ -46,9 +48,6 @@ public class StopWatch extends Activity {
     private Button firstButton;
     private float unselectedThickness = 2f;
     private float selectedThickness = 6f;
-    private static final int RECOLORABLE_TEXTVIEW[] = {
-        R.id.fraction, R.id.laps
-    };
     private static final int RECOLORABLE_BUTTON[] = {
             R.id.start, R.id.reset
     };
@@ -59,6 +58,17 @@ public class StopWatch extends Activity {
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
+    }
+
+    public int getControlBarForeColor() {
+        int base = Options.getForeColor(options);
+        if (!options.getBoolean(Options.PREF_FULLSCREEN, false))
+            return base;
+        int controlBarBrightness = 255 * Integer.parseInt(options.getString(Options.PREF_FS_BRIGHT, "0")) / 100;
+        if (controlBarBrightness == 0)
+            return base;
+        return (base & 0xFFFFFF) | (controlBarBrightness << 24);
+
     }
 
     @Override
@@ -82,10 +92,10 @@ public class StopWatch extends Activity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     GradientDrawable gd = (GradientDrawable) view.getBackground();
-                    gd.setStroke((int)dp2px(selectedThickness), Options.getForeColor(options));
+                    gd.setStroke((int)dp2px(selectedThickness), getControlBarForeColor());
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     GradientDrawable gd = (GradientDrawable) view.getBackground();
-                    gd.setStroke((int)dp2px(unselectedThickness), Options.getForeColor(options));
+                    gd.setStroke((int)dp2px(unselectedThickness), getControlBarForeColor());
                 }
                 return false;
             }
@@ -126,6 +136,7 @@ public class StopWatch extends Activity {
                 ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
                 MyChrono.apply(ed);
                 setFullScreen();
+                setTheme();
             }
         });
         laps.setOnLongClickListener(new View.OnLongClickListener() {
@@ -135,6 +146,8 @@ public class StopWatch extends Activity {
                 return false;
             }
         });
+        setFullScreen();
+        setTheme();
     }
 
     void setTheme() {
@@ -145,25 +158,26 @@ public class StopWatch extends Activity {
         chrono.setScale(Float.parseFloat(options.getString(Options.PREF_SCALE, "98%").replace("%",""))/100f);
 
         int fore = Options.getForeColor(options);
+        int controlFore = getControlBarForeColor();
         int back = Options.getBackColor(options);
 
         ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(back);
 
-        for (int id : RECOLORABLE_TEXTVIEW) {
-            ((TextView)findViewById(id)).setTextColor(fore);
-        }
+        laps.setTextColor(fore);
+        ((TextView)findViewById(R.id.fraction)).setTextColor(controlFore);
+        debug(String.format("controlFore=%x", controlFore));
 
         chrono.setTextColor(fore);
 
         for (int id : RECOLORABLE_BUTTON) {
             Button b = findViewById(id);
-            b.setTextColor(fore);
+            b.setTextColor(controlFore);
             GradientDrawable gd = (GradientDrawable)b.getBackground();
-            gd.setStroke((int)dp2px(unselectedThickness), fore);
+            gd.setStroke((int)dp2px(unselectedThickness), controlFore);
         }
 
-        ((ImageButton)findViewById(R.id.settings)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
-        ((ImageButton)findViewById(R.id.menu)).setColorFilter(fore, PorterDuff.Mode.MULTIPLY);
+        ((ImageButton)findViewById(R.id.settings)).setColorFilter(controlFore, PorterDuff.Mode.MULTIPLY);
+        ((ImageButton)findViewById(R.id.menu)).setColorFilter(controlFore, PorterDuff.Mode.MULTIPLY);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -195,6 +209,10 @@ public class StopWatch extends Activity {
             return;
 
         boolean fs = options.getBoolean(Options.PREF_FULLSCREEN, false);
+        int controlBarBrightness = 0;
+        if (fs) {
+            controlBarBrightness = 255 * Integer.parseInt(options.getString(Options.PREF_FS_BRIGHT, "0")) / 100;
+        }
         Window w = getWindow();
         WindowManager.LayoutParams attrs = w.getAttributes();
 
@@ -220,7 +238,19 @@ public class StopWatch extends Activity {
             dv.setSystemUiVisibility(flags);
         }
 
-        controlBar.setVisibility(fs ? View.GONE : View.VISIBLE);
+        controlBar.setVisibility((fs && controlBarBrightness == 0) ? View.GONE : View.VISIBLE);
+        if (controlBarBrightness > 0 && fs)
+            controlBar.setBackgroundColor(Options.getBackColor(options) & (controlBarBrightness<<24));
+        else
+            controlBar.setBackgroundColor(Options.getBackColor(options) | 0xFF000000);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if (! fs) {
+            lp.addRule(RelativeLayout.ABOVE, R.id.controlBar);
+        }
+        else {
+            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        }
+        laps.setLayoutParams(lp);
     }
 
     @Override
