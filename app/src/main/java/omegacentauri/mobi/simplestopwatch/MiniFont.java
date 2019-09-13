@@ -118,24 +118,23 @@ abstract public class MiniFont {
     }
 
     public void drawText(Canvas canvas, String text, float x, float y, Paint paint, float letterSpacing) {
-        Matrix m = new Matrix();
         float scaleY = paint.getTextSize() / defaultFontSize;
         float scaleX = scaleY * paint.getTextScaleX();
 
+        canvas.save();
+        canvas.translate(x, y);
+        canvas.scale(scaleX, scaleY);
         for (int i=0; i<text.length(); i++) {
             char c = text.charAt(i);
             try {
                 Glyph g = map.get(c);
-                Path p = new Path(g.path);
-                m.setScale(scaleX, scaleY);
-                m.postTranslate(x, y);
-                p.transform(m);
-                canvas.drawPath(p, paint);
-                x += g.width * letterSpacing * scaleX;
+                canvas.drawPath(g.path, paint);
+                canvas.translate((float)(g.width * letterSpacing),0f);
             }
             catch(Exception e) {
             }
         }
+        canvas.restore();
     }
 
     static class Glyph {

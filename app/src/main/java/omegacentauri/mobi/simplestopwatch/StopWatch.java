@@ -41,6 +41,7 @@ import android.widget.Toast;
 
 public class StopWatch extends Activity {
     private static final boolean DEBUG = true;
+    private static final int DARK_THEME = android.R.style.Theme_DeviceDefault_Dialog_Alert;
     SharedPreferences options;
     private BigTextView chrono = null;
     private MyChrono stopwatch;
@@ -171,7 +172,9 @@ public class StopWatch extends Activity {
 
         for (int id : RECOLORABLE_BUTTON) {
             Button b = findViewById(id);
+//            b.setBackgroundColor(0);
             b.setTextColor(controlFore);
+            debug(String.format("%s %x", b.getText(),controlFore));
             GradientDrawable gd = (GradientDrawable)b.getBackground();
             gd.setStroke((int)dp2px(unselectedThickness), controlFore);
         }
@@ -403,6 +406,15 @@ public class StopWatch extends Activity {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
                     break;
             }
+        }
+    }
+
+    public AlertDialog.Builder AlertDialog_Builder() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return new AlertDialog.Builder(this, DARK_THEME);
+        }
+        else {
+            return new AlertDialog.Builder(this);
         }
     }
 
