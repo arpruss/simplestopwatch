@@ -12,17 +12,19 @@
     <omegacentauri.mobi.simplestopwatch.BigTextView
         android:id="@+id/chrono"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_above="@+id/laps"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
         android:padding="0sp"
-        />
+        android:textSize="50sp"
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/laps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="false"
-        android:maxLines="0"
+        android:maxLines="3"
         android:textSize="14sp"
         android:scrollbars="vertical"
         android:scrollbarStyle="insideOverlay"
@@ -30,7 +32,7 @@
         android:fadeScrollbars="true"
         android:fadingEdge="vertical"
         android:gravity="bottom"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/controlBar"

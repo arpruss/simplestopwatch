@@ -112,8 +112,8 @@ public class BigTextView extends View {
             return;
 
         float height = 0;
-        float cWidth = canvas.getWidth();
-        float cHeight = canvas.getHeight();
+        float cWidth = this.getWidth(); // canvas.getWidth();
+        float cHeight = this.getHeight(); // canvas.getHeight();
         float cx = cWidth / 2f;
         float maxWidth = 0;
 
