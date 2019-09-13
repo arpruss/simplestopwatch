@@ -41,7 +41,11 @@ import android.widget.Toast;
 
 public class StopWatch extends Activity {
     private static final boolean DEBUG = true;
-    private static final int DARK_THEME = android.R.style.Theme_DeviceDefault_Dialog_Alert;
+    private static final int DARK_THEME = Build.VERSION.SDK_INT >= 23 ?
+            android.R.style.Theme_DeviceDefault_Dialog_Alert :
+            Build.VERSION.SDK_INT >= 14 ?
+                    AlertDialog.THEME_DEVICE_DEFAULT_DARK :
+                    4;
     SharedPreferences options;
     private BigTextView chrono = null;
     private MyChrono stopwatch;
@@ -426,7 +430,7 @@ public class StopWatch extends Activity {
 
         lockOrientation();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = AlertDialog_Builder();
         builder.setTitle("Pace/Speed Calculator");
         final long currentTime1000 = stopwatch.getTime();
         final String currentTimeString = stopwatch.formatTimeFull(currentTime1000);
