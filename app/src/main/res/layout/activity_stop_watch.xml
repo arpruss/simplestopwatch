@@ -14,16 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/laps"
-        android:gravity="center"
         android:padding="0sp"
-        android:textSize="50sp" />
+        />
 
     <TextView
         android:id="@+id/laps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="false"
-        android:maxLines="3"
+        android:maxLines="0"
         android:textSize="14sp"
         android:scrollbars="vertical"
         android:scrollbarStyle="insideOverlay"
@@ -31,7 +30,7 @@
         android:fadeScrollbars="true"
         android:fadingEdge="vertical"
         android:gravity="bottom"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/controlBar"
