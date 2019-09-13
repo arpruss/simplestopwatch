@@ -39,6 +39,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StopWatch extends Activity {
     private static final boolean DEBUG = true;
     private static final int DARK_THEME = Build.VERSION.SDK_INT >= 23 ?
@@ -60,6 +63,11 @@ public class StopWatch extends Activity {
     private TextView laps;
     private View.OnTouchListener imageHighlighter;
     private LinearLayout controlBar;
+
+    private static final String MENU_COPY_TIME = "Copy time to clipboard";
+    private static final String MENU_COPY_LAP = "Copy lap data to clipboard";
+    private static final String MENU_CLEAR_LAP = "Clear lap data";
+    private static final String MENU_PACE = "Pace and speed";
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
@@ -129,7 +137,7 @@ public class StopWatch extends Activity {
             @Override
             public boolean onLongClick(View view) {
                 stopwatch.copyToClipboard();
-                return false;
+                return true;
             }
         });
         chrono.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +156,7 @@ public class StopWatch extends Activity {
             @Override
             public boolean onLongClick(View view) {
                 stopwatch.copyLapsToClipboard();
-                return false;
+                return true;
             }
         });
         setFullScreen();
@@ -521,6 +529,53 @@ public class StopWatch extends Activity {
         debug("pace");
     }
 
+    public void myMenuChoice(String choice) {
+        switch (choice) {
+            case MENU_COPY_TIME:
+                stopwatch.copyToClipboard();
+                break;
+            case MENU_COPY_LAP:
+                stopwatch.copyLapsToClipboard();
+                break;
+            case MENU_CLEAR_LAP:
+                stopwatch.clearLapData();
+                break;
+            case MENU_PACE:
+                pace();
+                break;
+        }
+    }
+
+    void myMenu() {
+        final ArrayList<String> menu = new ArrayList<String>();
+        menu.add(MENU_COPY_TIME);
+        if (stopwatch.lapData.length()>0) {
+            menu.add(MENU_COPY_LAP);
+            menu.add(MENU_CLEAR_LAP);
+        }
+        if (stopwatch.getTime()>0)
+            menu.add(MENU_PACE);
+
+        AlertDialog.Builder builder = AlertDialog_Builder();
+        final String[] menuArray = new String[menu.size()];
+        menu.toArray(menuArray);
+        builder.setItems(menuArray, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                myMenuChoice(menuArray[i]);
+                setFullScreen();
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                setFullScreen();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.copy_laps).setVisible(stopwatch.lapData.length()>0);
@@ -536,12 +591,13 @@ public class StopWatch extends Activity {
     }
 
     public void onButtonMenu(View view) {
-        openOptionsMenu();
+        //openOptionsMenu();
+        myMenu();
     }
 
     public static void clip(Context c, String s) {
         android.text.ClipboardManager clip = (android.text.ClipboardManager)c.getSystemService(Context.CLIPBOARD_SERVICE);
         clip.setText(s);
-        Toast.makeText(c, "Copied", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(c, "Copied", Toast.LENGTH_SHORT).show();
     }
 }
