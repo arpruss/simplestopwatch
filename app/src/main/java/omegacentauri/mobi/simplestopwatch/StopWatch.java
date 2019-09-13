@@ -337,17 +337,23 @@ public class StopWatch extends Activity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (!options.getBoolean(Options.PREF_VOLUME, true))
-            return false;
-        return keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN;
+        if (options.getBoolean(Options.PREF_VOLUME, true) && (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+                keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) )
+            return true;
+        else
+            return super.onKeyUp(keyCode, event);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (!options.getBoolean(Options.PREF_VOLUME, true))
-            return false;
-        if (event.getAction() != KeyEvent.ACTION_DOWN)
-            return keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN;
+            return super.onKeyDown(keyCode, event);
+        if (event.getAction() != KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+                return true;
+            else
+                return super.onKeyDown(keyCode, event);
+        }
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
             pressStart();
             return true;
@@ -356,7 +362,7 @@ public class StopWatch extends Activity {
             pressReset();
             return true;
         }
-        return false;
+        return super.onKeyDown(keyCode, event);
     }
 
     public void onButtonSettings(View view) {
