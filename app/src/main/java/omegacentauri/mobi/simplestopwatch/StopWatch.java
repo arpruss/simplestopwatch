@@ -1,6 +1,5 @@
 package omegacentauri.mobi.simplestopwatch;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -40,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class StopWatch extends Activity {
     private static final boolean DEBUG = true;
@@ -325,22 +323,33 @@ public class StopWatch extends Activity {
         }
     }
 
-    void pressReset() {
+    void pressSecondButton() {
         stopwatch.secondButton();
         updateButtons();
     }
 
-    void pressStart() {
+    void pressFirstButton() {
         stopwatch.firstButton();
         updateButtons();
     }
 
     public void onButtonStart(View v) {
-        pressStart();
+        pressFirstButton();
     }
 
     public void onButtonReset(View v) {
-        pressReset();
+        pressSecondButton();
+    }
+
+    public boolean isFirstButton(int keyCode) {
+        return (keyCode == KeyEvent.KEYCODE_VOLUME_UP && options.getBoolean(Options.PREF_VOLUME, true)) ||
+                keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+    }
+
+    public boolean isSecondButton(int keyCode) {
+        return (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && options.getBoolean(Options.PREF_VOLUME, true)) ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_REWIND;
     }
 
     @Override
@@ -362,13 +371,19 @@ public class StopWatch extends Activity {
             else
                 return super.onKeyDown(keyCode, event);
         }
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            pressStart();
+        if (isFirstButton(keyCode)) {
+            pressFirstButton();
             return true;
         }
-        else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            pressReset();
+        else if (isSecondButton(keyCode)) {
+            pressSecondButton();
             return true;
+        }
+        else if (keyCode == KeyEvent.KEYCODE_MENU) {
+            onButtonMenu(null);
+        }
+        else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            onButtonSettings(null);
         }
         return super.onKeyDown(keyCode, event);
     }
