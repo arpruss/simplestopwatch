@@ -225,7 +225,7 @@ public class Options extends PreferenceActivity {
 
     public void setSummary(ListPreference p) {
         try {
-            p.setSummary(p.getEntry().toString().replace("%", "%%"));
+            p.setSummary(p.getEntry().toString().replace("%", "\uFF05")); // fullwidth percent symbol, won't be interpreted as formatting
         }
         catch(Exception e) {
             p.setSummary("");

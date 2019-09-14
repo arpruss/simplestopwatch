@@ -245,7 +245,7 @@ public class MyChrono {
     }
 
     public void secondButton() {
-        if (! paused) {
+        if (active && ! paused) {
             long t = getTime();
             if (0 <= t) {
                 String l = formatLapTime(t);
