@@ -7,8 +7,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
+import android.preference.PreferenceGroup;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.text.Html;
 import android.util.Log;
 
@@ -51,6 +56,7 @@ public class Options extends PreferenceActivity {
     public static final int highlightPercent = 25;
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
+    private SharedPreferences options;
 
     private static void addColor(String name, int fg, int bg) {
         colorMap.put(name, new int[]{fg,bg});
@@ -122,7 +128,10 @@ public class Options extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        PreferenceManager.setDefaultValues(this, R.xml.options, true);
+//        options = PreferenceManager.getDefaultSharedPreferences(this);
         addPreferencesFromResource(R.xml.options);
+        customizeDisplay();
 
         Preference lb = (Preference) findPreference("license");
         lb.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -135,6 +144,19 @@ public class Options extends PreferenceActivity {
         });
 
         //getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+                customizeDisplay();
+            }
+        });
+        customizeDisplay();
     }
 
     static public String getAssetFile(Context context, String assetName) {
@@ -179,6 +201,35 @@ public class Options extends PreferenceActivity {
             return AudioManager.STREAM_ALARM;
         else
             return AudioManager.STREAM_MUSIC;
+    }
+
+    private void scanPreferences(PreferenceGroup group) {
+        int n = group.getPreferenceCount();
+        for (int i=0; i <n; i++) {
+            Preference p = group.getPreference(i);
+            if (p instanceof PreferenceGroup) {
+                scanPreferences((PreferenceGroup)p);
+            }
+            else {
+                if (p instanceof ListPreference) {
+                    setSummary((ListPreference)p);
+                }
+            }
+        }
+    }
+
+    private void customizeDisplay() {
+        scanPreferences(getPreferenceScreen());
+
+    }
+
+    public void setSummary(ListPreference p) {
+        try {
+            p.setSummary(p.getEntry().toString().replace("%", "%%"));
+        }
+        catch(Exception e) {
+            p.setSummary("");
+        }
     }
 
 /*    public static class MyPreferenceFragment extends PreferenceFragment
