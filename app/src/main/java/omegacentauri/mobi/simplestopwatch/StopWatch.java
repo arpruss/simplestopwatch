@@ -389,6 +389,12 @@ public class StopWatch extends Activity {
     }
 
     @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        super.onOptionsMenuClosed(menu);
+        setFullScreen();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         debug("options menu "+item.getItemId());
         switch (item.getItemId()) {
@@ -405,7 +411,7 @@ public class StopWatch extends Activity {
                 pace();
                 return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     public void lockOrientation() {
@@ -580,7 +586,7 @@ public class StopWatch extends Activity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.copy_laps).setVisible(stopwatch.lapData.length()>0);
         menu.findItem(R.id.clear_laps).setVisible(stopwatch.lapData.length()>0);
-
+        menu.findItem(R.id.pace).setVisible(stopwatch.getTime()>0);
         return true;
     }
 
@@ -591,8 +597,11 @@ public class StopWatch extends Activity {
     }
 
     public void onButtonMenu(View view) {
-        //openOptionsMenu();
-        myMenu();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            invalidateOptionsMenu();
+        }
+        openOptionsMenu();
+//        myMenu();
     }
 
     public static void clip(Context c, String s) {

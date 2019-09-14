@@ -252,9 +252,9 @@ public class MyChrono {
                 if (lapData.length() > 0)
                     lapData += "\n" + l;
                 else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        context.invalidateOptionsMenu();
-                    }
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                        context.invalidateOptionsMenu();
+//                    }
                     lapData = l;
                 }
                 lastLapTime = t;
@@ -264,9 +264,9 @@ public class MyChrono {
         else if (active) {
             active = false;
             lapData = "";
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                context.invalidateOptionsMenu();
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                context.invalidateOptionsMenu();
+//            }
             lastLapTime = 0;
             stopUpdating();
         }
@@ -510,9 +510,9 @@ public class MyChrono {
     }
 
     public void clearLapData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            context.invalidateOptionsMenu();
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//            context.invalidateOptionsMenu();
+//        }
         lapData = "";
         lastLapTime = 0;
         save();
