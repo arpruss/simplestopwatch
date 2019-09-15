@@ -41,6 +41,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_LINE_SPACING = "lineSpacing";
     public static final String PREF_LETTER_SPACING = "letterSpacing";
     public static final String PREF_LAST_LAP_TIME = "lastLapTime";
+    public static final String PREF_VIBRATION = "vibration";
     public static final String PREF_DELAY = "delay";
     public static final String PREF_SCALE = "scale";
     public static final String PREF_LAPS = "laps";
@@ -230,6 +231,11 @@ public class Options extends PreferenceActivity {
         catch(Exception e) {
             p.setSummary("");
         }
+    }
+
+    public static int getVibration(SharedPreferences options) {
+        String v = options.getString(PREF_VIBRATION, "20");
+        return Integer.parseInt(v);
     }
 
 /*    public static class MyPreferenceFragment extends PreferenceFragment

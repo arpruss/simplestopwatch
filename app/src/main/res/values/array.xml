@@ -79,6 +79,26 @@
         <item>120%</item>
     </string-array>
 
+    <string-array name="vibrationDisplayValues">
+        <item>all vibration disabled</item>
+        <item>10 ms</item>
+        <item>20 ms</item>
+        <item>30 ms</item>
+        <item>40 ms</item>
+        <item>50 ms</item>
+        <item>60 ms</item>
+    </string-array>
+
+    <string-array name="vibrationValues">
+        <item>0</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+    </string-array>
+
     <string-array name="scaleValues">
         <item>50%</item>
         <item>60%</item>

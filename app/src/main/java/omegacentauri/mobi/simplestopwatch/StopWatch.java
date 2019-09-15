@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.Editable;
@@ -324,11 +325,13 @@ public class StopWatch extends Activity {
     }
 
     void pressSecondButton() {
+        vibrate(this,Options.getVibration(options));
         stopwatch.secondButton();
         updateButtons();
     }
 
     void pressFirstButton() {
+        vibrate(this,Options.getVibration(options));
         stopwatch.firstButton();
         updateButtons();
     }
@@ -623,5 +626,12 @@ public class StopWatch extends Activity {
         android.text.ClipboardManager clip = (android.text.ClipboardManager)c.getSystemService(Context.CLIPBOARD_SERVICE);
         clip.setText(s);
 //        Toast.makeText(c, "Copied", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void vibrate(Activity context, long time) {
+        if (time == 0)
+            return;
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(time);
     }
 }

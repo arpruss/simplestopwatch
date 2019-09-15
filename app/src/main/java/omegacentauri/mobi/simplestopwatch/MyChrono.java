@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -91,7 +92,8 @@ public class MyChrono {
     }
 
     private void announce(long t) {
-        if (quiet || !active || paused)
+        long vibrate = Options.getVibration(options);
+        if ((quiet &&  vibrate == 0) || !active || paused)
             return;
         if (t < -3000 || t >= 1000) {
             lastAnnounced = floorDiv(t, 1000)*1000;
@@ -111,7 +113,7 @@ public class MyChrono {
                 StopWatch.debug("say: "+msg);
                 tts.speak(msg,TextToSpeech.QUEUE_FLUSH, ttsParams);
             }
-            else {
+            else if (!quiet) {
                 shortTone.stop();
                 shortTone.reloadStaticData();
                 shortTone.play();
@@ -119,9 +121,12 @@ public class MyChrono {
             lastAnnounced = floorDiv(t, 1000)*1000;
         }
         else if (t >= 0) {
-            longTone.stop();
-            longTone.reloadStaticData();
-            longTone.play();
+            if (!quiet) {
+                longTone.stop();
+                longTone.reloadStaticData();
+                longTone.play();
+            }
+            StopWatch.vibrate(context, vibrate * 4);
             lastAnnounced = 0;
         }
     }
