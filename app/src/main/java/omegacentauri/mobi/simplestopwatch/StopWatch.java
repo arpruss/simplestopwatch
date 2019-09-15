@@ -343,7 +343,7 @@ public class StopWatch extends Activity {
 
     public boolean isFirstButton(int keyCode) {
         return (keyCode == KeyEvent.KEYCODE_VOLUME_UP && options.getBoolean(Options.PREF_VOLUME, true)) ||
-                keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+//                keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
                 keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
     }
 
@@ -382,9 +382,9 @@ public class StopWatch extends Activity {
         else if (keyCode == KeyEvent.KEYCODE_MENU) {
             onButtonMenu(null);
         }
-        else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            onButtonSettings(null);
-        }
+//        else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+//            onButtonSettings(null);
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -424,6 +424,9 @@ public class StopWatch extends Activity {
                 return true;
             case R.id.pace:
                 pace();
+                return true;
+            case R.id.go_settings:
+                onButtonSettings(null);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -548,53 +551,6 @@ public class StopWatch extends Activity {
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
         debug("pace");
-    }
-
-    public void myMenuChoice(String choice) {
-        switch (choice) {
-            case MENU_COPY_TIME:
-                stopwatch.copyToClipboard();
-                break;
-            case MENU_COPY_LAP:
-                stopwatch.copyLapsToClipboard();
-                break;
-            case MENU_CLEAR_LAP:
-                stopwatch.clearLapData();
-                break;
-            case MENU_PACE:
-                pace();
-                break;
-        }
-    }
-
-    void myMenu() {
-        final ArrayList<String> menu = new ArrayList<String>();
-        menu.add(MENU_COPY_TIME);
-        if (stopwatch.lapData.length()>0) {
-            menu.add(MENU_COPY_LAP);
-            menu.add(MENU_CLEAR_LAP);
-        }
-        if (stopwatch.getTime()>0)
-            menu.add(MENU_PACE);
-
-        AlertDialog.Builder builder = AlertDialog_Builder();
-        final String[] menuArray = new String[menu.size()];
-        menu.toArray(menuArray);
-        builder.setItems(menuArray, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                myMenuChoice(menuArray[i]);
-                setFullScreen();
-            }
-        });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                setFullScreen();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     @Override
