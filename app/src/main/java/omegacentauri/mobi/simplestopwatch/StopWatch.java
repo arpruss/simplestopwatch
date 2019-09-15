@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -25,7 +26,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,13 +54,16 @@ public class StopWatch extends Activity {
     private Button secondButton;
     private Button firstButton;
     private float unselectedThickness = 2f;
+    private float focusedThickness = 4f;
     private float selectedThickness = 6f;
-    private static final int RECOLORABLE_BUTTON[] = {
+    private static final int TEXT_BUTTONS[] = {
             R.id.start, R.id.reset
     };
-    private View.OnTouchListener highlighter;
+    private static final int IMAGE_BUTTONS[][] = {
+            {R.id.settings, R.drawable.settings},
+            {R.id.menu, R.drawable.menu}
+    };
     private TextView laps;
-    private View.OnTouchListener imageHighlighter;
     private LinearLayout controlBar;
 
     private static final String MENU_COPY_TIME = "Copy time to clipboard";
@@ -98,39 +101,6 @@ public class StopWatch extends Activity {
         laps = (TextView)findViewById(R.id.laps);
         stopwatch = new MyChrono(this, options, chrono, (TextView)findViewById(R.id.fraction),
                 laps);
-        highlighter = new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    GradientDrawable gd = (GradientDrawable) view.getBackground();
-                    gd.setStroke((int)dp2px(selectedThickness), getControlBarForeColor());
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    GradientDrawable gd = (GradientDrawable) view.getBackground();
-                    gd.setStroke((int)dp2px(unselectedThickness), getControlBarForeColor());
-                }
-                return false;
-            }
-        };
-        firstButton.setOnTouchListener(highlighter);
-        secondButton.setOnTouchListener(highlighter);
-        /*
-        imageHighlighter = new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    ((ImageButton)view).setColorFilter(Options.getHighlightColor(options), PorterDuff.Mode.MULTIPLY);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ((ImageButton)view).setColorFilter(Options.getForeColor(options), PorterDuff.Mode.MULTIPLY);
-                }
-                return false;
-            }
-        };
-
-        ((ImageButton)findViewById(R.id.settings)).setOnTouchListener(imageHighlighter);
-        ((ImageButton)findViewById(R.id.menu)).setOnTouchListener(imageHighlighter);
-        */
 
         chrono.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -162,6 +132,33 @@ public class StopWatch extends Activity {
         setTheme();
     }
 
+    static int[] getStateDescription(int focused, int pressed) {
+        if (focused==0 && pressed==0)
+            return new int[]{};
+        else if (focused>0 && pressed==0)
+            return new int[]{android.R.attr.state_focused};
+        else if (focused==0 && pressed>0)
+            return new int[]{android.R.attr.state_pressed};
+        else //if (focused>0 && pressed>0)
+            return new int[]{android.R.attr.state_pressed, android.R.attr.state_focused};
+    }
+
+    StateListDrawable makeOvalButtonBackground(int controlFore) {
+        StateListDrawable d = new StateListDrawable();
+        for (int focused = 1 ; focused >= 0; focused--)
+            for(int pressed = 1; pressed >= 0; pressed--) {
+                GradientDrawable gd = (GradientDrawable) getResources().getDrawable(R.drawable.oval); //.getConstantState().newDrawable();
+                gd.setStroke((int)dp2px(
+                        pressed>0 ? selectedThickness :
+                        focused>0 ? focusedThickness :
+                        unselectedThickness
+                        ), controlFore);
+                d.addState(getStateDescription(focused, pressed), gd);
+            }
+
+        return d;
+    }
+
     void setTheme() {
         chrono.setFont(Options.getFont(options));
         chrono.setKeepAspect(options.getBoolean(Options.PREF_KEEP_ASPECT, true));
@@ -181,17 +178,17 @@ public class StopWatch extends Activity {
 
         chrono.setTextColor(fore);
 
-        for (int id : RECOLORABLE_BUTTON) {
+        for (int id : TEXT_BUTTONS) {
             Button b = findViewById(id);
-//            b.setBackgroundColor(0);
             b.setTextColor(controlFore);
-            debug(String.format("%s %x", b.getText(),controlFore));
-            GradientDrawable gd = (GradientDrawable)b.getBackground();
-            gd.setStroke((int)dp2px(unselectedThickness), controlFore);
+            b.setBackgroundDrawable(makeOvalButtonBackground(controlFore));
         }
 
-        ((ImageButton)findViewById(R.id.settings)).setColorFilter(controlFore, PorterDuff.Mode.MULTIPLY);
-        ((ImageButton)findViewById(R.id.menu)).setColorFilter(controlFore, PorterDuff.Mode.MULTIPLY);
+        for (int[] ids : IMAGE_BUTTONS) {
+            ImageButton b = findViewById(ids[0]);
+            b.setImageDrawable(new MyStateDrawable(this, ids[1]));
+            b.setColorFilter(controlFore, PorterDuff.Mode.MULTIPLY);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -634,4 +631,30 @@ public class StopWatch extends Activity {
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(time);
     }
+}
+
+class MyStateDrawable extends StateListDrawable {
+    public MyStateDrawable(Context c, int id) {
+        super();
+        addState(new int[]{}, c.getResources().getDrawable(id));
+    }
+
+    @Override
+    protected boolean onStateChange(int[] states) {
+        boolean selected = false;
+        for (int state : states) {
+            if (state == android.R.attr.state_pressed || state == android.R.attr.state_focused) {
+                selected = true;
+                break;
+            }
+        }
+        setAlpha(selected?128:255);
+        return super.onStateChange(states);
+    }
+
+    @Override
+    public boolean isStateful() {
+        return true;
+    }
+
 }
