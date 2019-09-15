@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SoundEffectConstants;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,6 +205,8 @@ public class StopWatch extends Activity {
     }
 
     void setOrientation() {
+        if (isTV())
+            return;
         String o = options.getString(Options.PREF_ORIENTATION, "automatic");
         if (o.equals("landscape"))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -372,10 +375,12 @@ public class StopWatch extends Activity {
                 return super.onKeyDown(keyCode, event);
         }
         if (isFirstButton(keyCode)) {
+            chrono.playSoundEffect(SoundEffectConstants.CLICK);
             pressFirstButton();
             return true;
         }
         else if (isSecondButton(keyCode)) {
+            chrono.playSoundEffect(SoundEffectConstants.CLICK);
             pressSecondButton();
             return true;
         }
@@ -433,7 +438,7 @@ public class StopWatch extends Activity {
     }
 
     public void lockOrientation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+        if (!isTV() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             switch(((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation()) {
                 case Surface.ROTATION_0:
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -586,6 +591,15 @@ public class StopWatch extends Activity {
             return;
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(time);
+    }
+
+    public boolean isTV() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            return getPackageManager().hasSystemFeature("android.hardware.type.television");
+        }
+        else {
+            return false;
+        }
     }
 }
 
