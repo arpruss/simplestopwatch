@@ -43,12 +43,6 @@
         android:defaultValue="automatic"
         android:entries="@array/orientationValues"
         android:entryValues="@array/orientationValues" />
-    <ListPreference android:title="Standard Vibration Time"
-        android:summary=""
-        android:key="vibration"
-        android:defaultValue="20"
-        android:entries="@array/vibrationDisplayValues"
-        android:entryValues="@array/vibrationValues" />
     <PreferenceCategory android:title="Advanced">
         <CheckBoxPreference android:title="Keep Aspect"
             android:key="keepAspect"
@@ -86,6 +80,10 @@
             android:defaultValue="98%"
             android:entries="@array/scaleValues"
             android:entryValues="@array/scaleValues" />
+        <CheckBoxPreference android:title="Vibrate After Countdown"
+            android:key="vibrateAfterCountdown"
+            android:defaultValue="true"
+            />
         <CheckBoxPreference android:title="Boost Countdown Audio"
             android:key="boost"
             android:defaultValue="false"

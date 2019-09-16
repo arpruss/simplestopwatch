@@ -40,6 +40,7 @@ public class MyChrono {
     static final long MIN_DELAY_TIME = -9000;
     static final long delayTimes[] = { 0, -3000, -6000, MIN_DELAY_TIME };
     long lastLapTime;
+    int vibrateAfterCountDown = 100;
     public boolean paused = false;
     public boolean active = false;
     boolean quiet = false;
@@ -92,8 +93,8 @@ public class MyChrono {
     }
 
     private void announce(long t) {
-        long vibrate = Options.getVibration(options);
-        if ((quiet &&  vibrate == 0) || !active || paused)
+//        long vibrate = Options.getVibration(options);
+        if (/*(quiet &&  vibrate == 0) || */ !active || paused)
             return;
         if (t < -3000 || t >= 1000) {
             lastAnnounced = floorDiv(t, 1000)*1000;
@@ -126,7 +127,7 @@ public class MyChrono {
                 longTone.reloadStaticData();
                 longTone.play();
             }
-            StopWatch.vibrate(context, vibrate * 4);
+            StopWatch.vibrate(context, vibrateAfterCountDown);
             lastAnnounced = 0;
         }
     }
@@ -329,6 +330,8 @@ public class MyChrono {
     public void setAudio(String soundMode) {
         boostAudio = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && options.getBoolean(Options.PREF_BOOST, false);
         STREAM = Options.getStream(options);
+
+        vibrateAfterCountDown = options.getBoolean(Options.PREF_VIBRATE_AFTER_COUNTDOWN, true) ? (int)LONG_TONE_LENGTH/2 : 0;
 
         if (soundMode.equals("none")) {
             quiet = true;

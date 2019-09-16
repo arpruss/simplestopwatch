@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -23,6 +24,7 @@ import android.text.TextWatcher;
 import android.text.style.TabStopSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -325,13 +327,15 @@ public class StopWatch extends Activity {
     }
 
     void pressSecondButton() {
-        vibrate(this,Options.getVibration(options));
+        chrono.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+//        vibrate(this,Options.getVibration(options));
         stopwatch.secondButton();
         updateButtons();
     }
 
     void pressFirstButton() {
-        vibrate(this,Options.getVibration(options));
+        chrono.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+//        vibrate(this,Options.getVibration(options));
         stopwatch.firstButton();
         updateButtons();
     }
@@ -375,12 +379,10 @@ public class StopWatch extends Activity {
                 return super.onKeyDown(keyCode, event);
         }
         if (isFirstButton(keyCode)) {
-            chrono.playSoundEffect(SoundEffectConstants.CLICK);
             pressFirstButton();
             return true;
         }
         else if (isSecondButton(keyCode)) {
-            chrono.playSoundEffect(SoundEffectConstants.CLICK);
             pressSecondButton();
             return true;
         }

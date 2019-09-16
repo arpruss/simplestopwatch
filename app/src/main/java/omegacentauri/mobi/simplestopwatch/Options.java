@@ -41,7 +41,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_LINE_SPACING = "lineSpacing";
     public static final String PREF_LETTER_SPACING = "letterSpacing";
     public static final String PREF_LAST_LAP_TIME = "lastLapTime";
-    public static final String PREF_VIBRATION = "vibration";
+//    public static final String PREF_VIBRATION = "vibration";
     public static final String PREF_DELAY = "delay";
     public static final String PREF_SCALE = "scale";
     public static final String PREF_LAPS = "laps";
@@ -52,6 +52,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_VOLUME = "volume";
     public static final String PREF_FULLSCREEN = "fullscreen";
     public static final String PREF_FS_BRIGHT = "fsBright";
+    public static final String PREF_VIBRATE_AFTER_COUNTDOWN = "vibrateAfterCountdown";
     public static String PREF_CONTROL_FULLSCREEN = "controlFS";
     public static final String PREF_BOOT_ADJUSTED = "bootAdjusted";
     public static final int highlightPercent = 25;
@@ -233,10 +234,10 @@ public class Options extends PreferenceActivity {
         }
     }
 
-    public static int getVibration(SharedPreferences options) {
-        String v = options.getString(PREF_VIBRATION, "20");
-        return Integer.parseInt(v);
-    }
+//    public static int getVibration(SharedPreferences options) {
+//        String v = options.getString(PREF_VIBRATION, "20");
+//        return Integer.parseInt(v);
+//    }
 
 /*    public static class MyPreferenceFragment extends PreferenceFragment
     {
