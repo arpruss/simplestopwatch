@@ -358,7 +358,8 @@ public class MyChrono {
         }
         shortTone.write(tone, 0, shortLength);
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        am.setStreamVolume(STREAM, am.getStreamMaxVolume(STREAM), 0);
+        if (options.getBoolean(Options.PREF_BOOST, false))
+            am.setStreamVolume(STREAM, am.getStreamMaxVolume(STREAM), 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && boostAudio) {
             try {
