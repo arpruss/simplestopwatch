@@ -138,7 +138,8 @@ public class MyChrono {
             announce(t+10);
         }
         mainView.setText(formatTime(t,mainView.getHeight() > mainView.getWidth()));
-        fractionView.setText(formatTimeFraction(t, active && paused));
+        setFractionView(formatTimeFraction(t, active && paused, false));
+
         if (lapData.length() == 0) {
             if (lapView.getVisibility() != View.GONE)
                 lapView.setVisibility(View.GONE);
@@ -168,7 +169,21 @@ public class MyChrono {
         }
     }
 
-   static final long floorDiv(long a, long b) {
+    private void setFractionView(String s) {
+        fractionView.setTextScaleX(1f);
+        float w = fractionView.getPaint().measureText(s, 0, s.length());
+        StopWatch.debug("width "+w+" vs "+fractionView.getWidth());
+        float wCur = fractionView.getWidth() * 0.98f - 2;
+        if (wCur <= 0) {
+            fractionView.setText("");
+            return;
+        }
+        if (w > wCur)
+            fractionView.setTextScaleX(wCur/w);
+        fractionView.setText(s);
+    }
+
+    static final long floorDiv(long a, long b) {
         long q = a/b;
         if (q*b > a)
             return q-1;
@@ -185,49 +200,61 @@ public class MyChrono {
         if (format.equals("s")) {
             return String.format("%02d", t);
         }
-        int s = (int) (t % 60);
-        t /= 60;
-        int m;
-        int h;
-        if (format.equals("h:m:s")) {
-            m = (int) (t % 60);
+        if (format.endsWith("m")) {
             t /= 60;
-            h = (int) t;
+            if (format.equals("m"))
+                return String.format("%02d", t);
+        }
+        int part0 = (int) (t % 60); // seconds or minutes
+        t /= 60;
+        int part1;
+        int part2;
+        if (format.equals("h:m:s")) {
+            part1 = (int) (t % 60); // minutes
+            t /= 60;
+            part2 = (int) t; // hours
         }
         else {
-            m = (int) t;
-            h = 0;
+            part1 = (int) t; // seconds or minutes
+            part2 = 0;
         }
         if (multiline) {
             Boolean threeLine = options.getBoolean(Options.PREF_THREE_LINE, true);
-            if (h != 0) {
+            if (part2 != 0) {
                 if (threeLine)
-                    return String.format("%02d\n%02d\n%02d", h, m, s);
+                    return String.format("%02d\n%02d\n%02d", part2, part1, part0);
                 else
-                    return String.format("%d:%02d\n%02d", h, m, s);
+                    return String.format("%d:%02d\n%02d", part2, part1, part0);
             }
             else
-                return String.format("%02d\n%02d", m, s);
+                return String.format("%02d\n%02d", part1, part0);
         }
         else {
-            if (h != 0)
-                return String.format("%d:%02d:%02d", h, m, s);
+            if (part2 != 0)
+                return String.format("%d:%02d:%02d", part2, part1, part0);
             else
-                return String.format("%d:%02d", m, s);
+                return String.format("%d:%02d", part1, part0);
         }
     }
 
-    String formatTimeFraction(long t, boolean greaterPrecision) {
+    String formatTimeFraction(long t, boolean greaterPrecision, boolean includeColonIfNeeded) {
         if (t<0)
             return "";
+        String seconds;
+        if (options.getString(Options.PREF_FORMAT, "h:m:s").endsWith("m")) {
+            seconds = (includeColonIfNeeded ? ":" : "") + String.format("%02d", (t/1000)%60);
+        }
+        else {
+            seconds = "";
+        }
         if (precision == 10 || (precision > 10 && greaterPrecision))
-            return String.format(".%02d", (int)((t / 10) % 100));
+            return seconds+String.format(".%02d", (int)((t / 10) % 100));
         else if (precision == 100)
-            return String.format(".%01d", (int)((t / 100) % 10));
+            return seconds+String.format(".%01d", (int)((t / 100) % 10));
         else if (precision == 1)
-            return String.format(".%03d", (int)(t % 1000));
+            return seconds+String.format(".%03d", (int)(t % 1000));
         else
-            return "";
+            return seconds;
     }
 
     String formatTimeFull(long t) {
@@ -237,7 +264,7 @@ public class MyChrono {
             else
                 return String.format("%.02f", (float)(t/1000.));
         }
-        return formatTime(t, false)+formatTimeFraction(t,true );
+        return formatTime(t, false)+formatTimeFraction(t,true ,true);
     }
 
     public int getNumberOfLaps() {
@@ -509,8 +536,7 @@ public class MyChrono {
     }
 
     public void copyToClipboard() {
-        long t = getTime();
-        StopWatch.clip(context, formatTime(t, false) + formatTimeFraction(t, true));
+        StopWatch.clip(context, formatTimeFull(getTime()));
     }
 
     public void copyLapsToClipboard() {

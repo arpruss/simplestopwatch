@@ -20,7 +20,9 @@
     </string-array>
 
     <string-array name="formatValues">
+        <item>h:m</item>
         <item>h:m:s</item>
+        <item>m</item>
         <item>m:s</item>
         <item>s</item>
     </string-array>
