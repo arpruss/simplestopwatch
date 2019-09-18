@@ -71,6 +71,7 @@
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_weight="0.85"
+            android:maxLines="1"
             android:gravity="center"
             android:text=".0"
             android:textColor="#FFFFFF"

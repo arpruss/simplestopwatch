@@ -170,9 +170,9 @@ public class MyChrono {
     }
 
     private void setFractionView(String s) {
+        fractionView.setText(s);
         fractionView.setTextScaleX(1f);
         float w = fractionView.getPaint().measureText(s, 0, s.length());
-        StopWatch.debug("width "+w+" vs "+fractionView.getWidth());
         float wCur = fractionView.getWidth() * 0.98f - 2;
         if (wCur <= 0) {
             fractionView.setText("");
