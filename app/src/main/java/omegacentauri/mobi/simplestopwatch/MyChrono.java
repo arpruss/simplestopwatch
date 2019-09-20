@@ -30,6 +30,7 @@ import java.util.TimerTask;
 
 public class MyChrono implements BigTextView.GetCenter {
     private final Activity context;
+    private final View mainContainer;
     private String currentLapViewText;
     BigTextView mainView;
     TextView fractionView;
@@ -65,10 +66,11 @@ public class MyChrono implements BigTextView.GetCenter {
     private AudioTrack longTone;
 
     @SuppressLint("NewApi")
-    public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView) {
+    public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView, View mainContainer) {
         this.mainView = mainView;
         this.context = context;
         this.options = options;
+        this.mainContainer = mainContainer;
         this.lapData = "";
         this.delayTime = options.getLong(Options.PREF_DELAY, 0);
         this.fractionView = fractionView;
@@ -605,9 +607,6 @@ public class MyChrono implements BigTextView.GetCenter {
 
     @Override
     public float getCenter() {
-        if (lapView.getVisibility() == View.GONE)
-            return mainView.getHeight() / 2f;
-        else
-            return (mainView.getHeight() + lapView.getHeight()) / 2f;
+        return mainContainer.getHeight() / 2f;
     }
 }

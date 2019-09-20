@@ -73,6 +73,7 @@ public class StopWatch extends Activity {
     private static final String MENU_COPY_LAP = "Copy lap data to clipboard";
     private static final String MENU_CLEAR_LAP = "Clear lap data";
     private static final String MENU_PACE = "Pace and speed";
+    private View mainContainer;
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
@@ -101,9 +102,10 @@ public class StopWatch extends Activity {
         secondButton = (Button)findViewById(R.id.reset);
         firstButton = (Button)findViewById(R.id.start);
         controlBar = (LinearLayout)findViewById(R.id.controlBar);
+        mainContainer = findViewById(R.id.chrono_and_laps);
         laps = (TextView)findViewById(R.id.laps);
         stopwatch = new MyChrono(this, options, chrono, (TextView)findViewById(R.id.fraction),
-                laps);
+                laps, mainContainer);
 
         chrono.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -266,7 +268,7 @@ public class StopWatch extends Activity {
         else {
             lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         }
-        laps.setLayoutParams(lp);
+        mainContainer.setLayoutParams(lp);
     }
 
     @Override

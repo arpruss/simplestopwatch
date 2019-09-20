@@ -53,7 +53,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_FULLSCREEN = "fullscreen";
     public static final String PREF_FS_BRIGHT = "fsBright";
     public static final String PREF_VIBRATE_AFTER_COUNTDOWN = "vibrateAfterCountdown";
-    public static String PREF_CONTROL_FULLSCREEN = "controlFS";
+    public static final String PREF_CONTROL_FULLSCREEN = "controlFS";
     public static final String PREF_BOOT_ADJUSTED = "bootAdjusted";
     public static final int highlightPercent = 25;
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
@@ -87,7 +87,6 @@ public class Options extends PreferenceActivity {
             return new SansMediumDigitsColon();
         }
         else {
-            Log.v("chrono", "bold");
             return new SansBoldDigitsColon();
         }
     }
