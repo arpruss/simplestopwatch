@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MyChrono {
+public class MyChrono implements BigTextView.GetCenter {
     private final Activity context;
     private String currentLapViewText;
     BigTextView mainView;
@@ -77,6 +77,7 @@ public class MyChrono {
         this.lapView.setText("");
         this.currentLapViewText = "";
         this.lapView.setMovementMethod(new ScrollingMovementMethod());
+        this.mainView.getCenterY = this;
         tts = null;
 
         StopWatch.debug("maxSize " +this.maxSize);
@@ -137,8 +138,6 @@ public class MyChrono {
         if (lastAnnounced < 0 && lastAnnounced + 1000 <= t) {
             announce(t+10);
         }
-        mainView.setText(formatTime(t,mainView.getHeight() > mainView.getWidth()));
-        setFractionView(formatTimeFraction(t, active && paused, false));
 
         if (lapData.length() == 0) {
             if (lapView.getVisibility() != View.GONE)
@@ -167,6 +166,10 @@ public class MyChrono {
 //                this.lapView.setMovementMethod(new ScrollingMovementMethod());
             }
         }
+
+        mainView.setText(formatTime(t,mainView.getHeight() > mainView.getWidth()));
+        setFractionView(formatTimeFraction(t, active && paused, false));
+
     }
 
     private void setFractionView(String s) {
@@ -598,5 +601,13 @@ public class MyChrono {
     private static void adjust(SharedPreferences options, SharedPreferences.Editor ed, String opt, long delta) {
         StopWatch.debug("opt "+opt+" "+delta);
         ed.putLong(opt, options.getLong(opt, 0) + delta);
+    }
+
+    @Override
+    public float getCenter() {
+        if (lapView.getVisibility() == View.GONE)
+            return mainView.getHeight() / 2f;
+        else
+            return (mainView.getHeight() + lapView.getHeight()) / 2f;
     }
 }

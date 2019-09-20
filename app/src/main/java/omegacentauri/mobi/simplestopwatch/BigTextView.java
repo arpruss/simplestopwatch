@@ -24,6 +24,8 @@ public class BigTextView extends View {
     float yOffsets[];
     float xOffsets[];
     float scale = 0.98f;
+    GetCenter getCenterX = null;
+    GetCenter getCenterY = null;
     static final float BASE_FONT_SIZE = 50f;
 
     public BigTextView(Context context, AttributeSet attrs) {
@@ -153,8 +155,34 @@ public class BigTextView extends View {
 
         float dy = cHeight/2f - adjustY * height/2f;
 
+        cx = adjustCenter(cWidth, getCenterX, adjustX * maxWidth);
+        dy += adjustCenter(cHeight, getCenterY, adjustY * height) - cHeight/2f;
+
         for (int i = 0 ; i < n ; i++) {
             miniFont.drawText(canvas, lines[i], cx + adjustX * xOffsets[i], dy + adjustY * yOffsets[i], paint, letterSpacing);
+        }
+    }
+
+    private float adjustCenter(float canvasSize, GetCenter c, float size) {
+        float canvasCenter = canvasSize / 2f;
+        if (c == null)
+            return canvasCenter;
+        float drawingCenter = c.getCenter();
+        if (canvasCenter == drawingCenter)
+            return canvasCenter;
+        float half = size / 2f;
+        if (drawingCenter < canvasCenter) {
+            if (half <= drawingCenter)
+                return drawingCenter;
+            else
+                return half;
+        }
+        else {
+            if (drawingCenter + half <= canvasSize) {
+                return drawingCenter;
+            }
+            else
+                return canvasSize - half;
         }
     }
 
@@ -165,4 +193,7 @@ public class BigTextView extends View {
         }
     }
 
+    static interface GetCenter {
+        float getCenter();
+    }
 }

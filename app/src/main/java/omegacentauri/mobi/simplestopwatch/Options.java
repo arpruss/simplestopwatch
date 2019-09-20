@@ -155,6 +155,7 @@ public class Options extends PreferenceActivity {
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+                StopWatch.debug("changed pref");
                 customizeDisplay();
             }
         });
