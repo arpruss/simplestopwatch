@@ -52,6 +52,10 @@
             android:key="controlFS"
             android:defaultValue="true"
             android:summary="Allow switching to fullscreen mode by tapping in middle of screen"></CheckBoxPreference>
+        <CheckBoxPreference android:title="24 Hour Clock"
+            android:key="twentyfour"
+            android:defaultValue="false"
+            />
     <ListPreference android:title="Fullscreen Control Bar Brightness"
         android:summary="Set brightness of the bottom bar while in full screen mode"
         android:key="fsBright"

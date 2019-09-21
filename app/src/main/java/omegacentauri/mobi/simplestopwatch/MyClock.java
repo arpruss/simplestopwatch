@@ -29,6 +29,7 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
     SimpleDateFormat timeFormat;
     SimpleDateFormat fractionalFormat;
     DateFormat dateFormat;
+    private boolean twentyFourHour = false;
 
     @SuppressLint("NewApi")
     public MyClock(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, View mainContainer) {
@@ -95,8 +96,15 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     public void restore() {
-        timeFormat = new SimpleDateFormat("h:mm");
-        fractionalFormat = new SimpleDateFormat(":ss a");
+        twentyFourHour = options.getBoolean(Options.PREF_24HOUR, false);
+        if (!twentyFourHour) {
+            timeFormat = new SimpleDateFormat("h:mm");
+            fractionalFormat = new SimpleDateFormat(":ss a");
+        }
+        else {
+            timeFormat = new SimpleDateFormat("HH:mm");
+            fractionalFormat = new SimpleDateFormat(":ss");
+        }
         dateFormat = DateFormat.getDateInstance();
         startUpdating();
         updateViews();

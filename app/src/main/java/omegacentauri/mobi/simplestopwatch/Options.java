@@ -56,6 +56,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_VIBRATE_AFTER_COUNTDOWN = "vibrateAfterCountdown";
     public static final String PREF_CONTROL_FULLSCREEN = "controlFS";
     public static final String PREF_BOOT_ADJUSTED = "bootAdjusted";
+    public static final String PREF_24HOUR = "twentyfour";
     public static final int highlightPercent = 25;
     public static final String PREF_LAST_ACTIVITY = "lastActivity";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
