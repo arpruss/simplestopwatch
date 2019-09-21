@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/stopwatch" android:title="Stopwatch"   />
+    <item android:id="@+id/go_settings" android:title="Settings"   />
+    </menu>

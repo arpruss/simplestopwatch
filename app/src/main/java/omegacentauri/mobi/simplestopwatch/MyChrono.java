@@ -28,11 +28,11 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MyChrono implements BigTextView.GetCenter {
+public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private final Activity context;
     private final View mainContainer;
+    private final BigTextView mainView;
     private String currentLapViewText;
-    BigTextView mainView;
     TextView fractionView;
     public long baseTime;
     public long pauseTime;
@@ -130,12 +130,12 @@ public class MyChrono implements BigTextView.GetCenter {
                 longTone.reloadStaticData();
                 longTone.play();
             }
-            StopWatch.vibrate(context, vibrateAfterCountDown);
+            ShowTime.vibrate(context, vibrateAfterCountDown);
             lastAnnounced = 0;
         }
     }
 
-    protected void updateViews() {
+    public void updateViews() {
         long t = getTime();
         if (lastAnnounced < 0 && lastAnnounced + 1000 <= t) {
             announce(t+10);

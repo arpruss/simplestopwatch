@@ -3,5 +3,6 @@
     <item android:id="@+id/copy_laps" android:title="Copy lap data to clipboard"   />
     <item android:id="@+id/clear_laps" android:title="Clear lap data" />
     <item android:id="@+id/pace" android:title="Pace and speed"   />
+    <item android:id="@+id/clock" android:title="Clock"   />
     <item android:id="@+id/go_settings" android:title="Settings"   />
     </menu>

@@ -18,6 +18,14 @@ abstract public class MiniFont {
     public MiniFont(boolean maximizeDigitBounds) {
         map = new HashMap<Character, Glyph>();
         addFontData();
+        if (!map.containsKey(' ') && map.containsKey('0')) {
+            addCharacter(' ', map.get('0').width, 0, new PathMaker() {
+                @Override
+                public Path makePath() {
+                    return new Path();
+                }
+            });
+        }
         this.maximizeDigitBounds = maximizeDigitBounds;
         if (maximizeDigitBounds)
             doMaximizeDigitBounds();
@@ -61,6 +69,7 @@ abstract public class MiniFont {
                 map.get(i).bounds = bounds;
             }
         }
+        map.get(' ').bounds = bounds;
     }
 
     public void addCharacter(char c, float width, float lsb, PathMaker pm) {
