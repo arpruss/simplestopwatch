@@ -54,7 +54,7 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
 
     private String getTimeMain(Date d, boolean linear) {
         String t = timeFormat.format(d);
-        if (t.length() != 8)
+        if (t.length() != 5)
             t = " " + t;
         if (!linear && mainView.getHeight() > mainView.getWidth())
             return t.replaceAll(":", "\n");

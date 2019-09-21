@@ -42,8 +42,8 @@ abstract public class ShowTime extends Activity {
                     4;
     SharedPreferences options;
     private float unselectedThickness = 2f;
-    private float focusedThickness = 5f;
-    private float selectedThickness = 7f;
+    private float focusedThickness = 6f;
+    private float selectedThickness = 6f;
     protected View mainContainer;
     protected static int textButtons[] = {};
     protected static int imageButtons[][] = {};
@@ -168,6 +168,10 @@ abstract public class ShowTime extends Activity {
             return new int[]{android.R.attr.state_pressed, android.R.attr.state_focused};
     }
 
+    int focusedColor(int baseColor) {
+        return 0x80000000 | (baseColor & 0x00FFFFFF);
+    }
+
     StateListDrawable makeOvalButtonBackground(int controlFore) {
         StateListDrawable d = new StateListDrawable();
         for (int focused = 1 ; focused >= 0; focused--)
@@ -177,7 +181,7 @@ abstract public class ShowTime extends Activity {
                         pressed>0 ? selectedThickness :
                         focused>0 ? focusedThickness :
                         unselectedThickness
-                        ), controlFore);
+                        ), focused>0 ? focusedColor(controlFore) : controlFore);
                 d.addState(getStateDescription(focused, pressed), gd);
             }
 

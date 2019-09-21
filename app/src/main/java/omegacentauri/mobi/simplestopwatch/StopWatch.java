@@ -307,11 +307,11 @@ public class StopWatch extends ShowTime {
 
     @Override
     protected void flingUp() {
-        switchActivity(Clock.class, LEFT);
+        switchActivity(Clock.class, UP);
     }
 
     @Override
     protected void flingDown() {
-        switchActivity(Clock.class, RIGHT);
+        switchActivity(Clock.class, DOWN);
     }
 }
