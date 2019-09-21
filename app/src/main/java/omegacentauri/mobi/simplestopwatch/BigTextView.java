@@ -31,7 +31,7 @@ public class BigTextView extends View {
     public BigTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        paint = new Paint();
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         miniFont = new SansDigitsColon();
 
         paint.setStyle(Paint.Style.FILL);

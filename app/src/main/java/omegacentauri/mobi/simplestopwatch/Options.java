@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -74,22 +75,33 @@ public class Options extends PreferenceActivity {
 
     static MiniFont getFont(SharedPreferences options) {
         String f = options.getString(PREF_FONT, "medium");
+        MiniFont mf;
         if (f.equals("regular")) {
             Log.v("chrono", "regular");
-            return new SansDigitsColon();
+            mf = new SansDigitsColon();
         }
         else if (f.equals("7 segment")) {
-            return new SevenSegmentBoldItalicDigitsColon();
+            mf = new SevenSegmentBoldItalicDigitsColon();
         }
         else if (f.equals("DIN 1451")) {
-            return new DINDigitsColon();
+            mf = new DINDigitsColon();
         }
         else if (f.equals("medium")) {
-            return new SansMediumDigitsColon();
+            mf = new SansMediumDigitsColon();
         }
         else {
-            return new SansBoldDigitsColon();
+            mf = new SansBoldDigitsColon();
         }
+
+/*        MiniFont.Glyph colon = mf.map.get(':');
+        mf.addCharacter('|', colon.width, colon.lsb, new MiniFont.PathMaker(){
+            @Override
+            public Path makePath() {
+                return new Path();
+            }
+        }); */
+
+        return mf;
     }
 
     static int getForeColor(SharedPreferences options) {

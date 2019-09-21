@@ -52,12 +52,14 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
         setFractionView(getTimeFraction(date));
     }
 
-    private String getTimeMain(Date d, boolean linear) {
+    private String getTimeMain(Date d, boolean clip) {
         String t = timeFormat.format(d);
         if (t.length() != 5)
             t = " " + t;
-        if (!linear && mainView.getHeight() > mainView.getWidth())
+        if (!clip && mainView.getHeight() > mainView.getWidth())
             return t.replaceAll(":", "\n");
+//        else if (!clip && d.getSeconds() % 2 == 1)
+//            return t.replace(":", "|");
         else
             return t;
     }

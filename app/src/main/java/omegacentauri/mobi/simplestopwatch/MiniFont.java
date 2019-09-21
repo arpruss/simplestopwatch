@@ -148,8 +148,8 @@ abstract public class MiniFont {
 
     static class Glyph {
         public final Path path;
-        private float width;
-        private final float lsb;
+        public float width;
+        public final float lsb;
         RectF bounds;
 
         public Glyph(float width, float lsb, Path path) {
