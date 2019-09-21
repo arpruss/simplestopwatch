@@ -412,15 +412,18 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
 
         if (soundMode.equals("voice")) {
             ttsMode = true;
+            ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(STREAM));
             tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
                 @Override
                 public void onInit(int status) {
                     if(status != TextToSpeech.SUCCESS){
                         tts = null;
                     }
+                    else {
+                        tts.speak(" ",TextToSpeech.QUEUE_FLUSH, ttsParams);
+                    }
                 }
             });
-            ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(STREAM));
             if (loudnessEnhancer != null)
                 ttsParams.put(TextToSpeech.Engine.KEY_PARAM_SESSION_ID, String.valueOf(sessionId));
         }
@@ -559,7 +562,15 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         updateViews();
     }
 
+    public void suspend() {
+        destroyAudio();
+    }
+
     public void destroy() {
+        destroyAudio();
+    }
+
+    public void destroyAudio() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && loudnessEnhancer != null) {
             loudnessEnhancer.setEnabled(false);
             loudnessEnhancer = null;

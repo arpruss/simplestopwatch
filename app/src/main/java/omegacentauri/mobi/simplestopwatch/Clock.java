@@ -3,6 +3,7 @@ package omegacentauri.mobi.simplestopwatch;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -50,15 +51,7 @@ public class Clock extends ShowTime {
                 mainContainer);
         timeKeeper = chrono;
 
-        bigDigits.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                chrono.copyToClipboard();
-                return true;
-            }
-        });
-
-        bigDigits.setOnClickListener(fullScreenListener);
+        bigDigits.setOnTouchListener(gestureListener);
     }
 
     @Override
@@ -127,9 +120,30 @@ public class Clock extends ShowTime {
                 chrono.copyToClipboard();
                 return true;
             case R.id.stopwatch:
-                startActivity(new Intent(this, StopWatch.class));
+                switchActivity(StopWatch.class, NONE);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void flingLeft() {
+        switchActivity(StopWatch.class, LEFT);
+    }
+
+    @Override
+    protected void flingRight() {
+        switchActivity(StopWatch.class, RIGHT);
+    }
+
+    @Override
+    protected void flingUp() {
+        switchActivity(StopWatch.class, UP);
+    }
+
+    @Override
+    protected void flingDown() {
+        switchActivity(StopWatch.class, DOWN);
+    }
+
 }

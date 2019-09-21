@@ -2,7 +2,6 @@ package omegacentauri.mobi.simplestopwatch;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -13,12 +12,12 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +39,15 @@ public class StopWatch extends ShowTime {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String last = options.getString(Options.PREF_LAST_ACTIVITY, StopWatch.class.getName());
+        if (! last.equals(StopWatch.class.getName())) {
+            try {
+                switchActivity(Class.forName(last), NONE);
+            } catch (ClassNotFoundException e) {
+                debug("class not found "+last);
+            }
+        }
+
         setContentView(R.layout.activity_stop_watch);
         bigDigits = (BigTextView)findViewById(R.id.chrono);
         secondButton = (Button)findViewById(R.id.reset);
@@ -54,16 +62,7 @@ public class StopWatch extends ShowTime {
                 laps, mainContainer);
         timeKeeper = chrono;
 
-        bigDigits.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                chrono.copyToClipboard();
-                return true;
-            }
-        });
-
-        bigDigits.setOnClickListener(fullScreenListener);
-        laps.setOnClickListener(fullScreenListener);
+        bigDigits.setOnTouchListener(gestureListener);
         laps.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -239,8 +238,6 @@ public class StopWatch extends ShowTime {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (!options.getBoolean(Options.PREF_VOLUME, true))
-            return super.onKeyDown(keyCode, event);
         if (event.getAction() != KeyEvent.ACTION_DOWN) {
             if (volumeControl && (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN))
                 return true;
@@ -254,9 +251,6 @@ public class StopWatch extends ShowTime {
         else if (isSecondButton(keyCode)) {
             pressSecondButton();
             return true;
-        }
-        else if (keyCode == KeyEvent.KEYCODE_MENU) {
-            onButtonMenu(null);
         }
 //        else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
 //            onButtonSettings(null);
@@ -295,9 +289,29 @@ public class StopWatch extends ShowTime {
                 pace();
                 return true;
             case R.id.clock:
-                startActivity(new Intent(this, Clock.class));
+                switchActivity(Clock.class, NONE);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void flingLeft() {
+        switchActivity(Clock.class, LEFT);
+    }
+
+    @Override
+    protected void flingRight() {
+        switchActivity(Clock.class, RIGHT);
+    }
+
+    @Override
+    protected void flingUp() {
+        switchActivity(Clock.class, LEFT);
+    }
+
+    @Override
+    protected void flingDown() {
+        switchActivity(Clock.class, RIGHT);
     }
 }

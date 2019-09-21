@@ -93,8 +93,8 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     public void restore() {
-        timeFormat = new SimpleDateFormat("h:mm:ss");
-        fractionalFormat = new SimpleDateFormat("a");
+        timeFormat = new SimpleDateFormat("h:mm");
+        fractionalFormat = new SimpleDateFormat(":ss a");
         dateFormat = DateFormat.getDateInstance();
         startUpdating();
         updateViews();
@@ -152,11 +152,11 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
         return;
     }
 
-//    public void copyToClipboard() {
-//        StopWatch.clip(context, formatTimeFull(getTime()));
-//    }
-
     public void destroy() {
+    }
+
+    @Override
+    public void suspend() {
     }
 
     public static void fixOnBoot(SharedPreferences options) {

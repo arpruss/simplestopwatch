@@ -4,8 +4,8 @@
         android:key="screenOn"
         android:defaultValue="false"
         android:summary="Do not allow device to go to sleep while stopwatch is running"></CheckBoxPreference>
-    <ListPreference android:title="Display Format"
-        android:summary="Choose display format (shorter formats may be used to save space as needed)"
+    <ListPreference android:title="Stopwatch Big Digit Format"
+        android:summary=""
         android:key="format"
         android:defaultValue="h:m:s"
         android:entries="@array/formatValues"

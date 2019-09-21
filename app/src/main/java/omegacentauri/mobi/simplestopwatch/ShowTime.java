@@ -17,8 +17,11 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class ShowTime extends Activity {
+abstract public class ShowTime extends Activity {
     private static final boolean DEBUG = true;
     private static final int DARK_THEME = Build.VERSION.SDK_INT >= 23 ?
             android.R.style.Theme_DeviceDefault_Dialog_Alert :
@@ -45,10 +48,17 @@ public class ShowTime extends Activity {
     protected static int textButtons[] = {};
     protected static int imageButtons[][] = {};
     protected View controlBar;
+    protected static final int NONE = 0;
+    protected static final int LEFT = 1;
+    protected static final int RIGHT = 2;
+    protected static final int DOWN = 3;
+    protected static final int UP = 4;
 
-    protected View.OnClickListener fullScreenListener;
+//    protected View.OnClickListener fullScreenListener;
     public BigTextView bigDigits;
     protected MyTimeKeeper timeKeeper;
+    private GestureDetector gestureDetector;
+    protected View.OnTouchListener gestureListener;
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
@@ -72,7 +82,7 @@ public class ShowTime extends Activity {
         MyChrono.detectBoot(options);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        fullScreenListener = new View.OnClickListener() {
+/*        fullScreenListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
@@ -83,8 +93,69 @@ public class ShowTime extends Activity {
                 setFullScreen();
                 setTheme();
             }
+        }; */
+
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return true;
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                debug("singleTapUp");
+                if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
+                    return false;
+                SharedPreferences.Editor ed = options.edit();
+                ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
+                MyChrono.apply(ed);
+                setFullScreen();
+                setTheme();
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+                debug("longPress");
+                timeKeeper.copyToClipboard();
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
+                debug("Fling "+e1+" "+e2+" "+vx+" "+vy);
+                try {
+                    if (Math.abs(e1.getY() - e2.getY()) > 250)
+                        return false;
+                    // right to left swipe
+                    if (Math.abs(vx)>200) {
+                        if(e1.getX() - e2.getX() > 120) {
+                            flingLeft();
+                            return true;
+                        }
+                        else if (e2.getX() - e1.getX() > 120) {
+                            flingRight();
+                            return true;
+                        }
+                    }
+                } catch (Exception e) {
+                    // nothing
+                }
+                return false;
+            }
+        } );
+        gestureListener = new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                debug("onTouch "+motionEvent);
+                return gestureDetector.onTouchEvent(motionEvent);
+            }
         };
     }
+
+    abstract protected void flingLeft();
+    abstract protected void flingRight();
+    abstract protected void flingUp();
+    abstract protected void flingDown();
 
     static int[] getStateDescription(int focused, int pressed) {
         if (focused==0 && pressed==0)
@@ -254,6 +325,7 @@ public class ShowTime extends Activity {
         super.onPause();
         //timeKeeper.save();
         timeKeeper.stopUpdating();
+        timeKeeper.suspend();
     }
 
     public void onButtonSettings(View view) {
@@ -312,6 +384,23 @@ public class ShowTime extends Activity {
         openOptionsMenu();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            onButtonMenu(null);
+            return true;
+        }
+        else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+            flingUp();
+            return true;
+        }
+        else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            flingDown();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public static void clip(Context c, String s) {
         android.text.ClipboardManager clip = (android.text.ClipboardManager)c.getSystemService(Context.CLIPBOARD_SERVICE);
         clip.setText(s);
@@ -341,6 +430,35 @@ public class ShowTime extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void switchActivity(Class a, int direction) {
+        SharedPreferences.Editor ed = options.edit();
+        ed.putString(Options.PREF_LAST_ACTIVITY, a.getName());
+        MyChrono.apply(ed);
+        startActivity(new Intent(this, a));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            if (direction == RIGHT) {
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+                finish();
+            }
+            else if (direction == LEFT) {
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                finish();
+            }
+            else if (direction == DOWN) {
+                overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
+                finish();
+            }
+            else if (direction == UP) {
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                finish();
+            }
+            else if (direction == NONE) {
+                overridePendingTransition(0,0);
+                finish();
+            }
+        }
     }
 }
 
