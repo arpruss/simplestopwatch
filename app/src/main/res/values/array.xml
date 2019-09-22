@@ -19,6 +19,30 @@
         <item>portrait</item>
     </string-array>
 
+    <string-array name="distortionValues">
+        <item>0</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+        <item>10000</item>
+    </string-array>
+
+    <string-array name="distortionDisplayValues">
+        <item>none</item>
+        <item>10%</item>
+        <item>20%</item>
+        <item>30%</item>
+        <item>40%</item>
+        <item>50%</item>
+        <item>75%</item>
+        <item>100%</item>
+        <item>unlimited</item>
+    </string-array>
+
     <string-array name="formatValues">
         <item>h:m</item>
         <item>h:m:s</item>

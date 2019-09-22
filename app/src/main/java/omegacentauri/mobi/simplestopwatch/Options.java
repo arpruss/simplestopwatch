@@ -38,7 +38,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_FORMAT = "format";
     public static final String PREF_FONT = "font";
     public static final String PREF_THREE_LINE = "threeLine";
-    public static final String PREF_KEEP_ASPECT = "keepAspect";
+    public static final String PREF_DISTORTION = "distortion";
     public static final String PREF_LINE_SPACING = "lineSpacing";
     public static final String PREF_LETTER_SPACING = "letterSpacing";
     public static final String PREF_LAST_LAP_TIME = "lastLapTime";
@@ -74,6 +74,10 @@ public class Options extends PreferenceActivity {
         addColor("red on black", Color.RED, Color.BLACK);
         addColor("yellow on black", Color.YELLOW, Color.BLACK);
         addColor("white on black", Color.WHITE, Color.BLACK);
+    }
+
+    static float getMaxAspect(SharedPreferences options) {
+        return Float.parseFloat(options.getString(Options.PREF_DISTORTION, "10"))*.01f + 1f;
     }
 
     static MiniFont getFont(SharedPreferences options) {

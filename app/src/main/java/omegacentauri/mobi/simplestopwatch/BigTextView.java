@@ -20,13 +20,13 @@ public class BigTextView extends View {
     Paint basePaint;
     String text;
     String[] lines;
-    Boolean keepAspect = true;
     float yOffsets[];
     float xOffsets[];
     float scale = 0.98f;
     GetCenter getCenterX = null;
     GetCenter getCenterY = null;
     static final float BASE_FONT_SIZE = 50f;
+    private float maxAspect = 1f;
 
     public BigTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,9 +43,9 @@ public class BigTextView extends View {
         setText("", true);
     }
 
-    public void setKeepAspect(boolean keepAspect) {
-        if (this.keepAspect != keepAspect) {
-            this.keepAspect = keepAspect;
+    public void setMaxAspect(float maxAspect) {
+        if (this.maxAspect != maxAspect) {
+            this.maxAspect = maxAspect;
             invalidate();
         }
     }
@@ -134,21 +134,20 @@ public class BigTextView extends View {
         float adjustX;
         float adjustY;
 
-        if (keepAspect) {
-            adjustX = scale * Math.min(cWidth / maxWidth, cHeight / height);
-            adjustY = adjustX;
-        }
-        else {
-            float adjust = scale * Math.max(cWidth / maxWidth, cHeight / height);
-            if (adjust * maxWidth > cWidth * scale)
-                adjustX = scale * cWidth / maxWidth;
-            else
-                adjustX = adjust;
-            if (adjust * height > cHeight * scale)
-                adjustY = scale * cHeight / height;
-            else
-                adjustY = adjust;
-        }
+        float adjust = scale * Math.max(cWidth / maxWidth, cHeight / height);
+        if (adjust * maxWidth > cWidth * scale)
+            adjustX = scale * cWidth / maxWidth;
+        else
+            adjustX = adjust;
+        if (adjust * height > cHeight * scale)
+            adjustY = scale * cHeight / height;
+        else
+            adjustY = adjust;
+
+        if (adjustX > maxAspect * adjustY)
+            adjustX = maxAspect * adjustY;
+        else if (adjustY > maxAspect * adjustX)
+            adjustY = maxAspect * adjustX;
 
         paint.setTextSize(adjustY * BASE_FONT_SIZE);
         paint.setTextScaleX(adjustX / adjustY);

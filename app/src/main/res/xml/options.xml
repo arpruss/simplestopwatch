@@ -44,10 +44,12 @@
         android:entries="@array/orientationValues"
         android:entryValues="@array/orientationValues" />
     <PreferenceCategory android:title="Advanced">
-        <CheckBoxPreference android:title="Keep Aspect"
-            android:key="keepAspect"
-            android:defaultValue="true"
-            android:summary="Keep font aspect ratio (turn off to stretch fonts to fill more screen space)"></CheckBoxPreference>
+        <ListPreference android:title="Permitted Aspect Ratio Distortion"
+            android:summary=""
+            android:key="distortion"
+            android:defaultValue="10"
+            android:entries="@array/distortionDisplayValues"
+            android:entryValues="@array/distortionValues" />
         <CheckBoxPreference android:title="Control Fullscreen"
             android:key="controlFS"
             android:defaultValue="true"
