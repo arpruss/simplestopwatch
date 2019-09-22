@@ -53,19 +53,22 @@ public class Clock extends ShowTime {
 
         bigDigits.setOnTouchListener(gestureListener);
 
-        if (!options.getBoolean(Options.PREF_CLOCK_SWIPE_INFO, false)) {
-            SharedPreferences.Editor ed = options.edit();
-            ed.putBoolean(Options.PREF_CLOCK_SWIPE_INFO, true);
-            MyChrono.apply(ed);
-            timedMessage("Clock Mode", "Swipe on time or press menu button to switch to stopwatch mode", 5500);
-//            Toast.makeText(this, "Clock mode: Swipe time to switch to stopwatch", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateButtons();
+        if (!options.getBoolean(Options.PREF_CLOCK_SWIPE_INFO, false)) {
+            SharedPreferences.Editor ed = options.edit();
+            ed.putBoolean(Options.PREF_CLOCK_SWIPE_INFO, true);
+            MyChrono.apply(ed);
+            if (hasTouch())
+                timedMessage("Clock Mode", "Swipe on time or press menu button to switch to stopwatch mode", 5200);
+            else
+                timedMessage("Clock Mode", "Press up/down or use menu button to switch to stopwatch mode", 5200);
+//            Toast.makeText(this, "Clock mode: Swipe time to switch to stopwatch", Toast.LENGTH_LONG).show();
+        }
     }
 
     void updateButtons() {

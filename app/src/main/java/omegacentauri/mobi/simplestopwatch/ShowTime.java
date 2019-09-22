@@ -443,6 +443,15 @@ abstract public class ShowTime extends Activity {
         }
     }
 
+    public boolean hasTouch() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            return getPackageManager().hasSystemFeature("android.hardware.touchscreen") && !isTV();
+        }
+        else {
+            return true;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

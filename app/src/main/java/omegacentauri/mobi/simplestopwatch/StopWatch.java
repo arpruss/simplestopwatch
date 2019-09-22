@@ -73,13 +73,6 @@ public class StopWatch extends ShowTime {
             }
         });
 
-        if (!options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
-            SharedPreferences.Editor ed = options.edit();
-            ed.putBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, true);
-            MyChrono.apply(ed);
-            timedMessage("StopWatch Mode", "Swipe on time or press menu button to switch to clock mode", 5500);
-//            Toast.makeText(this, "StopWatch mode: Swipe time to switch to clock", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -87,6 +80,16 @@ public class StopWatch extends ShowTime {
         super.onResume();
         volumeControl = options.getBoolean(Options.PREF_VOLUME, true);
         updateButtons();
+        if (!options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
+            SharedPreferences.Editor ed = options.edit();
+            ed.putBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, true);
+            MyChrono.apply(ed);
+            if (hasTouch())
+                timedMessage("StopWatch Mode", "Swipe on time or press menu button to switch to clock mode", 5200);
+            else
+                timedMessage("StopWatch Mode", "Press up/down or use menu button to switch to clock mode", 5200);
+//            Toast.makeText(this, "StopWatch mode: Swipe time to switch to clock", Toast.LENGTH_LONG).show();
+        }
     }
 
     void updateButtons() {
