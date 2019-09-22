@@ -77,7 +77,8 @@ public class StopWatch extends ShowTime {
             SharedPreferences.Editor ed = options.edit();
             ed.putBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, true);
             MyChrono.apply(ed);
-            Toast.makeText(this, "StopWatch mode: Swipe time to switch to clock", Toast.LENGTH_LONG).show();
+            timedMessage("StopWatch Mode", "Swipe on time or press menu button to switch to clock mode", 5500);
+//            Toast.makeText(this, "StopWatch mode: Swipe time to switch to clock", Toast.LENGTH_LONG).show();
         }
     }
 

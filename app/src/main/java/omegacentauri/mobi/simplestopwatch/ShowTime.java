@@ -13,6 +13,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -381,6 +382,20 @@ abstract public class ShowTime extends Activity {
         else {
             return new AlertDialog.Builder(this);
         }
+    }
+
+    public void timedMessage(String title, String message, long time) {
+        AlertDialog.Builder b = AlertDialog_Builder();
+        b.setTitle(title);
+        b.setMessage(message);
+        final AlertDialog d = b.create();
+        d.show();
+        new Handler().postDelayed(new Runnable(){
+            public void run(){
+                d.cancel();
+                d.dismiss();
+            }
+        }, time);
     }
 
     public void onButtonMenu(View view) {
