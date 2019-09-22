@@ -61,6 +61,7 @@
             android:onClick="onButtonStart"
             android:text="Start"
             android:textColor="@android:color/white"
+            android:hapticFeedbackEnabled="true"
             android:textSize="16sp" />
 
         <Button
@@ -72,6 +73,7 @@
             android:onClick="onButtonReset"
             android:text="Reset"
             android:textColor="@android:color/white"
+            android:hapticFeedbackEnabled="true"
             android:textSize="16sp" />
 
         <TextView
@@ -92,6 +94,7 @@
             android:layout_marginRight="6dp"
             android:background="@null"
             android:onClick="onButtonSettings"
+            android:hapticFeedbackEnabled="true"
             android:src="@drawable/settings" />
 
         <ImageButton
@@ -100,6 +103,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:onClick="onButtonMenu"
+            android:hapticFeedbackEnabled="true"
             android:src="@drawable/menu" />
 
     </LinearLayout>

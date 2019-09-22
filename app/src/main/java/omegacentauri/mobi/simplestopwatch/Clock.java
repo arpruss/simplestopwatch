@@ -52,6 +52,13 @@ public class Clock extends ShowTime {
         timeKeeper = chrono;
 
         bigDigits.setOnTouchListener(gestureListener);
+
+        if (!options.getBoolean(Options.PREF_CLOCK_SWIPE_INFO, false)) {
+            SharedPreferences.Editor ed = options.edit();
+            ed.putBoolean(Options.PREF_CLOCK_SWIPE_INFO, true);
+            MyChrono.apply(ed);
+            Toast.makeText(this, "Clock mode: Swipe time to switch to stopwatch", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

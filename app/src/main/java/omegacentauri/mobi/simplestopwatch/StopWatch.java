@@ -2,6 +2,8 @@ package omegacentauri.mobi.simplestopwatch;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -70,6 +72,13 @@ public class StopWatch extends ShowTime {
                 return true;
             }
         });
+
+        if (!options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
+            SharedPreferences.Editor ed = options.edit();
+            ed.putBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, true);
+            MyChrono.apply(ed);
+            Toast.makeText(this, "StopWatch mode: Swipe time to switch to clock", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -197,13 +206,15 @@ public class StopWatch extends ShowTime {
     }
 
     void pressSecondButton() {
-        bigDigits.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        if (Build.VERSION.SDK_INT >= 5)
+            secondButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         chrono.secondButton();
         updateButtons();
     }
 
     void pressFirstButton() {
-        bigDigits.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        if (Build.VERSION.SDK_INT >= 5)
+            firstButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         chrono.firstButton();
         updateButtons();
     }

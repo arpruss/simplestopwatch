@@ -61,6 +61,7 @@
             android:layout_marginRight="6dp"
             android:background="@null"
             android:onClick="onButtonSettings"
+            android:hapticFeedbackEnabled="true"
             android:src="@drawable/settings" />
 
         <ImageButton
@@ -69,6 +70,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:onClick="onButtonMenu"
+            android:hapticFeedbackEnabled="true"
             android:src="@drawable/menu" />
 
     </LinearLayout>

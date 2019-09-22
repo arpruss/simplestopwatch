@@ -122,23 +122,25 @@ abstract public class ShowTime extends Activity {
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
-                debug("Fling "+e1+" "+e2+" "+vx+" "+vy);
-                try {
-                    if (Math.abs(e1.getY() - e2.getY()) > 250)
-                        return false;
-                    // right to left swipe
-                    if (Math.abs(vx)>200) {
-                        if(e1.getX() - e2.getX() > 120) {
-                            flingLeft();
-                            return true;
-                        }
-                        else if (e2.getX() - e1.getX() > 120) {
-                            flingRight();
-                            return true;
-                        }
+                if (Math.abs(e1.getY() - e2.getY()) < 250 && Math.abs(vx)>200) {
+                    if(e1.getX() - e2.getX() > 120) {
+                        flingLeft();
+                        return true;
                     }
-                } catch (Exception e) {
-                    // nothing
+                    else if (e2.getX() - e1.getX() > 120) {
+                        flingRight();
+                        return true;
+                    }
+                }
+                else if (Math.abs(e1.getX() - e2.getX()) < 250 && Math.abs(vy)>200) {
+                    if(e1.getY() - e2.getY() > 120) {
+                        flingUp();
+                        return true;
+                    }
+                    else if (e2.getY() - e1.getY() > 120) {
+                        flingDown();
+                        return true;
+                    }
                 }
                 return false;
             }
