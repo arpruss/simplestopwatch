@@ -60,6 +60,7 @@
     <string-array name="fontValues">
         <item>7 segment</item>
         <item>DIN 1451</item>
+        <item>black</item>
         <item>bold</item>
         <item>medium</item>
         <item>regular</item>
@@ -86,6 +87,7 @@
     <string-array name="fontNames">
         <item>7 segment</item>
         <item>DIN 1451</item>
+        <item>Roboto Black</item>
         <item>Roboto Bold</item>
         <item>Roboto Medium</item>
         <item>Roboto Regular</item>

@@ -96,6 +96,9 @@ public class Options extends PreferenceActivity {
         else if (f.equals("medium")) {
             mf = new SansMediumDigitsColon();
         }
+        else if (f.equals("black")) {
+            mf = new SansBlackDigitsColon();
+        }
         else {
             mf = new SansBoldDigitsColon();
         }
