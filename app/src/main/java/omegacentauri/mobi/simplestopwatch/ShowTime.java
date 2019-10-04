@@ -102,7 +102,6 @@ abstract public class ShowTime extends Activity {
         gestureListener = new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                debug("onTouch "+motionEvent);
                 return gestureDetector.onTouchEvent(motionEvent);
             }
         };
@@ -289,7 +288,7 @@ abstract public class ShowTime extends Activity {
                 float dy = e2.getY() - e1.getY();
                 float dx = e2.getX() - e1.getX();
 
-                debug("vx "+vx+" vy "+vy+ " baseSize " + baseSize);
+//                debug("vx "+vx+" vy "+vy+ " baseSize " + baseSize);
 
                 if (Math.abs(dx)>Math.abs(dy)*swipeAxisRatio && Math.abs(vx) > minV) {
                     if(-dx > minFlingPixels) {
