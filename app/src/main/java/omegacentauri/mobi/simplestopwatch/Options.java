@@ -174,6 +174,8 @@ public class Options extends PreferenceActivity {
     public void onResume() {
         super.onResume();
 
+        StopWatch.debug("Options::onResume");
+
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
@@ -244,6 +246,7 @@ public class Options extends PreferenceActivity {
     }
 
     private void customizeDisplay() {
+        StopWatch.debug("customizing option display");
         scanPreferences(getPreferenceScreen());
 
     }

@@ -64,7 +64,6 @@ public class StopWatch extends ShowTime {
                 laps, mainContainer);
         timeKeeper = chrono;
 
-        bigDigits.setOnTouchListener(gestureListener);
         laps.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -78,6 +77,7 @@ public class StopWatch extends ShowTime {
     @Override
     protected void onResume() {
         super.onResume();
+
         volumeControl = options.getBoolean(Options.PREF_VOLUME, true);
         updateButtons();
         if (!options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {

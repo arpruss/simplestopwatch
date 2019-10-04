@@ -42,9 +42,12 @@ abstract public class ShowTime extends Activity {
                     AlertDialog.THEME_DEVICE_DEFAULT_DARK :
                     4;
     SharedPreferences options;
-    private float unselectedThickness = 2f;
-    private float focusedThickness = 6f;
-    private float selectedThickness = 6f;
+    private static final float swipeAxisRatio = 1.33f;
+    private static final float minimumFling = 0.5f;
+    private static final float minimumVelocity = 0.2f;
+    private static final float unselectedThickness = 2f;
+    private static final float focusedThickness = 6f;
+    private static final float selectedThickness = 6f;
     protected View mainContainer;
     protected static int textButtons[] = {};
     protected static int imageButtons[][] = {};
@@ -59,7 +62,7 @@ abstract public class ShowTime extends Activity {
     public BigTextView bigDigits;
     protected MyTimeKeeper timeKeeper;
     private GestureDetector gestureDetector;
-    protected View.OnTouchListener gestureListener;
+    private View.OnTouchListener gestureListener;
 
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
@@ -96,56 +99,6 @@ abstract public class ShowTime extends Activity {
             }
         }; */
 
-        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent motionEvent) {
-                return true;
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent motionEvent) {
-                debug("singleTapUp");
-                if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
-                    return false;
-                SharedPreferences.Editor ed = options.edit();
-                ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
-                MyChrono.apply(ed);
-                setFullScreen();
-                setTheme();
-                return true;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent motionEvent) {
-                debug("longPress");
-                timeKeeper.copyToClipboard();
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
-                if (Math.abs(e1.getY() - e2.getY()) < 250 && Math.abs(vx)>200) {
-                    if(e1.getX() - e2.getX() > 120) {
-                        flingLeft();
-                        return true;
-                    }
-                    else if (e2.getX() - e1.getX() > 120) {
-                        flingRight();
-                        return true;
-                    }
-                }
-                else if (Math.abs(e1.getX() - e2.getX()) < 250 && Math.abs(vy)>200) {
-                    if(e1.getY() - e2.getY() > 120) {
-                        flingUp();
-                        return true;
-                    }
-                    else if (e2.getY() - e1.getY() > 120) {
-                        flingDown();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        } );
         gestureListener = new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -298,6 +251,71 @@ abstract public class ShowTime extends Activity {
     protected void onResume() {
         super.onResume();
 
+        final DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return true;
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                debug("singleTapUp");
+                if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
+                    return false;
+                SharedPreferences.Editor ed = options.edit();
+                ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
+                MyChrono.apply(ed);
+                setFullScreen();
+                setTheme();
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+                timeKeeper.copyToClipboard();
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
+                final float baseSize;
+                baseSize = Math.min(2.3f * metrics.xdpi, Math.min(bigDigits.getWidth(), bigDigits.getHeight()));
+
+                final float minFlingPixels = baseSize * minimumFling;
+                final float minV = baseSize * minimumVelocity;
+
+                float dy = e2.getY() - e1.getY();
+                float dx = e2.getX() - e1.getX();
+
+                debug("vx "+vx+" vy "+vy+ " baseSize " + baseSize);
+
+                if (Math.abs(dx)>Math.abs(dy)*swipeAxisRatio && Math.abs(vx) > minV) {
+                    if(-dx > minFlingPixels) {
+                        flingLeft();
+                        return true;
+                    }
+                    else if (dx > minFlingPixels) {
+                        flingRight();
+                        return true;
+                    }
+                }
+                else if (Math.abs(dy)>Math.abs(dx)*swipeAxisRatio && Math.abs(vy) > minV) {
+                    if(-dy > minFlingPixels) {
+                        flingUp();
+                        return true;
+                    }
+                    else if (dy > minFlingPixels) {
+                        flingDown();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        } );
+
+        bigDigits.setOnTouchListener(gestureListener);
         bigDigits.post(new Runnable() {
             @Override
             public void run() {

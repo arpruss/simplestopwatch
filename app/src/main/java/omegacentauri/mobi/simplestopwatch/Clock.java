@@ -50,9 +50,6 @@ public class Clock extends ShowTime {
         chrono = new MyClock(this, options, bigDigits, (TextView)findViewById(R.id.fraction),
                 mainContainer);
         timeKeeper = chrono;
-
-        bigDigits.setOnTouchListener(gestureListener);
-
     }
 
     @Override
