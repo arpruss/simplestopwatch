@@ -100,6 +100,11 @@
             android:defaultValue="true"
             android:summary="If this is turned off, the media stream will be used."
             />
+        <CheckBoxPreference android:title="Swipe Between Clock/Stopwatch"
+            android:key="swipe"
+            android:defaultValue="true"
+            android:summary=""
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="Licenses and Copyrights">
     <Preference android:key="license" android:title="View Licenses and Copyrights"/>

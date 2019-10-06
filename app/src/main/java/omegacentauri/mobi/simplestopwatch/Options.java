@@ -59,6 +59,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_24HOUR = "twentyfour";
     public static final String PREF_CLOCK_SWIPE_INFO = "clockSwipeInfo2";
     public static final String PREF_STOPWATCH_SWIPE_INFO = "stopwatchSwipeInfo2";
+    public static final String PREF_SWIPE = "swipe";
     public static final int highlightPercent = 25;
     public static final String PREF_LAST_ACTIVITY = "lastActivity";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();

@@ -80,7 +80,7 @@ public class StopWatch extends ShowTime {
 
         volumeControl = options.getBoolean(Options.PREF_VOLUME, true);
         updateButtons();
-        if (!options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
+        if (options.getBoolean(Options.PREF_SWIPE, true) && !options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
             SharedPreferences.Editor ed = options.edit();
             ed.putBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, true);
             MyChrono.apply(ed);

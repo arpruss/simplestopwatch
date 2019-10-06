@@ -279,6 +279,9 @@ abstract public class ShowTime extends Activity {
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
+                if (! options.getBoolean(Options.PREF_SWIPE, true))
+                    return false;
+
                 final float baseSize;
                 baseSize = Math.min(2.3f * metrics.xdpi, Math.min(bigDigits.getWidth(), bigDigits.getHeight()));
 
