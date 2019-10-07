@@ -82,6 +82,8 @@ abstract public class ShowTime extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        PreferenceManager.setDefaultValues(this, R.xml.options, true);
+
         options = PreferenceManager.getDefaultSharedPreferences(this);
         MyChrono.detectBoot(options);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

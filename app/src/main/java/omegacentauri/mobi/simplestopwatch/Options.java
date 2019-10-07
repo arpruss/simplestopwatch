@@ -64,7 +64,8 @@ public class Options extends PreferenceActivity {
     public static final String PREF_LAST_ACTIVITY = "lastActivity";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
-    private SharedPreferences options;
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+//    private SharedPreferences options;
 
     private static void addColor(String name, int fg, int bg) {
         colorMap.put(name, new int[]{fg,bg});
@@ -153,8 +154,17 @@ public class Options extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        PreferenceManager.setDefaultValues(this, R.xml.options, true);
-//        options = PreferenceManager.getDefaultSharedPreferences(this);
+
+        PreferenceManager.setDefaultValues(this, R.xml.options, true);
+
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+                StopWatch.debug("changed pref1");
+                customizeDisplay();
+            }
+        };
+
         addPreferencesFromResource(R.xml.options);
         customizeDisplay();
 
@@ -176,14 +186,9 @@ public class Options extends PreferenceActivity {
         super.onResume();
 
         StopWatch.debug("Options::onResume");
-
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-                StopWatch.debug("changed pref");
-                customizeDisplay();
-            }
-        });
+        
+//        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener();
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
         customizeDisplay();
     }
 
