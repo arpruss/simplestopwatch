@@ -4,5 +4,6 @@
     <item android:id="@+id/clear_laps" android:title="Clear lap data" />
     <item android:id="@+id/pace" android:title="Pace and speed"   />
     <item android:id="@+id/clock" android:title="Clock"   />
+    <item android:id="@+id/clock_with_seconds" android:title="Clock with seconds"   />
     <item android:id="@+id/go_settings" android:title="Settings"   />
     </menu>

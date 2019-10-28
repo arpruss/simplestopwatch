@@ -26,7 +26,7 @@ import android.widget.Toast;
 public class Clock extends ShowTime {
     private Button secondButton;
     private Button firstButton;
-    private MyClock chrono;
+    protected MyClock chrono;
     protected static final int TEXT_BUTTONS[] = {
     };
     protected static final int IMAGE_BUTTONS[][] = {
@@ -38,6 +38,8 @@ public class Clock extends ShowTime {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        colorThemeOptionName = Options.PREF_CLOCK_COLOR;
+
         setContentView(R.layout.activity_clock);
         bigDigits = (BigTextView)findViewById(R.id.chrono);
         secondButton = (Button)findViewById(R.id.reset);
@@ -47,6 +49,10 @@ public class Clock extends ShowTime {
         textButtons = TEXT_BUTTONS;
         imageButtons = IMAGE_BUTTONS;
 
+        setupChrono();
+    }
+
+    protected void setupChrono() {
         chrono = new MyClock(this, options, bigDigits, (TextView)findViewById(R.id.fraction),
                 mainContainer);
         timeKeeper = chrono;
@@ -130,28 +136,14 @@ public class Clock extends ShowTime {
             case R.id.stopwatch:
                 switchActivity(StopWatch.class, NONE);
                 return true;
+            case R.id.clock:
+                switchActivity(Clock.class, NONE);
+                return true;
+            case R.id.clock_with_seconds:
+                switchActivity(ClockWithSeconds.class, NONE);
+                return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void flingLeft() {
-        switchActivity(StopWatch.class, LEFT);
-    }
-
-    @Override
-    protected void flingRight() {
-        switchActivity(StopWatch.class, RIGHT);
-    }
-
-    @Override
-    protected void flingUp() {
-        switchActivity(StopWatch.class, UP);
-    }
-
-    @Override
-    protected void flingDown() {
-        switchActivity(StopWatch.class, DOWN);
     }
 
 }

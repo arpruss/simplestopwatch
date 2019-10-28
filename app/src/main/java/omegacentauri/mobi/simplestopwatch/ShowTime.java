@@ -47,7 +47,7 @@ abstract public class ShowTime extends Activity {
     private static final float minimumVelocity = 0.2f;
     private static final float unselectedThickness = 2f;
     private static final float focusedThickness = 6f;
-    private static final float selectedThickness = 6f;
+    private static final float selectedThickness = 9f;
     protected View mainContainer;
     protected static int textButtons[] = {};
     protected static int imageButtons[][] = {};
@@ -57,6 +57,8 @@ abstract public class ShowTime extends Activity {
     protected static final int RIGHT = 2;
     protected static final int DOWN = 3;
     protected static final int UP = 4;
+    String colorThemeOptionName = Options.PREF_STOPWATCH_COLOR;
+    Class activityCircle[] = { StopWatch.class, Clock.class, ClockWithSeconds.class };
 
 //    protected View.OnClickListener fullScreenListener;
     public BigTextView bigDigits;
@@ -64,12 +66,29 @@ abstract public class ShowTime extends Activity {
     private GestureDetector gestureDetector;
     private View.OnTouchListener gestureListener;
 
+    Class nextActivity(int delta) {
+        for (int i=0; i< activityCircle.length; i++) {
+            if (this.getClass() == activityCircle[i]) {
+                int j = i + delta;
+                if (j < 0) {
+                    j = activityCircle.length - 1;
+                }
+                else {
+                    j %= activityCircle.length;
+                }
+                debug(""+activityCircle[j]);
+                return activityCircle[j];
+            }
+        }
+        return activityCircle[0];
+    }
+
     public float dp2px(float dp){
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
     }
 
     public int getControlBarForeColor() {
-        int base = Options.getForeColor(options);
+        int base = Options.getForeColor(this, options);
         if (!options.getBoolean(Options.PREF_FULLSCREEN, false))
             return base;
         int controlBarBrightness = 255 * Integer.parseInt(options.getString(Options.PREF_FS_BRIGHT, "0")) / 100;
@@ -109,11 +128,6 @@ abstract public class ShowTime extends Activity {
         };
     }
 
-    abstract protected void flingLeft();
-    abstract protected void flingRight();
-    abstract protected void flingUp();
-    abstract protected void flingDown();
-
     static int[] getStateDescription(int focused, int pressed) {
         if (focused==0 && pressed==0)
             return new int[]{};
@@ -152,9 +166,9 @@ abstract public class ShowTime extends Activity {
         bigDigits.setLetterSpacing(Float.parseFloat(options.getString(Options.PREF_LETTER_SPACING, "95%").replace("%",""))/100f);
         bigDigits.setScale(Float.parseFloat(options.getString(Options.PREF_SCALE, "98%").replace("%",""))/100f);
 
-        int fore = Options.getForeColor(options);
+        int fore = Options.getForeColor(this, options);
         int controlFore = getControlBarForeColor();
-        int back = Options.getBackColor(options);
+        int back = Options.getBackColor(this, options);
 
         ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(back);
 
@@ -234,9 +248,9 @@ abstract public class ShowTime extends Activity {
 
         controlBar.setVisibility((fs && controlBarBrightness == 0) ? View.GONE : View.VISIBLE);
         if (controlBarBrightness > 0 && fs)
-            controlBar.setBackgroundColor(Options.getBackColor(options) & (controlBarBrightness<<24));
+            controlBar.setBackgroundColor(Options.getBackColor(this, options) & (controlBarBrightness<<24));
         else
-            controlBar.setBackgroundColor(Options.getBackColor(options) | 0xFF000000);
+            controlBar.setBackgroundColor(Options.getBackColor(this, options) | 0xFF000000);
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (! fs) {
@@ -511,6 +525,22 @@ abstract public class ShowTime extends Activity {
                 finish();
             }
         }
+    }
+
+    protected void flingLeft() {
+        switchActivity(nextActivity(-1), LEFT);
+    }
+
+    protected void flingRight() {
+        switchActivity(nextActivity(1), RIGHT);
+    }
+
+    protected void flingUp() {
+        switchActivity(nextActivity(-1), UP);
+    }
+
+    protected void flingDown() {
+        switchActivity(nextActivity(1), DOWN);
     }
 }
 

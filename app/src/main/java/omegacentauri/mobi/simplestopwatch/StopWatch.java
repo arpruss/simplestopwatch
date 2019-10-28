@@ -28,6 +28,8 @@ public class StopWatch extends ShowTime {
     private Button firstButton;
     private TextView laps;
     private MyChrono chrono;
+
+
     protected static final int TEXT_BUTTONS[] = {
             R.id.start, R.id.reset
     };
@@ -40,6 +42,8 @@ public class StopWatch extends ShowTime {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        colorThemeOptionName = Options.PREF_STOPWATCH_COLOR;
 
         String last = options.getString(Options.PREF_LAST_ACTIVITY, StopWatch.class.getName());
         if (! last.equals(StopWatch.class.getName())) {
@@ -112,7 +116,7 @@ public class StopWatch extends ShowTime {
     @Override
     protected void setTheme() {
         super.setTheme();
-        int fore = Options.getForeColor(options);
+        int fore = Options.getForeColor(this, options);
 
         laps.setTextColor(fore);
     }
@@ -306,27 +310,11 @@ public class StopWatch extends ShowTime {
             case R.id.clock:
                 switchActivity(Clock.class, NONE);
                 return true;
+            case R.id.clock_with_seconds:
+                switchActivity(ClockWithSeconds.class, NONE);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void flingLeft() {
-        switchActivity(Clock.class, LEFT);
-    }
-
-    @Override
-    protected void flingRight() {
-        switchActivity(Clock.class, RIGHT);
-    }
-
-    @Override
-    protected void flingUp() {
-        switchActivity(Clock.class, UP);
-    }
-
-    @Override
-    protected void flingDown() {
-        switchActivity(Clock.class, DOWN);
-    }
 }

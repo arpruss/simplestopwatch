@@ -33,7 +33,8 @@ public class Options extends PreferenceActivity {
     public static final String PREF_BOOT_TIME = "boot";
     public static final String PREF_SCREEN_ON = "screenOn";
     public static final String PREF_PRECISION = "precision";
-    public static final String PREF_COLOR = "color";
+    public static final String PREF_STOPWATCH_COLOR = "color";
+    public static final String PREF_CLOCK_COLOR = "clockColor";
     public static final String PREF_ORIENTATION = "orientation";
     public static final String PREF_FORMAT = "format";
     public static final String PREF_FONT = "font";
@@ -116,27 +117,27 @@ public class Options extends PreferenceActivity {
         return mf;
     }
 
-    static int getForeColor(SharedPreferences options) {
+    static int getForeColor(ShowTime st, SharedPreferences options) {
         try {
-            return colorMap.get(options.getString(PREF_COLOR, "white on black"))[0];
+            return colorMap.get(options.getString(st.colorThemeOptionName, "white on black"))[0];
         }
         catch(Exception e) {
             return defaultColor[0];
         }
     }
 
-    static int getBackColor(SharedPreferences options) {
+    static int getBackColor(ShowTime st, SharedPreferences options) {
         try {
-            return colorMap.get(options.getString(PREF_COLOR, "white on black"))[1];
+            return colorMap.get(options.getString(st.colorThemeOptionName, "white on black"))[1];
         }
         catch(Exception e) {
             return defaultColor[1];
         }
     }
 
-    static int getHighlightColor(SharedPreferences options) {
-        int fore = getForeColor(options);
-        int back = getBackColor(options);
+    static int getHighlightColor(ShowTime st, SharedPreferences options) {
+        int fore = getForeColor(st, options);
+        int back = getBackColor(st, options);
 
         int high = 0;
         for (int i = 0 ; i < 4 ; i++) {

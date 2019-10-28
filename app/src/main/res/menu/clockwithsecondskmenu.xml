@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/clock" android:title="Clock"   />
     <item android:id="@+id/stopwatch" android:title="Stopwatch"   />
-    <item android:id="@+id/clock_with_seconds" android:title="Clock with seconds"   />
     <item android:id="@+id/go_settings" android:title="Settings"   />
-    </menu>
+</menu>

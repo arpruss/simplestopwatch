@@ -22,8 +22,13 @@
         android:defaultValue="medium"
         android:entries="@array/fontNames"
         android:entryValues="@array/fontValues" />
-    <ListPreference android:title="Color Scheme"
+    <ListPreference android:title="Stopwatch Color Scheme"
         android:key="color"
+        android:defaultValue="white on black"
+        android:entries="@array/colorSchemes"
+        android:entryValues="@array/colorSchemes" />
+    <ListPreference android:title="Clock Color Scheme"
+        android:key="clockColor"
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />

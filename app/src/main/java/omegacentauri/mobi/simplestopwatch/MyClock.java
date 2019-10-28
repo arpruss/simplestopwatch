@@ -20,7 +20,7 @@ import java.util.TimerTask;
 public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
     private final Activity context;
     private final View mainContainer;
-    private final SharedPreferences options;
+    protected final SharedPreferences options;
     private final Handler updateHandler;
     BigTextView mainView;
     TextView fractionView;
@@ -29,7 +29,7 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
     SimpleDateFormat timeFormat;
     SimpleDateFormat fractionalFormat;
     DateFormat dateFormat;
-    private boolean twentyFourHour = false;
+    protected boolean twentyFourHour = false;
 
     @SuppressLint("NewApi")
     public MyClock(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, View mainContainer) {
