@@ -146,7 +146,7 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
                 }
             }, 0, precision<=10 ? precision : 50); // avoid off-by-1 errors at lower precisions, at cost of some battery life
         }
-        if (options.getBoolean(Options.PREF_SCREEN_ON, false))
+        if (options.getBoolean(Options.PREF_SCREEN_ON, true))
             ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
