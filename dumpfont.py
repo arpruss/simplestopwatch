@@ -37,10 +37,14 @@ class MyPen(object):
 #    def curveTo(self, *points):
 #        print(self.indent+"curveTo", self.shift(*points))
     def qCurveTo(self, *points):
+        if points and points[-1] is None:
+            // this shouldn't happen but it does
+            print(self.indent+"path.moveTo(%gf,%gf);" % self.shift(points[0]))        
+            points = points[:-1]
         decomp = decomposeQuadraticSegment(points)
         for pair in decomp:
             shifted = self.shiftList(pair)
-            if shifted and len(shifted)>=2 and shifted[0] and shifted[1]:
+            if shifted[0] and shifted[1]:
                 print(self.indent+"path.quadTo(%gf,%gf,%gf,%gf);" % tuple(shifted[0]+shifted[1]))
     def lineTo(self, point):
         print(self.indent+"path.lineTo(%gf,%gf);" % self.shift(point))

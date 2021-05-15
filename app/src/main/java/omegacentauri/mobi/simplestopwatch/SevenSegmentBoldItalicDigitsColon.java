@@ -462,6 +462,7 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
     @Override
     public Path makePath() {
       Path path = new Path();
+      path.moveTo(18f,-74f);
       path.quadTo(18f,-74f,18f,-62f);
       path.quadTo(18f,-50f,13f,-38f);
       path.quadTo(8f,-26f,0f,-18f);
@@ -476,7 +477,7 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.quadTo(-80f,-114f,-68f,-119f);
       path.quadTo(-56f,-124f,-44f,-124f);
       path.quadTo(-32f,-124f,-20f,-119f);
-      path.quadTo(-8f,-114f,0f,-106f);
+      path.quadTo(-8f,-114f,8f,-98f);
       path.close();
       return path;
       }
