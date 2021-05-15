@@ -24,7 +24,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(401f,-214f,487f,-214f);
       path.quadTo(573f,-214f,624.5f,-268f);
       path.quadTo(676f,-322f,676f,-420f);
-      path.lineTo(676f,-1025f);
       path.close();
       path.moveTo(71f,-1037f);
       path.quadTo(71f,-1239f,198f,-1348f);
@@ -38,7 +37,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(650f,13f,487f,13f);
       path.quadTo(324f,13f,198f,-97f);
       path.quadTo(71f,-206f,71f,-408f);
-      path.lineTo(71f,-1037f);
       path.close();
       return path;
       }
@@ -62,7 +60,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(557f,-1446f,557f,-1434f);
       path.lineTo(557f,-8f);
       path.quadTo(557f,4f,545f,4f);
-      path.lineTo(340f,4f);
       path.close();
       return path;
       }
@@ -103,7 +100,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(895f,-226f,895f,-214f);
       path.lineTo(895f,-11f);
       path.quadTo(895f,1f,883f,1f);
-      path.lineTo(71f,1f);
       path.close();
       return path;
       }
@@ -156,7 +152,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(653f,-326f,653f,-428f);
       path.quadTo(653f,-530f,591f,-585f);
       path.quadTo(528f,-643f,445f,-643f);
-      path.lineTo(359f,-643f);
       path.close();
       return path;
       }
@@ -191,7 +186,6 @@ public class DINDigitsColon extends MiniFont {
       path.lineTo(625f,1f);
       path.quadTo(613f,1f,613f,-11f);
       path.lineTo(613f,-210f);
-      path.lineTo(31f,-210f);
       path.close();
       return path;
       }
@@ -238,7 +232,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(603f,-771f,483f,-771f);
       path.quadTo(373f,-771f,310f,-659f);
       path.quadTo(306f,-653f,300f,-653f);
-      path.lineTo(107f,-653f);
       path.close();
       return path;
       }
@@ -270,7 +263,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(668f,12f,497f,17f);
       path.quadTo(331f,12f,220f,-93f);
       path.quadTo(94f,-203f,93f,-405f);
-      path.lineTo(93f,-1036f);
       path.close();
       path.moveTo(315f,-417f);
       path.quadTo(316f,-212f,497f,-210f);
@@ -278,7 +270,6 @@ public class DINDigitsColon extends MiniFont {
       path.lineTo(681f,-534f);
       path.quadTo(673f,-737f,497f,-741f);
       path.quadTo(316f,-736f,315f,-534f);
-      path.lineTo(315f,-417f);
       path.close();
       return path;
       }
@@ -303,7 +294,6 @@ public class DINDigitsColon extends MiniFont {
       path.lineTo(325f,-1218f);
       path.lineTo(325f,-1025f);
       path.quadTo(325f,-1013f,314f,-1013f);
-      path.lineTo(110f,-1013f);
       path.close();
       return path;
       }
@@ -390,7 +380,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(290f,-493f,189f,-596f);
       path.lineTo(190f,-596f);
       path.quadTo(91f,-695f,93f,-905f);
-      path.lineTo(93f,-1037f);
       path.close();
       path.moveTo(315f,-907f);
       path.quadTo(315f,-703f,497f,-700f);
@@ -398,7 +387,22 @@ public class DINDigitsColon extends MiniFont {
       path.lineTo(681f,-1024f);
       path.quadTo(673f,-1227f,497f,-1231f);
       path.quadTo(316f,-1226f,315f,-1024f);
-      path.lineTo(315f,-907f);
+      path.close();
+      return path;
+      }
+    });
+  addCharacter((char)46,491f,131f,new PathMaker() {
+    @Override
+    public Path makePath() {
+      Path path = new Path();
+      path.moveTo(143f,1f);
+      path.quadTo(131f,1f,131f,-11f);
+      path.lineTo(131f,-214f);
+      path.quadTo(131f,-226f,143f,-226f);
+      path.lineTo(347f,-226f);
+      path.quadTo(358f,-226f,358f,-214f);
+      path.lineTo(358f,-11f);
+      path.quadTo(358f,1f,347f,1f);
       path.close();
       return path;
       }
@@ -415,7 +419,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(358f,-680f,358f,-668f);
       path.lineTo(358f,-464f);
       path.quadTo(358f,-452f,347f,-452f);
-      path.lineTo(143f,-452f);
       path.close();
       path.moveTo(143f,1f);
       path.quadTo(131f,1f,131f,-11f);
@@ -425,7 +428,6 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(358f,-226f,358f,-214f);
       path.lineTo(358f,-11f);
       path.quadTo(358f,1f,347f,1f);
-      path.lineTo(143f,1f);
       path.close();
       return path;
       }
@@ -442,11 +444,11 @@ public class DINDigitsColon extends MiniFont {
       path.quadTo(727f,-678f,727f,-666f);
       path.lineTo(727f,-462f);
       path.quadTo(727f,-450f,715f,-450f);
-      path.lineTo(112f,-450f);
       path.close();
       return path;
       }
     });
+  tweakWidth((char)46,392.8f);
   tweakWidth((char)58,392.8f);
   tweakWidth((char)48,1011f);
   tweakWidth((char)49,1011f);

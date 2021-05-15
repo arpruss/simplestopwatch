@@ -201,14 +201,35 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         if (t<0)
             return String.format("\u2212%d", -floorDiv(t,1000));
         String format = options.getString(Options.PREF_FORMAT, "h:m:s");
+        boolean fraction = format.endsWith(".ms");
+        String suffix;
+        if (fraction) {
+            format = format.substring(0, format.lastIndexOf('.'));
+            if (precision == 100) {
+                suffix = String.format(".%01d", (t / 100) % 10);
+            }
+            else if (precision == 10) {
+                suffix = String.format(".%02d", (t / 10) % 100);
+            }
+            else if (precision == 1) {
+                suffix = String.format(".%03d", t % 1000);
+            }
+            else {
+                suffix = "";
+            }
+        }
+        else {
+            suffix = "";
+        }
+
         t /= 1000;
         if (format.equals("s")) {
-            return String.format("%02d", t);
+            return String.format("%02d", t) + suffix;
         }
         if (format.endsWith("m")) {
             t /= 60;
             if (format.equals("m"))
-                return String.format("%02d", t);
+                return String.format("%02d", t) + suffix;
         }
         int part0 = (int) (t % 60); // seconds or minutes
         t /= 60;
@@ -227,18 +248,18 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             Boolean threeLine = options.getBoolean(Options.PREF_THREE_LINE, true);
             if (part2 != 0) {
                 if (threeLine)
-                    return String.format("%02d\n%02d\n%02d", part2, part1, part0);
+                    return String.format("%02d\n%02d\n%02d", part2, part1, part0) + suffix;
                 else
-                    return String.format("%d:%02d\n%02d", part2, part1, part0);
+                    return String.format("%d:%02d\n%02d", part2, part1, part0) + suffix;
             }
             else
-                return String.format("%02d\n%02d", part1, part0);
+                return String.format("%02d\n%02d", part1, part0) + suffix;
         }
         else {
             if (part2 != 0)
-                return String.format("%d:%02d:%02d", part2, part1, part0);
+                return String.format("%d:%02d:%02d", part2, part1, part0) + suffix;
             else
-                return String.format("%d:%02d", part1, part0);
+                return String.format("%d:%02d", part1, part0) + suffix;
         }
     }
 
@@ -246,7 +267,10 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         if (t<0)
             return "";
         String seconds;
-        if (options.getString(Options.PREF_FORMAT, "h:m:s").endsWith("m")) {
+        String format = options.getString(Options.PREF_FORMAT, "h:m:s");
+        if (format.endsWith(".ms"))
+            return "";
+        if (format.endsWith("m")) {
             seconds = (includeColonIfNeeded ? ":" : "") + String.format("%02d", (t/1000)%60);
         }
         else {

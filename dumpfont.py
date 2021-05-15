@@ -2,8 +2,8 @@ from fontTools.ttLib import TTFont
 from fontTools.pens.basePen import decomposeQuadraticSegment
 from sys import argv
 
-charsToDump = "0123456789:\u2212"
-charsToNarrow = ":"
+charsToDump = "0123456789.:\u2212"
+charsToNarrow = ".:"
 narrowFraction = 0.8
 maximizeDigitBounds = True
 equalizeWidths = "0123456789"
@@ -40,7 +40,8 @@ class MyPen(object):
         decomp = decomposeQuadraticSegment(points)
         for pair in decomp:
             shifted = self.shiftList(pair)
-            print(self.indent+"path.quadTo(%gf,%gf,%gf,%gf);" % tuple(shifted[0]+shifted[1]))
+            if shifted and len(shifted)>=2 and shifted[0] and shifted[1]:
+                print(self.indent+"path.quadTo(%gf,%gf,%gf,%gf);" % tuple(shifted[0]+shifted[1]))
     def lineTo(self, point):
         print(self.indent+"path.lineTo(%gf,%gf);" % self.shift(point))
     def closePath(self):
@@ -101,6 +102,7 @@ def getGlyph(c):
         if c == '\u2212':
             return glyphs[map[ord('-')]]
         else:
+            print("Error fetching glyph",c)
             raise KeyError()
 
 for c in charsToDump:

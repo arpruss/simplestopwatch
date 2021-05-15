@@ -24,7 +24,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.quadTo(350f,-1476f,592f,-1476f);
       path.quadTo(834f,-1476f,967f,-1315f);
       path.quadTo(1100f,-1154f,1100f,-860f);
-      path.lineTo(1100f,-595f);
       path.close();
       path.moveTo(763f,-904f);
       path.quadTo(763f,-1061f,722f,-1138.5f);
@@ -36,7 +35,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.quadTo(505f,-240f,594f,-240f);
       path.quadTo(680f,-240f,721f,-313.5f);
       path.quadTo(762f,-387f,763f,-544f);
-      path.lineTo(763f,-904f);
       path.close();
       return path;
       }
@@ -52,7 +50,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.lineTo(166f,-1235f);
       path.lineTo(805f,-1456f);
       path.lineTo(836f,-1456f);
-      path.lineTo(836f,0f);
       path.close();
       return path;
       }
@@ -81,7 +78,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.quadTo(870f,-627f,720f,-477f);
       path.lineTo(532f,-260f);
       path.lineTo(1105f,-260f);
-      path.lineTo(1105f,0f);
       path.close();
       return path;
       }
@@ -120,7 +116,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.quadTo(768f,-526f,713f,-572f);
       path.quadTo(658f,-618f,561f,-618f);
       path.lineTo(397f,-618f);
-      path.lineTo(397f,-869f);
       path.close();
       return path;
       }
@@ -141,13 +136,11 @@ public class SansBlackDigitsColon extends MiniFont {
       path.lineTo(642f,-1453f);
       path.lineTo(642f,-1456f);
       path.lineTo(979f,-1456f);
-      path.lineTo(979f,-569f);
       path.close();
       path.moveTo(380f,-569f);
       path.lineTo(642f,-569f);
       path.lineTo(642f,-1017f);
       path.lineTo(621f,-983f);
-      path.lineTo(380f,-569f);
       path.close();
       return path;
       }
@@ -178,7 +171,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.quadTo(761f,-240f,761f,-492f);
       path.quadTo(761f,-725f,553f,-725f);
       path.quadTo(435f,-725f,377f,-649f);
-      path.lineTo(109f,-712f);
       path.close();
       return path;
       }
@@ -205,7 +197,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.quadTo(83f,-914f,179.5f,-1093.5f);
       path.quadTo(276f,-1273f,455f,-1375f);
       path.quadTo(634f,-1477f,852f,-1477f);
-      path.lineTo(903f,-1477f);
       path.close();
       path.moveTo(599f,-724f);
       path.quadTo(532f,-724f,487f,-693f);
@@ -231,7 +222,6 @@ public class SansBlackDigitsColon extends MiniFont {
       path.lineTo(52f,-1196f);
       path.lineTo(52f,-1456f);
       path.lineTo(1101f,-1456f);
-      path.lineTo(1101f,-1276f);
       path.close();
       return path;
       }
@@ -317,6 +307,23 @@ public class SansBlackDigitsColon extends MiniFont {
       return path;
       }
     });
+  addCharacter((char)46,619f,117f,new PathMaker() {
+    @Override
+    public Path makePath() {
+      Path path = new Path();
+      path.moveTo(303f,-327f);
+      path.quadTo(383f,-327f,436f,-279.5f);
+      path.quadTo(489f,-232f,489f,-158f);
+      path.quadTo(489f,-84f,436f,-36.5f);
+      path.quadTo(383f,11f,303f,11f);
+      path.quadTo(222f,11f,169.5f,-37f);
+      path.quadTo(117f,-85f,117f,-158f);
+      path.quadTo(117f,-231f,169.5f,-279f);
+      path.quadTo(222f,-327f,303f,-327f);
+      path.close();
+      return path;
+      }
+    });
   addCharacter((char)58,615f,118f,new PathMaker() {
     @Override
     public Path makePath() {
@@ -354,11 +361,11 @@ public class SansBlackDigitsColon extends MiniFont {
       path.lineTo(135f,-578f);
       path.lineTo(135f,-842f);
       path.lineTo(1014f,-842f);
-      path.lineTo(1014f,-578f);
       path.close();
       return path;
       }
     });
+  tweakWidth((char)46,495.2f);
   tweakWidth((char)58,492f);
   }
 }

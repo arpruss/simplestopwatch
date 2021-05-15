@@ -21,7 +21,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(170f,-955f);
       path.lineTo(254f,-862f);
       path.lineTo(229f,-576f);
-      path.lineTo(162f,-515f);
       path.close();
       path.moveTo(90f,-45f);
       path.lineTo(62f,-76f);
@@ -30,7 +29,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(160f,-485f);
       path.lineTo(216f,-424f);
       path.lineTo(191f,-138f);
-      path.lineTo(90f,-45f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -38,7 +36,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -47,7 +44,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -56,7 +52,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       path.moveTo(631f,-31f);
       path.lineTo(597f,0f);
@@ -64,7 +59,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(103f,-31f);
       path.lineTo(204f,-124f);
       path.lineTo(546f,-124f);
-      path.lineTo(631f,-31f);
       path.close();
       return path;
       }
@@ -80,7 +74,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -89,7 +82,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       return path;
       }
@@ -104,7 +96,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       path.moveTo(90f,-45f);
       path.lineTo(62f,-76f);
@@ -113,7 +104,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(160f,-485f);
       path.lineTo(216f,-424f);
       path.lineTo(191f,-138f);
-      path.lineTo(90f,-45f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -121,7 +111,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -130,7 +119,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       path.moveTo(631f,-31f);
       path.lineTo(597f,0f);
@@ -138,7 +126,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(103f,-31f);
       path.lineTo(204f,-124f);
       path.lineTo(546f,-124f);
-      path.lineTo(631f,-31f);
       path.close();
       return path;
       }
@@ -153,7 +140,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -161,7 +147,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -170,7 +155,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -179,7 +163,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       path.moveTo(631f,-31f);
       path.lineTo(597f,0f);
@@ -187,7 +170,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(103f,-31f);
       path.lineTo(204f,-124f);
       path.lineTo(546f,-124f);
-      path.lineTo(631f,-31f);
       path.close();
       return path;
       }
@@ -202,7 +184,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       path.moveTo(162f,-515f);
       path.lineTo(157f,-510f);
@@ -211,7 +192,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(170f,-955f);
       path.lineTo(254f,-862f);
       path.lineTo(229f,-576f);
-      path.lineTo(162f,-515f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -220,7 +200,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -229,7 +208,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       return path;
       }
@@ -244,7 +222,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       path.moveTo(162f,-515f);
       path.lineTo(157f,-510f);
@@ -253,7 +230,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(170f,-955f);
       path.lineTo(254f,-862f);
       path.lineTo(229f,-576f);
-      path.lineTo(162f,-515f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -261,7 +237,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -270,7 +245,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(631f,-31f);
       path.lineTo(597f,0f);
@@ -278,7 +252,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(103f,-31f);
       path.lineTo(204f,-124f);
       path.lineTo(546f,-124f);
-      path.lineTo(631f,-31f);
       path.close();
       return path;
       }
@@ -293,7 +266,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       path.moveTo(162f,-515f);
       path.lineTo(157f,-510f);
@@ -302,7 +274,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(170f,-955f);
       path.lineTo(254f,-862f);
       path.lineTo(229f,-576f);
-      path.lineTo(162f,-515f);
       path.close();
       path.moveTo(90f,-45f);
       path.lineTo(62f,-76f);
@@ -311,7 +282,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(160f,-485f);
       path.lineTo(216f,-424f);
       path.lineTo(191f,-138f);
-      path.lineTo(90f,-45f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -319,7 +289,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -328,7 +297,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(631f,-31f);
       path.lineTo(597f,0f);
@@ -336,7 +304,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(103f,-31f);
       path.lineTo(204f,-124f);
       path.lineTo(546f,-124f);
-      path.lineTo(631f,-31f);
       path.close();
       return path;
       }
@@ -352,7 +319,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(170f,-955f);
       path.lineTo(254f,-862f);
       path.lineTo(229f,-576f);
-      path.lineTo(162f,-515f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -360,7 +326,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -369,7 +334,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -378,7 +342,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       return path;
       }
@@ -393,7 +356,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       path.moveTo(162f,-515f);
       path.lineTo(157f,-510f);
@@ -402,7 +364,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(170f,-955f);
       path.lineTo(254f,-862f);
       path.lineTo(229f,-576f);
-      path.lineTo(162f,-515f);
       path.close();
       path.moveTo(90f,-45f);
       path.lineTo(62f,-76f);
@@ -411,7 +372,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(160f,-485f);
       path.lineTo(216f,-424f);
       path.lineTo(191f,-138f);
-      path.lineTo(90f,-45f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -419,7 +379,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -428,7 +387,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -437,7 +395,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       path.moveTo(631f,-31f);
       path.lineTo(597f,0f);
@@ -445,7 +402,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(103f,-31f);
       path.lineTo(204f,-124f);
       path.lineTo(546f,-124f);
-      path.lineTo(631f,-31f);
       path.close();
       return path;
       }
@@ -460,7 +416,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       path.moveTo(162f,-515f);
       path.lineTo(157f,-510f);
@@ -469,7 +424,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(170f,-955f);
       path.lineTo(254f,-862f);
       path.lineTo(229f,-576f);
-      path.lineTo(162f,-515f);
       path.close();
       path.moveTo(185f,-969f);
       path.lineTo(219f,-1000f);
@@ -477,7 +431,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(713f,-969f);
       path.lineTo(612f,-876f);
       path.lineTo(270f,-876f);
-      path.lineTo(185f,-969f);
       path.close();
       path.moveTo(653f,-485f);
       path.lineTo(658f,-489f);
@@ -486,7 +439,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(646f,-45f);
       path.lineTo(562f,-138f);
       path.lineTo(587f,-424f);
-      path.lineTo(653f,-485f);
       path.close();
       path.moveTo(726f,-955f);
       path.lineTo(754f,-924f);
@@ -495,7 +447,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(656f,-514f);
       path.lineTo(600f,-575f);
       path.lineTo(625f,-862f);
-      path.lineTo(726f,-955f);
       path.close();
       path.moveTo(631f,-31f);
       path.lineTo(597f,0f);
@@ -503,7 +454,29 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(103f,-31f);
       path.lineTo(204f,-124f);
       path.lineTo(546f,-124f);
-      path.lineTo(631f,-31f);
+      path.close();
+      return path;
+      }
+    });
+  addCharacter((char)46,0f,-106f,new PathMaker() {
+    @Override
+    public Path makePath() {
+      Path path = new Path();
+      path.quadTo(18f,-74f,18f,-62f);
+      path.quadTo(18f,-50f,13f,-38f);
+      path.quadTo(8f,-26f,0f,-18f);
+      path.quadTo(-8f,-10f,-20f,-5f);
+      path.quadTo(-32f,0f,-44f,0f);
+      path.quadTo(-56f,0f,-68f,-5f);
+      path.quadTo(-80f,-10f,-88f,-18f);
+      path.quadTo(-96f,-26f,-101f,-38f);
+      path.quadTo(-106f,-50f,-106f,-62f);
+      path.quadTo(-106f,-74f,-101f,-86f);
+      path.quadTo(-96f,-98f,-88f,-106f);
+      path.quadTo(-80f,-114f,-68f,-119f);
+      path.quadTo(-56f,-124f,-44f,-124f);
+      path.quadTo(-32f,-124f,-20f,-119f);
+      path.quadTo(-8f,-114f,0f,-106f);
       path.close();
       return path;
       }
@@ -513,7 +486,6 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
     public Path makePath() {
       Path path = new Path();
       path.moveTo(100f,-486f);
-      path.lineTo(100f,-486f);
       path.close();
       path.moveTo(61f,-717f);
       path.quadTo(65f,-728f,74f,-736f);
@@ -564,11 +536,11 @@ public class SevenSegmentBoldItalicDigitsColon extends MiniFont {
       path.lineTo(232f,-438f);
       path.lineTo(175f,-500f);
       path.lineTo(243f,-562f);
-      path.lineTo(583f,-562f);
       path.close();
       return path;
       }
     });
+  tweakWidth((char)46,0f);
   tweakWidth((char)58,160f);
   }
 }

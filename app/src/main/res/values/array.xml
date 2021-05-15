@@ -46,9 +46,12 @@
     <string-array name="formatValues">
         <item>h:m</item>
         <item>h:m:s</item>
+        <item>h:m:s.ms</item>
         <item>m</item>
         <item>m:s</item>
+        <item>m:s.ms</item>
         <item>s</item>
+        <item>s.ms</item>
     </string-array>
 
     <string-array name="soundValues">
