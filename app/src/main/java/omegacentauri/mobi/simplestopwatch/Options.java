@@ -61,6 +61,8 @@ public class Options extends PreferenceActivity {
     public static final String PREF_CLOCK_SWIPE_INFO = "clockSwipeInfo2";
     public static final String PREF_STOPWATCH_SWIPE_INFO = "stopwatchSwipeInfo2";
     public static final String PREF_SWIPE = "swipe";
+    public static final String PREF_CLOCK_BIG_SECONDS = "clockWithBigSeconds";
+    public static final String PREF_CLOCK_LITTLE_SECONDS = "clockWithLittleSeconds";
     public static final int highlightPercent = 25;
     public static final String PREF_LAST_ACTIVITY = "lastActivity";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
@@ -73,6 +75,7 @@ public class Options extends PreferenceActivity {
     }
     static {
         addColor("black on white", Color.BLACK, Color.WHITE);
+        addColor("dark green on black", Color.argb(255,0,128,0), Color.BLACK);
         addColor("green on black", Color.GREEN, Color.BLACK);
         addColor("red on black", Color.RED, Color.BLACK);
         addColor("yellow on black", Color.YELLOW, Color.BLACK);

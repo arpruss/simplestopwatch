@@ -141,6 +141,7 @@
 
     <string-array name="colorSchemes">
         <item>black on white</item>
+        <item>dark green on black</item>
         <item>green on black</item>
         <item>red on black</item>
         <item>white on black</item>

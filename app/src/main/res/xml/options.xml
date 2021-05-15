@@ -27,6 +27,16 @@
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />
+    <CheckBoxPreference android:title="Clock With Big Seconds"
+        android:key="clockWithBigSeconds"
+        android:defaultValue="true"
+        android:summary="Can swipe to reach clock with big seconds"
+        />
+    <CheckBoxPreference android:title="Clock With Little Seconds"
+        android:key="clockWithLittleSeconds"
+        android:defaultValue="true"
+        android:summary="Can swipe to reach clock with little seconds"
+        />
     <ListPreference android:title="Clock Color Scheme"
         android:key="clockColor"
         android:defaultValue="white on black"

@@ -35,7 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 abstract public class ShowTime extends Activity {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final int DARK_THEME = Build.VERSION.SDK_INT >= 23 ?
             android.R.style.Theme_DeviceDefault_Dialog_Alert :
             Build.VERSION.SDK_INT >= 14 ?
@@ -58,7 +58,7 @@ abstract public class ShowTime extends Activity {
     protected static final int DOWN = 3;
     protected static final int UP = 4;
     String colorThemeOptionName = Options.PREF_STOPWATCH_COLOR;
-    Class activityCircle[] = { StopWatch.class, Clock.class, ClockWithSeconds.class };
+    //static final Class activityCircle[] = { StopWatch.class, Clock.class, ClockWithSeconds.class };
 
 //    protected View.OnClickListener fullScreenListener;
     public BigTextView bigDigits;
@@ -66,7 +66,29 @@ abstract public class ShowTime extends Activity {
     private GestureDetector gestureDetector;
     private View.OnTouchListener gestureListener;
 
+    Class[] getActivityCircle() {
+        Class activityCircle[];
+        if (options.getBoolean(Options.PREF_CLOCK_LITTLE_SECONDS, true)) {
+            if (options.getBoolean(Options.PREF_CLOCK_BIG_SECONDS, true)) {
+                activityCircle = new Class[] { StopWatch.class, Clock.class, ClockWithSeconds.class };
+            }
+            else {
+                activityCircle = new Class[] { StopWatch.class, Clock.class };
+            }
+        }
+        else {
+            if (options.getBoolean(Options.PREF_CLOCK_BIG_SECONDS, true)) {
+                activityCircle = new Class[] { StopWatch.class, ClockWithSeconds.class };
+            }
+            else {
+                activityCircle = new Class[] { StopWatch.class };
+            }
+        }
+        return activityCircle;
+    }
+
     Class nextActivity(int delta) {
+        Class[] activityCircle = getActivityCircle();
         for (int i=0; i< activityCircle.length; i++) {
             if (this.getClass() == activityCircle[i]) {
                 int j = i + delta;
@@ -265,6 +287,12 @@ abstract public class ShowTime extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        Class a = nextActivity(0);
+        if (a != this.getClass()) {
+            switchActivity(a, NONE);
+            return;
+        }
 
         final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
