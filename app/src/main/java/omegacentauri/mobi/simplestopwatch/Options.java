@@ -74,6 +74,10 @@ public class Options extends PreferenceActivity {
         colorMap.put(name, new int[]{fg,bg});
     }
     static {
+        addColor("gray (20%) on black", Color.argb(255,20*255/100,20*255/100,20*255/100), Color.BLACK);
+        addColor("gray (40%) on black", Color.argb(255,40*255/100,40*255/100,40*255/100), Color.BLACK);
+        addColor("gray (60%) on black", Color.argb(255,60*255/100,60*255/100,60*255/100), Color.BLACK);
+        addColor("gray (80%) on black", Color.argb(255,80*255/100,80*255/100,80*255/100), Color.BLACK);
         addColor("black on white", Color.BLACK, Color.WHITE);
         addColor("dark green on black", Color.argb(255,0,128,0), Color.BLACK);
         addColor("green on black", Color.GREEN, Color.BLACK);

@@ -360,7 +360,7 @@ public class SansDigitsColon extends MiniFont {
       return path;
       }
     });
-  tweakWidth((char)46,431.2f);
   tweakWidth((char)58,396.8f);
+  tweakWidth((char)46,431.2f);
   }
 }

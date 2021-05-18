@@ -448,8 +448,8 @@ public class DINDigitsColon extends MiniFont {
       return path;
       }
     });
-  tweakWidth((char)46,392.8f);
   tweakWidth((char)58,392.8f);
+  tweakWidth((char)46,392.8f);
   tweakWidth((char)48,1011f);
   tweakWidth((char)49,1011f);
   tweakWidth((char)50,1011f);

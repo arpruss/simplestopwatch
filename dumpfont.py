@@ -3,7 +3,7 @@ from fontTools.pens.basePen import decomposeQuadraticSegment
 from sys import argv
 
 charsToDump = "0123456789.:\u2212"
-charsToNarrow = ".:"
+charsToNarrow = ":."
 narrowFraction = 0.8
 maximizeDigitBounds = True
 equalizeWidths = "0123456789"
@@ -38,7 +38,7 @@ class MyPen(object):
 #        print(self.indent+"curveTo", self.shift(*points))
     def qCurveTo(self, *points):
         if points and points[-1] is None:
-            // this shouldn't happen but it does
+            print("// this shouldn't happen but it does")
             print(self.indent+"path.moveTo(%gf,%gf);" % self.shift(points[0]))        
             points = points[:-1]
         decomp = decomposeQuadraticSegment(points)
