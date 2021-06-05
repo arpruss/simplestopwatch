@@ -1,0 +1,22 @@
+<p>
+Sports stopwatch with:
+<ul>
+<li>giant digits and adjustable theme (color, font, size, spacing, format)</li>
+<li>control with both on-screen buttons and volume buttons</li>
+<li>lap-timer</li>
+<li>delayed-start (with audio 3...2...1... countdown).</li>
+</ul>
+</p>
+
+<p>
+Free, small, no ads, open source (<a
+href="https://github.com/arpruss/simplestopwatch">github.com/arpruss/simplestopwatch</a>).
+</p>
+
+<p>
+As a bonus, includes a giant number clock (swipe to switch between clock and stopwatch).
+</p>
+
+<p> I made this so I could easily see the time while rock climbing at the gym
+50 feet up. It's also useful poolside for swimming, and for other sports where
+you need to see the time from a distance (or close up, if you want). </p>
