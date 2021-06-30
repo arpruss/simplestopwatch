@@ -467,9 +467,13 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         lastAnnounced = options.getLong(Options.PREF_LAST_ANNOUNCED, 0);
         setAudio(options.getString(Options.PREF_SOUND, "voice"));
 
+        StopWatch.debug("baseTime "+baseTime);
+
         precision = Integer.parseInt(options.getString(Options.PREF_PRECISION, "100"));
-        if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME)
+        if (SystemClock.elapsedRealtime() < baseTime + MIN_DELAY_TIME) {
+            StopWatch.debug("deactivating");
             active = false;
+        }
 
         if (options.getBoolean(Options.PREF_BOOT_ADJUSTED, false)) {
             SharedPreferences.Editor ed = options.edit();
@@ -622,6 +626,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         long oldBootTime = options.getLong(Options.PREF_BOOT_TIME, 0);
         SharedPreferences.Editor ed = options.edit();
         if (oldBootTime == 0) {
+            StopWatch.debug("zero old boot time");
             ed.putBoolean(Options.PREF_ACTIVE, false);
         }
         else {

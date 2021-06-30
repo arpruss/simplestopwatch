@@ -2,6 +2,7 @@ package omegacentauri.mobi.simplestopwatch;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -499,6 +500,13 @@ abstract public class ShowTime extends Activity {
     }
 
     public boolean isTV() {
+        if (Build.MODEL.startsWith("AFT")) {
+            Application app = getApplication();
+            String installerName = app.getPackageManager().getInstallerPackageName(app.getPackageName());
+            if (installerName != null && installerName.equals("com.amazon.venezia"))
+                return true;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             return getPackageManager().hasSystemFeature("android.hardware.type.television");
         }
