@@ -47,6 +47,11 @@
         android:defaultValue="true"
         android:summary="Volume Up = Start/Stop/Continue and Volume Down = Delay/Lap/Reset"
         />
+    <CheckBoxPreference android:title="Disable Touch Screen When Running"
+        android:key="noTouch"
+        android:defaultValue="false"
+        android:summary="Prevent accidental touches until Volume Up is pressed to stop"
+        />
     <ListPreference android:title="Countdown Sounds"
         android:key="sounds"
         android:defaultValue="voice"

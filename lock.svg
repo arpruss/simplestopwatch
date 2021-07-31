@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Layer_1"
+   xml:space="preserve"
+   version="1.0"
+   viewBox="0 0 112 163"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="lock.svg"
+   width="119.46667"
+   height="173.86667"
+   inkscape:export-filename="C:\cygwin64\home\Alexander_Pruss\android\SimpleStopwatch\lock.png"
+   inkscape:export-xdpi="411.42999"
+   inkscape:export-ydpi="411.42999"><defs
+     id="defs4491" /><sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1000"
+     id="namedview4489"
+     showgrid="false"
+     inkscape:zoom="3.160019"
+     inkscape:cx="51.030854"
+     inkscape:cy="86.933334"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" /><path
+     id="path3"
+     style="fill:#ffffff;fill-rule:evenodd"
+     d="m 57.309,28.614 c 12.105,0 19.902,12.698 20.064,28.445 H 37.245 C 37.408,41.312 45.204,28.614 57.309,28.614 Z m 0,-15.723 c -18.861,0 -34.144,19.958 -34.144,44.575 l 0.008,0.618 C 16.758,60.433 12.19,66.571 12.19,73.774 v 39.206 c 0,17.46 20.202,31.61 45.119,31.61 24.918,0 45.121,-14.15 45.121,-31.61 V 73.774 c 0,-7.203 -4.57,-13.341 -10.984,-15.69 l 0.008,-0.618 C 91.454,32.849 76.17,12.891 57.309,12.891 Z M 44.505,94.139 c 0,-7.049 5.731,-12.764 12.804,-12.764 7.073,0 12.804,5.715 12.804,12.764 0,4.512 -2.349,8.481 -5.894,10.751 v 11.74 h -13.82 v -11.74 c -3.545,-2.27 -5.894,-6.239 -5.894,-10.751 z"
+     inkscape:connector-curvature="0"
+     inkscape:export-xdpi="411.42999"
+     inkscape:export-ydpi="411.42999" /><metadata
+     id="metadata4486"><rdf:RDF><cc:Work><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" /><dc:publisher><cc:Agent
+             rdf:about="http://openclipart.org/"><dc:title>Openclipart</dc:title></cc:Agent></dc:publisher><dc:title>Padlock Icon (Rounded)</dc:title><dc:date>2010-06-25T18:33:28</dc:date><dc:description>a simple rounded padlock.</dc:description><dc:source>https://openclipart.org/detail/68545/padlock-icon-(rounded)-by-jaschon</dc:source><dc:creator><cc:Agent><dc:title>jaschon</dc:title></cc:Agent></dc:creator><dc:subject><rdf:Bag><rdf:li>black</rdf:li><rdf:li>black and white</rdf:li><rdf:li>key</rdf:li><rdf:li>keyhole</rdf:li><rdf:li>lock</rdf:li><rdf:li>padlock</rdf:li><rdf:li>security</rdf:li><rdf:li>silhouette</rdf:li><rdf:li>symbol</rdf:li><rdf:li>tool</rdf:li></rdf:Bag></dc:subject></cc:Work><cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/"><cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /></cc:License></rdf:RDF></metadata></svg>

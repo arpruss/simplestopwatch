@@ -35,6 +35,11 @@ public class Clock extends ShowTime {
     };
 
     @Override
+    public boolean noTouch() {
+        return false;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

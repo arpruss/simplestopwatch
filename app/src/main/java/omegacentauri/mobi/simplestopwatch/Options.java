@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -17,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,6 +67,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_CLOCK_LITTLE_SECONDS = "clockWithLittleSeconds";
     public static final int highlightPercent = 25;
     public static final String PREF_LAST_ACTIVITY = "lastActivity";
+    public static final String PREF_NO_TOUCH = "noTouch";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
@@ -273,6 +276,21 @@ public class Options extends PreferenceActivity {
             p.setSummary("");
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getScanCode() == 513 || event.getScanCode() == 595) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+                finish();
+            }
+            else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 //    public static int getVibration(SharedPreferences options) {
 //        String v = options.getString(PREF_VIBRATION, "20");

@@ -110,6 +110,8 @@ abstract public class ShowTime extends Activity {
         return dp * (float)getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT;
     }
 
+    abstract public boolean noTouch();
+
     public int getControlBarForeColor() {
         int base = Options.getForeColor(this, options);
         if (!options.getBoolean(Options.PREF_FULLSCREEN, false))
@@ -484,6 +486,16 @@ abstract public class ShowTime extends Activity {
             flingDown();
             return true;
         }
+        else if (event.getScanCode() == 513 || event.getScanCode() == 595) { // Sony camera delete
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+                finish();
+            }
+            else {
+                finish();
+            }
+            return true;
+        }
+
         return super.onKeyDown(keyCode, event);
     }
 

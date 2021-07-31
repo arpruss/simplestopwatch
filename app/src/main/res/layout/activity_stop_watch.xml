@@ -88,6 +88,15 @@
             android:textSize="32sp" />
 
         <ImageButton
+            android:id="@+id/lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:enabled="false"
+            android:background="@null"
+            android:src="@drawable/lock" />
+
+        <ImageButton
             android:id="@+id/settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

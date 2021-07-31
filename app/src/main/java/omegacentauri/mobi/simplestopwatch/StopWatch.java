@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.TabStopSpan;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -29,7 +31,6 @@ public class StopWatch extends ShowTime {
     private TextView laps;
     private MyChrono chrono;
 
-
     protected static final int TEXT_BUTTONS[] = {
             R.id.start, R.id.reset
     };
@@ -38,6 +39,16 @@ public class StopWatch extends ShowTime {
             {R.id.menu, R.drawable.menu}
     };
     private boolean volumeControl;
+    private View noTouchIcon;
+    private long lastNoTouchWarned = -1;
+    private static final long NO_TOUCH_WARN_DELAY = 5 * 60 * 1000l;
+    private View menuButton;
+    private View settingsButton;
+
+    @Override
+    public boolean noTouch() {
+        return chrono.active && ! chrono.paused && options.getBoolean(Options.PREF_NO_TOUCH, false);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +71,9 @@ public class StopWatch extends ShowTime {
         firstButton = (Button)findViewById(R.id.start);
         controlBar = (LinearLayout)findViewById(R.id.controlBar);
         mainContainer = findViewById(R.id.chrono_and_laps);
+        noTouchIcon = findViewById(R.id.lock);
+        menuButton = findViewById(R.id.menu);
+        settingsButton = findViewById(R.id.settings);
         laps = (TextView)findViewById(R.id.laps);
         textButtons = TEXT_BUTTONS;
         imageButtons = IMAGE_BUTTONS;
@@ -110,6 +124,19 @@ public class StopWatch extends ShowTime {
                 firstButton.setText("Stop");
                 secondButton.setText("Lap");
             }
+        }
+
+        if (noTouch()) {
+//            secondButton.setVisibility(View.GONE);
+            menuButton.setVisibility(View.GONE);
+            settingsButton.setVisibility(View.GONE);
+            noTouchIcon.setVisibility(View.VISIBLE);
+        }
+        else {
+            secondButton.setVisibility(View.VISIBLE);
+            menuButton.setVisibility(View.VISIBLE);
+            settingsButton.setVisibility(View.VISIBLE);
+            noTouchIcon.setVisibility(View.GONE);
         }
     }
 
@@ -236,13 +263,13 @@ public class StopWatch extends ShowTime {
     }
 
     public boolean isFirstButton(int keyCode) {
-        return (keyCode == KeyEvent.KEYCODE_VOLUME_UP && volumeControl) ||
+        return (keyCode == KeyEvent.KEYCODE_VOLUME_UP && (volumeControl || noTouch()) ) ||
 //                keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
                 keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
     }
 
     public boolean isSecondButton(int keyCode) {
-        return (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && volumeControl) ||
+        return (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && (volumeControl || noTouch() ) ) ||
                 keyCode == KeyEvent.KEYCODE_MEDIA_REWIND;
     }
 
@@ -253,6 +280,19 @@ public class StopWatch extends ShowTime {
             return true;
         else
             return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent v) {
+        if (noTouch()) {
+            if (lastNoTouchWarned < 0 || lastNoTouchWarned + NO_TOUCH_WARN_DELAY <= System.currentTimeMillis()) {
+                lastNoTouchWarned = System.currentTimeMillis();
+                Toast.makeText(this, "Screen locked: Press Volume Up to stop", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+        else
+            return super.dispatchTouchEvent(v);
     }
 
     @Override
