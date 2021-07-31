@@ -47,11 +47,6 @@
         android:defaultValue="true"
         android:summary="Volume Up = Start/Stop/Continue and Volume Down = Delay/Lap/Reset"
         />
-    <CheckBoxPreference android:title="Disable Touch Screen When Running"
-        android:key="noTouch"
-        android:defaultValue="false"
-        android:summary="Prevent accidental touches until Volume Up is pressed to stop"
-        />
     <ListPreference android:title="Countdown Sounds"
         android:key="sounds"
         android:defaultValue="voice"
@@ -81,7 +76,7 @@
     <ListPreference android:title="Fullscreen Control Bar Brightness"
         android:summary="Set brightness of the bottom bar while in full screen mode"
         android:key="fsBright"
-        android:defaultValue="0"
+        android:defaultValue="20"
         android:entries="@array/fsControlBarBrightnessDisplayValues"
         android:entryValues="@array/fsControlBarBrightnessValues" />
         <CheckBoxPreference android:title="Allow Three Line"
@@ -124,6 +119,11 @@
             android:key="swipe"
             android:defaultValue="true"
             android:summary=""
+            />
+        <CheckBoxPreference android:title="Pin When Locking"
+            android:key="pinOnLock"
+            android:defaultValue="true"
+            android:summary="When setting lock mode in menu, automatically request that app be pinned."
             />
     </PreferenceCategory>
     <PreferenceCategory android:title="Licenses and Copyrights">

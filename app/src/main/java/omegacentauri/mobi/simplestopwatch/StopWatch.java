@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -40,6 +39,7 @@ public class StopWatch extends ShowTime {
     };
     private boolean volumeControl;
     private View noTouchIcon;
+    private boolean noTouch = false;
     private long lastNoTouchWarned = -1;
     private static final long NO_TOUCH_WARN_DELAY = 5 * 60 * 1000l;
     private View menuButton;
@@ -47,12 +47,14 @@ public class StopWatch extends ShowTime {
 
     @Override
     public boolean noTouch() {
-        return chrono.active && ! chrono.paused && options.getBoolean(Options.PREF_NO_TOUCH, false);
+        return noTouch && chrono.active && ! chrono.paused;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.v("chrono", "create");
 
         colorThemeOptionName = Options.PREF_STOPWATCH_COLOR;
 
@@ -322,6 +324,8 @@ public class StopWatch extends ShowTime {
         menu.findItem(R.id.copy_laps).setVisible(chrono.lapData.length()>0);
         menu.findItem(R.id.clear_laps).setVisible(chrono.lapData.length()>0);
         menu.findItem(R.id.pace).setVisible(chrono.getTime()>0);
+        menu.findItem(R.id.lock_mode).setVisible(!noTouch);
+        menu.findItem(R.id.unlock_mode).setVisible(noTouch);
         return true;
     }
 
@@ -352,6 +356,27 @@ public class StopWatch extends ShowTime {
                 return true;
             case R.id.clock_with_seconds:
                 switchActivity(ClockWithSeconds.class, NONE);
+                return true;
+
+            case R.id.lock_mode:
+                noTouch = true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    invalidateOptionsMenu();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startLockTask();
+                }
+                updateButtons();
+                return true;
+            case R.id.unlock_mode:
+                noTouch = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    invalidateOptionsMenu();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    stopLockTask();
+                }
+                updateButtons();
                 return true;
         }
         return super.onOptionsItemSelected(item);
