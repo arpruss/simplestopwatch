@@ -54,7 +54,8 @@ public class StopWatch extends ShowTime {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.v("chrono", "create");
+        if (savedInstanceState != null)
+            noTouch = savedInstanceState.getBoolean("noTouch", false);
 
         colorThemeOptionName = Options.PREF_STOPWATCH_COLOR;
 
@@ -92,6 +93,13 @@ public class StopWatch extends ShowTime {
             }
         });
 
+        if (noTouch)
+            lockModeWarn();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle b) {
+        b.putBoolean("noTouch", noTouch);
     }
 
     @Override
@@ -367,6 +375,7 @@ public class StopWatch extends ShowTime {
                     startLockTask();
                 }
                 updateButtons();
+                lockModeWarn();
                 return true;
             case R.id.unlock_mode:
                 noTouch = false;
@@ -380,6 +389,10 @@ public class StopWatch extends ShowTime {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void lockModeWarn() {
+        Toast.makeText(this, "Touch screen will be disabled when stopwatch is running. Use Volume Up to stop and Volume Down for lap.", Toast.LENGTH_LONG).show();
     }
 
 }
