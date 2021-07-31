@@ -363,7 +363,7 @@ public class StopWatch extends ShowTime {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                     invalidateOptionsMenu();
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && options.getBoolean(Options.PREF_PIN_ON_LOCK, true)) {
                     startLockTask();
                 }
                 updateButtons();
@@ -373,7 +373,7 @@ public class StopWatch extends ShowTime {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                     invalidateOptionsMenu();
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && options.getBoolean(Options.PREF_PIN_ON_LOCK, true)) {
                     stopLockTask();
                 }
                 updateButtons();
