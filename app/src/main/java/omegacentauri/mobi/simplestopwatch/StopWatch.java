@@ -141,12 +141,17 @@ public class StopWatch extends ShowTime {
             menuButton.setVisibility(View.GONE);
             settingsButton.setVisibility(View.GONE);
             noTouchIcon.setVisibility(View.VISIBLE);
+
+            //this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+
         }
         else {
             secondButton.setVisibility(View.VISIBLE);
             menuButton.setVisibility(View.VISIBLE);
             settingsButton.setVisibility(View.VISIBLE);
             noTouchIcon.setVisibility(View.GONE);
+
+            //this.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION);
         }
     }
 
@@ -293,12 +298,24 @@ public class StopWatch extends ShowTime {
     }
 
     @Override
+    public void onBackPressed() {
+        if (noTouch())
+            touchWarn();
+        else
+            super.onBackPressed();
+    }
+
+    public void touchWarn() {
+        if (lastNoTouchWarned < 0 || lastNoTouchWarned + NO_TOUCH_WARN_DELAY <= System.currentTimeMillis()) {
+            lastNoTouchWarned = System.currentTimeMillis();
+            Toast.makeText(this, "Screen locked: Press Volume Up to stop", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent v) {
         if (noTouch()) {
-            if (lastNoTouchWarned < 0 || lastNoTouchWarned + NO_TOUCH_WARN_DELAY <= System.currentTimeMillis()) {
-                lastNoTouchWarned = System.currentTimeMillis();
-                Toast.makeText(this, "Screen locked: Press Volume Up to stop", Toast.LENGTH_SHORT).show();
-            }
+            touchWarn();
             return true;
         }
         else
