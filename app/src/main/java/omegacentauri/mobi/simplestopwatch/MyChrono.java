@@ -229,6 +229,8 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         if (format.endsWith("m")) {
             t /= 60;
             if (format.equals("m"))
+                return String.format("%d", t) + suffix;
+            else if (format.equals("mm"))
                 return String.format("%02d", t) + suffix;
         }
         int part0 = (int) (t % 60); // seconds or minutes

@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/copy_time" android:title="Copy time to clipboard"   />
     <item android:id="@+id/copy_laps" android:title="Copy lap data to clipboard"   />
-    <item android:id="@+id/unlock_mode" android:title="Unlock" />
-    <item android:id="@+id/lock_mode" android:title="Lock when active" />
     <item android:id="@+id/clear_laps" android:title="Clear lap data" />
     <item android:id="@+id/pace" android:title="Pace and speed"   />
+    <item android:id="@+id/unlock_mode" android:title="Unlock" />
+    <item android:id="@+id/lock_mode" android:title="Lock screen when active" />
     <item android:id="@+id/clock" android:title="Clock"   />
     <item android:id="@+id/clock_with_seconds" android:title="Clock with seconds"   />
     <item android:id="@+id/go_settings" android:title="Settings"   />

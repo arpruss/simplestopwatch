@@ -48,6 +48,7 @@
         <item>h:m:s</item>
         <item>h:m:s.ms</item>
         <item>m</item>
+        <item>mm</item>
         <item>m:s</item>
         <item>m:s.ms</item>
         <item>s</item>
