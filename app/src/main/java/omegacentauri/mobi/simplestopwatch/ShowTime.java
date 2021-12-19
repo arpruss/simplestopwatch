@@ -195,6 +195,10 @@ abstract public class ShowTime extends Activity {
         int controlFore = getControlBarForeColor();
         int back = Options.getBackColor(this, options);
 
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(back);
+        }
+
         ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(back);
 
         ((TextView)findViewById(R.id.fraction)).setTextColor(controlFore);
