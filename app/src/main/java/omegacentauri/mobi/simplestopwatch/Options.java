@@ -188,8 +188,6 @@ public class Options extends PreferenceActivity {
                 return false;
             }
         });
-
-        //getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
     }
 
     @Override
@@ -198,7 +196,6 @@ public class Options extends PreferenceActivity {
 
         StopWatch.debug("Options::onResume");
         
-//        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
         customizeDisplay();
     }
