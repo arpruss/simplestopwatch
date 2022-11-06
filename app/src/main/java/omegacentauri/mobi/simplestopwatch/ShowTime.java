@@ -234,12 +234,14 @@ abstract public class ShowTime extends Activity {
         if (isTV())
             return;
         String o = options.getString(Options.PREF_ORIENTATION, "automatic");
-        if (o.equals("landscape"))
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        else if (o.equals("portrait"))
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        else
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        try {
+            if (o.equals("landscape"))
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            else if (o.equals("portrait"))
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            else
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        } catch(Exception e) {}
 
     }
 
@@ -518,7 +520,10 @@ abstract public class ShowTime extends Activity {
     public boolean isTV() {
         if (Build.MODEL.startsWith("AFT")) {
             Application app = getApplication();
-            String installerName = app.getPackageManager().getInstallerPackageName(app.getPackageName());
+            String installerName = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ECLAIR) {
+                installerName = app.getPackageManager().getInstallerPackageName(app.getPackageName());
+            }
             if (installerName != null && installerName.equals("com.amazon.venezia"))
                 return true;
         }
