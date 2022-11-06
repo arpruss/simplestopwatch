@@ -22,12 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Clock">
+        <activity android:name=".Clock"
+            >
         </activity>
-        <activity android:name=".ClockWithSeconds">
+        <activity android:name=".ClockWithSeconds"
+            >
         </activity>
         <activity android:name=".Options"
-            android:exported="true">
+            android:exported="true"
+            >
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE" />
             </intent-filter>
