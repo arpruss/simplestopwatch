@@ -24,6 +24,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,8 +40,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     public long pauseTime;
     public long delayTime;
     public String lapData;
-    static final long MIN_DELAY_TIME = -9000;
-    static final long delayTimes[] = { 0, -3000, -6000, MIN_DELAY_TIME };
+    static final long MIN_DELAY_TIME = -60000;
     long lastLapTime;
     int vibrateAfterCountDown = 100;
     public boolean paused = false;
@@ -335,14 +336,24 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             stopUpdating();
         }
         else {
-            int i = 0;
-            for (i = 0; i < delayTimes.length; i++) {
-                if (delayTimes[i] == delayTime) {
-                    i = (i+1) % delayTimes.length;
+            long delayTimes[];
+            long cd = Options.getCustomDelay(options);
+            if (cd == 0)
+                delayTimes = new long[] { 0, 3000, 6000, 9000 };
+            else {
+                delayTimes = new long[] { 0, 3000, 6000, 9000, cd };
+                Arrays.sort(delayTimes);
+            }
+            boolean didSet = false;
+            for (int i = 0; i < delayTimes.length; i++) {
+                if (delayTimes[i] == -delayTime) {
+                    delayTime = -delayTimes[(i+1) % delayTimes.length];
+                    didSet = true;
                     break;
                 }
             }
-            delayTime = delayTimes[i];
+            if (!didSet)
+                delayTime = 0;
         }
         save();
         updateViews();

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -16,6 +17,8 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,6 +47,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_LAST_LAP_TIME = "lastLapTime";
 //    public static final String PREF_VIBRATION = "vibration";
     public static final String PREF_DELAY = "delay";
+    public static final String PREF_CUSTOM_DELAY = "customDelay";
     public static final String PREF_SCALE = "scale";
     public static final String PREF_LAPS = "laps";
     public static final String PREF_LAST_ANNOUNCED = "lastAnnounced";
@@ -174,6 +178,16 @@ public class Options extends PreferenceActivity {
         return high;
     }
 
+    public static long getCustomDelay(SharedPreferences options) {
+        String cd = options.getString(PREF_CUSTOM_DELAY, "0");
+        try {
+            return 1000l * Long.parseLong(cd);
+        }
+        catch(Exception e) {
+            return 0;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,6 +214,19 @@ public class Options extends PreferenceActivity {
                 showLicenses();
 
                 return false;
+            }
+        });
+
+        final EditTextPreference customDelayPref = (EditTextPreference) findPreference("customDelay");
+        customDelayPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                long val = Long.parseLong((String)newValue);
+                if (val<0 || val>60) {
+                    Toast.makeText(getApplicationContext(), "Maximum delay is 60 seconds", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                return true;
             }
         });
     }
@@ -279,6 +306,7 @@ public class Options extends PreferenceActivity {
         boolean swipeWorks = !options.getString(PREF_TAP_ACTION, "fullscreen").equals("start_stop");
         findPreference(PREF_CLOCK_BIG_SECONDS).setEnabled(swipeWorks);
         findPreference(PREF_CLOCK_LITTLE_SECONDS).setEnabled(swipeWorks);
+        findPreference(PREF_CUSTOM_DELAY).setSummary(Long.toString(getCustomDelay(options)/1000));
     }
 
     public void setSummary(ListPreference p) {

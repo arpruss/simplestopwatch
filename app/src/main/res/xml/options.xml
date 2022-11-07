@@ -54,6 +54,11 @@
         android:defaultValue="automatic"
         android:entries="@array/orientationValues"
         android:entryValues="@array/orientationValues" />
+    <EditTextPreference android:title="Custom Delay Time"
+        android:defaultValue="0"
+        android:inputType="number"
+        android:key="customDelay"
+        />
     <PreferenceCategory android:title="Advanced">
         <ListPreference android:title="Permitted Aspect Ratio Distortion"
             android:summary=""
