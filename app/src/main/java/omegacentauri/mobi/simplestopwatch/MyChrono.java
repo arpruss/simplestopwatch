@@ -338,7 +338,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         else {
             long delayTimes[];
             long cd = Options.getCustomDelay(options);
-            if (cd == 0)
+            if (cd == 0 || cd == 3000 || cd == 6000 || cd == 9000)
                 delayTimes = new long[] { 0, 3000, 6000, 9000 };
             else {
                 delayTimes = new long[] { 0, 3000, 6000, 9000, cd };
