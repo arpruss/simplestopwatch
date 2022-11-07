@@ -76,6 +76,7 @@
     <string-array name="fontValues">
         <item>7 segment</item>
         <item>DIN 1451</item>
+        <item>FHWA E</item>
         <item>black</item>
         <item>bold</item>
         <item>medium</item>
@@ -103,6 +104,7 @@
     <string-array name="fontNames">
         <item>7 segment</item>
         <item>DIN 1451</item>
+        <item>RoadGeek 2014 FHWA E</item>
         <item>Roboto Black</item>
         <item>Roboto Bold</item>
         <item>Roboto Medium</item>

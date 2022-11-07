@@ -10,5 +10,7 @@ echo DSEG7
 python3 dumpfont.py fonts-DSEG_v045/DSEG7-Classic/DSEG7Classic-BoldItalic.ttf SevenSegmentBoldItalicDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/SevenSegmentBoldItalicDigitsColon.java
 echo DIN
 python3 dumpfont.py "din1451alt G.ttf" DINDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/DINDigitsColon.java
+echo RG
+python3 dumpfont.py "rg/RG2014E.ttf" FHWAE > app/src/main/java/omegacentauri/mobi/simplestopwatch/FHWAE.java
 #echo RG2014E
 #python3 dumpfont.py "RG2014E.ttf" RGDigitsColon > app/src/main/java/omegacentauri/mobi/simplestopwatch/RGDigitsColon.java
