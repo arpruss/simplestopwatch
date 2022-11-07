@@ -27,16 +27,6 @@
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />
-    <CheckBoxPreference android:title="Clock With Big Seconds"
-        android:key="clockWithBigSeconds"
-        android:defaultValue="true"
-        android:summary="Can swipe to reach clock with big seconds"
-        />
-    <CheckBoxPreference android:title="Clock With Little Seconds"
-        android:key="clockWithLittleSeconds"
-        android:defaultValue="true"
-        android:summary="Can swipe to reach clock with little seconds"
-        />
     <ListPreference android:title="Clock Color Scheme"
         android:key="clockColor"
         android:defaultValue="white on black"
@@ -46,6 +36,12 @@
         android:key="volume"
         android:defaultValue="true"
         android:summary="Volume Up = Start/Stop/Continue and Volume Down = Delay/Lap/Reset"
+        />
+    <ListPreference android:title="Tap Action"
+        android:key="tapAction"
+        android:defaultValue="fullscreen"
+        android:entries="@array/tapActionNames"
+        android:entryValues="@array/tapActions"
         />
     <ListPreference android:title="Countdown Sounds"
         android:key="sounds"
@@ -65,10 +61,11 @@
             android:defaultValue="10"
             android:entries="@array/distortionDisplayValues"
             android:entryValues="@array/distortionValues" />
-        <CheckBoxPreference android:title="Control Fullscreen"
+<!--        <CheckBoxPreference android:title="Control Fullscreen"
             android:key="controlFS"
             android:defaultValue="true"
             android:summary="Allow switching to fullscreen mode by tapping in middle of screen"></CheckBoxPreference>
+            -->
         <CheckBoxPreference android:title="24 Hour Clock"
             android:key="twentyfour"
             android:defaultValue="false"
@@ -115,10 +112,15 @@
             android:defaultValue="true"
             android:summary="If this is turned off, the media stream will be used."
             />
-        <CheckBoxPreference android:title="Swipe Between Clock/Stopwatch"
-            android:key="swipe"
+        <CheckBoxPreference android:title="Swipe to Clock With Big Seconds"
+            android:key="clockWithBigSeconds"
             android:defaultValue="true"
-            android:summary=""
+            android:summary="Can swipe to reach clock with big seconds"
+            />
+        <CheckBoxPreference android:title="Swipe to Clock With Little Seconds"
+            android:key="clockWithLittleSeconds"
+            android:defaultValue="true"
+            android:summary="Can swipe to reach clock with little seconds"
             />
         <CheckBoxPreference android:title="Pin When Locking"
             android:key="pinOnLock"

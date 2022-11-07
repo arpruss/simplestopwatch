@@ -6,6 +6,18 @@
         <item>0.001</item>
     </string-array>
 
+    <string-array name="tapActionNames">
+        <item>none</item>
+        <item>start/stop</item>
+        <item>toggle full screen</item>
+    </string-array>
+
+    <string-array name="tapActions">
+        <item>none</item>
+        <item>start_stop</item>
+        <item>fullscreen</item>
+    </string-array>
+
     <string-array name="precisionValues">
         <item>1000</item>
         <item>100</item>

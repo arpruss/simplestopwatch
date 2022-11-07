@@ -5,17 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Path;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -57,12 +54,13 @@ public class Options extends PreferenceActivity {
     public static final String PREF_FULLSCREEN = "fullscreen";
     public static final String PREF_FS_BRIGHT = "fsBright";
     public static final String PREF_VIBRATE_AFTER_COUNTDOWN = "vibrateAfterCountdown";
-    public static final String PREF_CONTROL_FULLSCREEN = "controlFS";
+    //public static final String PREF_CONTROL_FULLSCREEN = "controlFS";
+    public static final String PREF_TAP_ACTION = "tapAction";
     public static final String PREF_BOOT_ADJUSTED = "bootAdjusted";
     public static final String PREF_24HOUR = "twentyfour";
     public static final String PREF_CLOCK_SWIPE_INFO = "clockSwipeInfo2";
     public static final String PREF_STOPWATCH_SWIPE_INFO = "stopwatchSwipeInfo2";
-    public static final String PREF_SWIPE = "swipe";
+//    public static final String PREF_SWIPE = "swipe";
     public static final String PREF_CLOCK_BIG_SECONDS = "clockWithBigSeconds";
     public static final String PREF_CLOCK_LITTLE_SECONDS = "clockWithLittleSeconds";
     public static final int highlightPercent = 25;
@@ -71,6 +69,7 @@ public class Options extends PreferenceActivity {
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
+    private SharedPreferences options;
 //    private SharedPreferences options;
 
     private static void addColor(String name, int fg, int bg) {
@@ -88,6 +87,16 @@ public class Options extends PreferenceActivity {
         addColor("yellow on black", Color.YELLOW, Color.BLACK);
         addColor("white on black", Color.WHITE, Color.BLACK);
     }
+
+    static String getTapAction(SharedPreferences options) {
+        return options.getString(PREF_TAP_ACTION, "fullscreen");
+    }
+
+    static boolean swipeEnabled(SharedPreferences options) {
+        return !getTapAction(options).equals("start_stop") && (
+                options.getBoolean(PREF_CLOCK_LITTLE_SECONDS, true) || options.getBoolean(PREF_CLOCK_BIG_SECONDS, true) );
+    }
+
 
     static float getMaxAspect(SharedPreferences options) {
         return Float.parseFloat(options.getString(Options.PREF_DISTORTION, "10"))*.01f + 1f;
@@ -167,6 +176,8 @@ public class Options extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         PreferenceManager.setDefaultValues(this, R.xml.options, true);
+
+        options = PreferenceManager.getDefaultSharedPreferences(this);
 
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
@@ -262,7 +273,9 @@ public class Options extends PreferenceActivity {
     private void customizeDisplay() {
         StopWatch.debug("customizing option display");
         scanPreferences(getPreferenceScreen());
-
+        boolean swipeWorks = !options.getString(PREF_TAP_ACTION, "fullscreen").equals("start_stop");
+        findPreference(PREF_CLOCK_BIG_SECONDS).setEnabled(swipeWorks);
+        findPreference(PREF_CLOCK_LITTLE_SECONDS).setEnabled(swipeWorks);
     }
 
     public void setSummary(ListPreference p) {

@@ -10,7 +10,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.TabStopSpan;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -108,7 +107,7 @@ public class StopWatch extends ShowTime {
 
         volumeControl = options.getBoolean(Options.PREF_VOLUME, true);
         updateButtons();
-        if (options.getBoolean(Options.PREF_SWIPE, true) && !options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
+        if (Options.swipeEnabled(options) && !options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
             SharedPreferences.Editor ed = options.edit();
             ed.putBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, true);
             MyChrono.apply(ed);
@@ -262,7 +261,8 @@ public class StopWatch extends ShowTime {
         updateButtons();
     }
 
-    void pressFirstButton() {
+    @Override
+    public void pressFirstButton() {
         if (Build.VERSION.SDK_INT >= 5)
             firstButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         chrono.firstButton();
@@ -403,6 +403,9 @@ public class StopWatch extends ShowTime {
                     stopLockTask();
                 }
                 updateButtons();
+                return true;
+            case R.id.fullscreen:
+                toggleFullscreen();
                 return true;
         }
         return super.onOptionsItemSelected(item);

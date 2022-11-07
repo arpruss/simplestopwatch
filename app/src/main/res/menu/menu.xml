@@ -7,6 +7,7 @@
     <item android:id="@+id/lock_mode" android:title="Lock screen when active" />
     <item android:id="@+id/clock" android:title="Clock"   />
     <item android:id="@+id/clock_with_seconds" android:title="Clock with seconds"   />
+    <item android:id="@+id/fullscreen" android:title="Toggle fullscreen"   />
     <item android:id="@+id/go_settings" android:title="Settings"   />
 
     </menu>

@@ -31,7 +31,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -131,19 +130,6 @@ abstract public class ShowTime extends Activity {
         options = PreferenceManager.getDefaultSharedPreferences(this);
         MyChrono.detectBoot(options);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-/*        fullScreenListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
-                    return;
-                SharedPreferences.Editor ed = options.edit();
-                ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
-                MyChrono.apply(ed);
-                setFullScreen();
-                setTheme();
-            }
-        }; */
 
         gestureListener = new View.OnTouchListener(){
             @Override
@@ -257,9 +243,17 @@ abstract public class ShowTime extends Activity {
         }
     }
 
+    public void toggleFullscreen() {
+        SharedPreferences.Editor ed = options.edit();
+        ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
+        MyChrono.apply(ed);
+        setFullScreen();
+        setTheme();
+    }
+
     protected void setFullScreen()
     {
-        boolean fs = options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true) && options.getBoolean(Options.PREF_FULLSCREEN, false);
+        boolean fs = options.getBoolean(Options.PREF_FULLSCREEN, false);
         Window w = getWindow();
         WindowManager.LayoutParams attrs = w.getAttributes();
 
@@ -321,30 +315,31 @@ abstract public class ShowTime extends Activity {
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDown(MotionEvent motionEvent) {
+                if (options.getString(Options.PREF_TAP_ACTION, "fullscreen").equals("start_stop")) {
+                    pressFirstButton();
+                }
                 return true;
             }
 
             @Override
             public boolean onSingleTapUp(MotionEvent motionEvent) {
                 debug("singleTapUp");
-                if (!options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true))
+                if (!options.getString(Options.PREF_TAP_ACTION, "fullscreen").equals("fullscreen"))
                     return false;
-                SharedPreferences.Editor ed = options.edit();
-                ed.putBoolean(Options.PREF_FULLSCREEN, ! options.getBoolean(Options.PREF_FULLSCREEN, false));
-                MyChrono.apply(ed);
-                setFullScreen();
-                setTheme();
+                toggleFullscreen();
                 return true;
             }
 
             @Override
             public void onLongPress(MotionEvent motionEvent) {
+                if (options.getString(Options.PREF_TAP_ACTION, "fullscreen").equals("start_stop"))
+                    return;
                 timeKeeper.copyToClipboard();
             }
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
-                if (! options.getBoolean(Options.PREF_SWIPE, true))
+                if (!Options.swipeEnabled(options))
                     return false;
 
                 final float baseSize;
@@ -403,6 +398,9 @@ abstract public class ShowTime extends Activity {
 
         timeKeeper.restore();
         timeKeeper.updateViews();
+    }
+
+    public void pressFirstButton() {
     }
 
     @Override

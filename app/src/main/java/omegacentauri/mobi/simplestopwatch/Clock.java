@@ -1,27 +1,14 @@
 package omegacentauri.mobi.simplestopwatch;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.text.style.TabStopSpan;
-import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Clock extends ShowTime {
     private Button secondButton;
@@ -67,7 +54,7 @@ public class Clock extends ShowTime {
     protected void onResume() {
         super.onResume();
         updateButtons();
-        if (options.getBoolean(Options.PREF_SWIPE, true) && !options.getBoolean(Options.PREF_CLOCK_SWIPE_INFO, false)) {
+        if (Options.swipeEnabled(options) && !options.getBoolean(Options.PREF_CLOCK_SWIPE_INFO, false)) {
             SharedPreferences.Editor ed = options.edit();
             ed.putBoolean(Options.PREF_CLOCK_SWIPE_INFO, true);
             MyChrono.apply(ed);
@@ -91,7 +78,7 @@ public class Clock extends ShowTime {
     protected void setFullScreen() {
         super.setFullScreen();
 
-        boolean fs = options.getBoolean(Options.PREF_CONTROL_FULLSCREEN, true) && options.getBoolean(Options.PREF_FULLSCREEN, false);
+        boolean fs = options.getString(Options.PREF_TAP_ACTION, "fullscreen").equals("fullscreen") && options.getBoolean(Options.PREF_FULLSCREEN, false);
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (! fs) {
@@ -146,6 +133,9 @@ public class Clock extends ShowTime {
                 return true;
             case R.id.clock_with_seconds:
                 switchActivity(ClockWithSeconds.class, NONE);
+                return true;
+            case R.id.fullscreen:
+                toggleFullscreen();
                 return true;
         }
         return super.onOptionsItemSelected(item);
