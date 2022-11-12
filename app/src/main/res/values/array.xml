@@ -67,6 +67,21 @@
         <item>s.ms</item>
     </string-array>
 
+    <string-array name="extraButtonHeightValues">
+        <item>0</item>
+        <item>10</item>
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+    </string-array>
+    <string-array name="extraButtonHeights">
+        <item>normal</item>
+        <item>slightly taller</item>
+        <item>tall</item>
+        <item>quite tall</item>
+        <item>very tall</item>
+    </string-array>
     <string-array name="soundValues">
         <item>none</item>
         <item>beeps</item>

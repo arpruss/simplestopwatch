@@ -70,6 +70,10 @@ public class Options extends PreferenceActivity {
     public static final int highlightPercent = 25;
     public static final String PREF_LAST_ACTIVITY = "lastActivity";
     public static final String PREF_PIN_ON_LOCK = "pinOnLock";
+    public static final String PREF_TTS_SYNC = "ttsSync";
+    public static final String PREF_BEEP_SYNC = "beepSync";
+    public static final String PREF_SETTINGS_BUTTON = "settingsButton";
+    private static final String PREF_EXTRA_HEIGHT = "extraButtonHeight";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
@@ -188,6 +192,36 @@ public class Options extends PreferenceActivity {
         }
     }
 
+    public static long getTTSSync(SharedPreferences options) {
+        String cd = options.getString(PREF_TTS_SYNC, "20");
+        try {
+            return Long.min(Long.parseLong(cd), 500);
+        }
+        catch(Exception e) {
+            return 0;
+        }
+    }
+
+    public static long getBeepSync(SharedPreferences options) {
+        String cd = options.getString(PREF_BEEP_SYNC, "0");
+        try {
+            return Long.min(Long.parseLong(cd), 500);
+        }
+        catch(Exception e) {
+            return 0;
+        }
+    }
+
+    public static int extraHeight(SharedPreferences options) {
+        String h = options.getString(PREF_EXTRA_HEIGHT, "0");
+        try {
+            return Integer.parseInt(h);
+        }
+        catch(Exception e) {
+            return 0;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,7 +255,15 @@ public class Options extends PreferenceActivity {
         customDelayPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                long val = Long.parseLong((String)newValue);
+                long val;
+                try {
+                    val = Long.parseLong((String) newValue);
+                }
+                catch(Exception e) {
+                    val = 0;
+                    options.edit().putString(PREF_CUSTOM_DELAY, "0").commit();
+                    return true;
+                }
                 if (val<0 || val>60) {
                     Toast.makeText(getApplicationContext(), "Maximum delay is 60 seconds", Toast.LENGTH_LONG).show();
                     return false;
@@ -307,6 +349,8 @@ public class Options extends PreferenceActivity {
         findPreference(PREF_CLOCK_BIG_SECONDS).setEnabled(swipeWorks);
         findPreference(PREF_CLOCK_LITTLE_SECONDS).setEnabled(swipeWorks);
         findPreference(PREF_CUSTOM_DELAY).setSummary(Long.toString(getCustomDelay(options)/1000));
+        findPreference(PREF_TTS_SYNC).setSummary(Long.toString(getTTSSync(options)));
+        findPreference(PREF_BEEP_SYNC).setSummary(Long.toString(getBeepSync(options)));
     }
 
     public void setSummary(ListPreference p) {

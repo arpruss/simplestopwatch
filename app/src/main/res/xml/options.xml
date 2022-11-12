@@ -112,10 +112,20 @@
             android:defaultValue="false"
             android:summary="USE AT YOUR OWN RISK. Boosted audio could damage speakers, earphones or hearing."
             />
-        <CheckBoxPreference android:title="Use Alarm Stream"
+        <CheckBoxPreference android:title="Use Alarm Stream for Audio"
             android:key="alarm"
             android:defaultValue="true"
             android:summary="If this is turned off, the media stream will be used."
+            />
+        <EditTextPreference android:title="Voice Sync Adjust (milliseconds)"
+            android:defaultValue="20"
+            android:inputType="number"
+            android:key="ttsSync"
+            />
+        <EditTextPreference android:title="Beep Sync Adjust (milliseconds)"
+            android:defaultValue="0"
+            android:inputType="number"
+            android:key="beepSync"
             />
         <CheckBoxPreference android:title="Swipe to Clock With Big Seconds"
             android:key="clockWithBigSeconds"
@@ -127,6 +137,17 @@
             android:defaultValue="true"
             android:summary="Can swipe to reach clock with little seconds"
             />
+        <CheckBoxPreference android:title="Separate Settings Button"
+            android:key="settingsButton"
+            android:defaultValue="true"
+            android:summary="Also show settings button outside menu"
+            />
+        <ListPreference android:title="Button Height"
+            android:summary="Make buttons taller"
+            android:key="extraButtonHeight"
+            android:defaultValue="0"
+            android:entries="@array/extraButtonHeights"
+            android:entryValues="@array/extraButtonHeightValues" />
         <CheckBoxPreference android:title="Pin When Locking"
             android:key="pinOnLock"
             android:defaultValue="true"

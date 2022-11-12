@@ -55,6 +55,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     public int precision = 100;
     private TextToSpeech tts = null;
     private boolean ttsMode;
+    private long ttsSync;
     int STREAM = AudioManager.STREAM_ALARM;;
     private boolean boostAudio = false;
     private static final int GAIN = 2000;
@@ -65,6 +66,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private static final float TONE_FREQUENCY = 2000;
     private AudioTrack shortTone;
     private AudioTrack longTone;
+    private long beepSync = 0;
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView, View mainContainer) {
@@ -97,6 +99,16 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     private void announce(long t) {
+        if (t < -1000 && (tts != null && ttsMode)) {
+            t += ttsSync;
+        }
+        else {
+            t += beepSync;
+        }
+
+        if (! (lastAnnounced < 0 && lastAnnounced + 1000 <= t))
+            return;
+
 //        long vibrate = Options.getVibration(options);
         if (/*(quiet &&  vibrate == 0) || */ !active || paused)
             return;
@@ -138,9 +150,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
 
     public void updateViews() {
         long t = getTime();
-        if (lastAnnounced < 0 && lastAnnounced + 1000 <= t) {
-            announce(t+10);
-        }
+        announce(t);
 
         if (lapData.length() == 0) {
             if (lapView.getVisibility() != View.GONE)
@@ -457,7 +467,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
                         tts = null;
                     }
                     else {
-                        tts.speak(" ",TextToSpeech.QUEUE_FLUSH, ttsParams);
+                        tts.speak("",TextToSpeech.QUEUE_FLUSH, ttsParams);
                     }
                 }
             });
@@ -467,6 +477,8 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         else if (soundMode.equals("beeps")) {
             ttsMode = false;
         }
+        ttsSync = Options.getTTSSync(options);
+        beepSync = Options.getBeepSync(options);
     }
 
     public void restore() {

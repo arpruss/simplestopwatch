@@ -142,12 +142,12 @@ public class StopWatch extends ShowTime {
             noTouchIcon.setVisibility(View.VISIBLE);
 
             //this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
-
         }
         else {
             secondButton.setVisibility(View.VISIBLE);
             menuButton.setVisibility(View.VISIBLE);
-            settingsButton.setVisibility(View.VISIBLE);
+            settingsButton.setVisibility(
+                    options.getBoolean(Options.PREF_SETTINGS_BUTTON, true) ? View.VISIBLE : View.GONE );
             noTouchIcon.setVisibility(View.GONE);
 
             //this.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION);

@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 abstract public class ShowTime extends Activity {
     private static final boolean DEBUG = false;
@@ -303,11 +304,15 @@ abstract public class ShowTime extends Activity {
     protected void onResume() {
         super.onResume();
 
+        findViewById(R.id.settings).setVisibility( options.getBoolean(Options.PREF_SETTINGS_BUTTON, true) ? View.VISIBLE : View.GONE );
+
+        /*
         Class a = nextActivity(0);
         if (a != this.getClass()) {
             switchActivity(a, NONE);
             return;
         }
+         */
 
         final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -398,6 +403,12 @@ abstract public class ShowTime extends Activity {
 
         timeKeeper.restore();
         timeKeeper.updateViews();
+
+        ImageButton settingsButton = findViewById(R.id.settings);
+        ImageButton menuButton = findViewById(R.id.menu);
+        int h = settingsButton.getPaddingTop()+(menuButton.getDrawable().getIntrinsicHeight()) * Options.extraHeight(options) / 200;
+        menuButton.setPadding(0, h, 0, h);
+        //menuButton.setMinimumHeight(h);
     }
 
     public void pressFirstButton() {
@@ -522,6 +533,7 @@ abstract public class ShowTime extends Activity {
     public static void clip(Context c, String s) {
         android.text.ClipboardManager clip = (android.text.ClipboardManager)c.getSystemService(Context.CLIPBOARD_SERVICE);
         clip.setText(s);
+        Toast.makeText(c, "Copied", Toast.LENGTH_SHORT).show();
     }
 
     public static void vibrate(Activity context, long time) {
