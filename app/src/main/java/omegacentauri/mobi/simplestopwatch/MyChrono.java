@@ -66,7 +66,9 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private static final float TONE_FREQUENCY = 2000;
     private AudioTrack shortTone;
     private AudioTrack longTone;
+    private AudioTrack periodicTone;
     private long beepSync = 0;
+    private long periodicBeepSpacing;
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView, View mainContainer) {
@@ -106,13 +108,33 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             t += beepSync;
         }
 
-        if (! (lastAnnounced < 0 && lastAnnounced + 1000 <= t))
+        boolean delayAnnounce = lastAnnounced < 0 && lastAnnounced + 1000 <= t;
+
+        boolean periodicAnnounce = ! delayAnnounce && periodicBeepSpacing > 0;
+
+        if (periodicAnnounce) {
+            long nextAnnounce = (1 + lastAnnounced / periodicBeepSpacing) * periodicBeepSpacing;
+            periodicAnnounce = (lastAnnounced <= 0 && periodicBeepSpacing <= t)
+                    || (lastAnnounced >= 0 && nextAnnounce <= t);
+
+        }
+
+        if (! delayAnnounce && !periodicAnnounce)
             return;
+        // TODO: periodic announce
 
 //        long vibrate = Options.getVibration(options);
         if (/*(quiet &&  vibrate == 0) || */ !active || paused)
             return;
-        if (t < -3000 || t >= 1000) {
+        if (periodicAnnounce) {
+            lastAnnounced = floorDiv(t, periodicBeepSpacing) * periodicBeepSpacing;
+            if (t <= lastAnnounced + 800) {
+                periodicTone.stop();
+                periodicTone.reloadStaticData();
+                periodicTone.play();
+            }
+        }
+        else if (t < -3000 || t >= 1000) {
             lastAnnounced = floorDiv(t, 1000)*1000;
         }
         else if (t < 0) {
@@ -412,7 +434,8 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
 
         vibrateAfterCountDown = options.getBoolean(Options.PREF_VIBRATE_AFTER_COUNTDOWN, true) ? (int)LONG_TONE_LENGTH/2 : 0;
 
-        if (soundMode.equals("none")) {
+        periodicBeepSpacing = Options.getPeriodicBeepSpacing(options);
+        if (soundMode.equals("none") && periodicBeepSpacing>0) {
             quiet = true;
             ttsMode = false;
             return;
@@ -420,23 +443,34 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
 
         quiet = false;
 
-        short[] tone = sinewave(TONE_FREQUENCY, LONG_TONE_LENGTH);
-        longTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, tone.length * 2, AudioTrack.MODE_STATIC);
-        longTone.write(tone, 0, tone.length);
+        int periodicBeepLength = (int)Options.getPeriodicBeepLength(options);
+        short[] tone = sinewave(TONE_FREQUENCY, Math.max(LONG_TONE_LENGTH, periodicBeepLength));
         int sessionId = 0;
         int shortLength = Math.min(tone.length, (int) (44.100 * SHORT_TONE_LENGTH));
+        int longLength = Math.min(tone.length, (int) (44.100 * LONG_TONE_LENGTH));
+        int periodicLength = Math.min(tone.length, (int) (44.100 * periodicBeepLength));
+
+        longTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, longLength * 2, AudioTrack.MODE_STATIC);
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
             sessionId = longTone.getAudioSessionId();
             shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC, sessionId);
+            periodicTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, periodicLength * 2, AudioTrack.MODE_STATIC, sessionId);
         }
         else {
             shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC);
+            periodicTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, periodicLength * 2, AudioTrack.MODE_STATIC);
         }
+        longTone.write(tone, 0, longLength);
         shortTone.write(tone, 0, shortLength);
+        periodicTone.write(tone, 0, periodicLength);
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
         if (options.getBoolean(Options.PREF_BOOST, false))
             am.setStreamVolume(STREAM, am.getStreamMaxVolume(STREAM), 0);
 

@@ -74,6 +74,8 @@ public class Options extends PreferenceActivity {
     public static final String PREF_BEEP_SYNC = "beepSync";
     public static final String PREF_SETTINGS_BUTTON = "settingsButton";
     private static final String PREF_EXTRA_HEIGHT = "extraButtonHeight";
+    private static final String PREF_PERIODIC_BEEP_SPACING = "periodicBeepSpacing";
+    private static final String PREF_PERIODIC_BEEP_LENGTH = "periodicBeepLength";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
@@ -212,6 +214,26 @@ public class Options extends PreferenceActivity {
         }
     }
 
+    public static long getPeriodicBeepSpacing(SharedPreferences options) {
+        String cd = options.getString(PREF_PERIODIC_BEEP_SPACING, "0");
+        try {
+            return 1000 * Long.parseLong(cd);
+        }
+        catch(Exception e) {
+            return 0;
+        }
+    }
+
+    public static long getPeriodicBeepLength(SharedPreferences options) {
+        String cd = options.getString(PREF_PERIODIC_BEEP_LENGTH, "200");
+        try {
+            return Long.parseLong(cd);
+        }
+        catch(Exception e) {
+            return 0;
+        }
+    }
+
     public static int extraHeight(SharedPreferences options) {
         String h = options.getString(PREF_EXTRA_HEIGHT, "0");
         try {
@@ -251,7 +273,7 @@ public class Options extends PreferenceActivity {
             }
         });
 
-        final EditTextPreference customDelayPref = (EditTextPreference) findPreference("customDelay");
+        final EditTextPreference customDelayPref = (EditTextPreference) findPreference(PREF_CUSTOM_DELAY);
         customDelayPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -267,6 +289,38 @@ public class Options extends PreferenceActivity {
                 if (val<0 || val>60) {
                     Toast.makeText(getApplicationContext(), "Maximum delay is 60 seconds", Toast.LENGTH_LONG).show();
                     return false;
+                }
+                return true;
+            }
+        });
+        final EditTextPreference periodicBeepSpacingPref = (EditTextPreference) findPreference(PREF_PERIODIC_BEEP_SPACING);
+        customDelayPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                long val;
+                try {
+                    val = Long.parseLong((String) newValue);
+                }
+                catch(Exception e) {
+                    val = 0;
+                    options.edit().putString(PREF_PERIODIC_BEEP_SPACING, "0").commit();
+                    return true;
+                }
+                return true;
+            }
+        });
+        final EditTextPreference periodicBeepLengthPref = (EditTextPreference) findPreference(PREF_PERIODIC_BEEP_LENGTH);
+        customDelayPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                long val;
+                try {
+                    val = Long.parseLong((String) newValue);
+                }
+                catch(Exception e) {
+                    val = 0;
+                    options.edit().putString(PREF_PERIODIC_BEEP_LENGTH, "0").commit();
+                    return true;
                 }
                 return true;
             }
@@ -351,6 +405,8 @@ public class Options extends PreferenceActivity {
         findPreference(PREF_CUSTOM_DELAY).setSummary(Long.toString(getCustomDelay(options)/1000));
         findPreference(PREF_TTS_SYNC).setSummary(Long.toString(getTTSSync(options)));
         findPreference(PREF_BEEP_SYNC).setSummary(Long.toString(getBeepSync(options)));
+        findPreference(PREF_PERIODIC_BEEP_LENGTH).setSummary(Long.toString(getPeriodicBeepLength(options)));
+        findPreference(PREF_PERIODIC_BEEP_SPACING).setSummary(Long.toString(getPeriodicBeepSpacing(options)/1000));
     }
 
     public void setSummary(ListPreference p) {

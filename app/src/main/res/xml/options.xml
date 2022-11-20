@@ -127,6 +127,16 @@
             android:inputType="number"
             android:key="beepSync"
             />
+        <EditTextPreference android:title="Periodic Beep Spacing (seconds)"
+            android:defaultValue="0"
+            android:inputType="number"
+            android:key="periodicBeepSpacing"
+            />
+        <EditTextPreference android:title="Periodic Beep Length (milliseconds)"
+            android:defaultValue="200"
+            android:inputType="number"
+            android:key="periodicBeepLength"
+            />
         <CheckBoxPreference android:title="Swipe to Clock With Big Seconds"
             android:key="clockWithBigSeconds"
             android:defaultValue="true"
