@@ -235,6 +235,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             return String.format("\u2212%d", -floorDiv(t,1000));
         String format = options.getString(Options.PREF_FORMAT, "h:m:s");
         boolean fraction = format.endsWith(".ms");
+        boolean frames = format.endsWith(".f");
         String suffix;
         if (fraction) {
             format = format.substring(0, format.lastIndexOf('.'));
@@ -250,6 +251,10 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             else {
                 suffix = "";
             }
+        }
+        else if (frames) {
+            format = format.substring(0, format.lastIndexOf('.'));
+            suffix = String.format(".%02d", (int)((t % 1000)*(24.0/1000.0)));
         }
         else {
             suffix = "";
@@ -303,7 +308,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             return "";
         String seconds;
         String format = options.getString(Options.PREF_FORMAT, "h:m:s");
-        if (format.endsWith(".ms"))
+        if (format.endsWith(".ms") || format.endsWith(".f"))
             return "";
         if (format.endsWith("m")) {
             seconds = (includeColonIfNeeded ? ":" : "") + String.format("%02d", (t/1000)%60);
