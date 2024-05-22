@@ -69,6 +69,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private AudioTrack periodicTone;
     private long beepSync = 0;
     private long periodicBeepSpacing;
+    private boolean countdownSilent;
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView, View mainContainer) {
@@ -152,15 +153,16 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
                 StopWatch.debug("say: "+msg);
                 tts.speak(msg,TextToSpeech.QUEUE_FLUSH, ttsParams);
             }
-            else if (!quiet) {
+            else if (!quiet && !countdownSilent) {
                 shortTone.stop();
                 shortTone.reloadStaticData();
                 shortTone.play();
+                StopWatch.debug("beep!");
             }
             lastAnnounced = floorDiv(t, 1000)*1000;
         }
         else if (t >= 0) {
-            if (!quiet) {
+            if (!quiet && !countdownSilent) {
                 longTone.stop();
                 longTone.reloadStaticData();
                 longTone.play();
@@ -202,7 +204,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             }
         }
 
-        mainView.setText(formatTime(t,mainView.getHeight() > mainView.getWidth()));
+        mainView.setText(formatTime(t,mainView.getHeight() > mainView.getWidth()),false, !active || paused);
         setFractionView(formatTimeFraction(t, active && paused, false));
 
     }
@@ -435,11 +437,12 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         vibrateAfterCountDown = options.getBoolean(Options.PREF_VIBRATE_AFTER_COUNTDOWN, true) ? (int)LONG_TONE_LENGTH/2 : 0;
 
         periodicBeepSpacing = Options.getPeriodicBeepSpacing(options);
-        if (soundMode.equals("none") && periodicBeepSpacing>0) {
+        if (soundMode.equals("none") && periodicBeepSpacing == 0) {
             quiet = true;
             ttsMode = false;
             return;
         }
+        countdownSilent = soundMode.equals("none");
 
         quiet = false;
 
@@ -494,6 +497,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         if (soundMode.equals("voice")) {
             ttsMode = true;
             ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(STREAM));
+            tts = null;
             tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
                 @Override
                 public void onInit(int status) {
@@ -501,7 +505,8 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
                         tts = null;
                     }
                     else {
-                        tts.speak("",TextToSpeech.QUEUE_FLUSH, ttsParams);
+                        if (tts != null)
+                            tts.speak("",TextToSpeech.QUEUE_FLUSH, ttsParams);
                     }
                 }
             });

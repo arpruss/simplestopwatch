@@ -27,6 +27,11 @@
         android:defaultValue="white on black"
         android:entries="@array/colorSchemes"
         android:entryValues="@array/colorSchemes" />
+    <ListPreference android:title="Brightness When Paused"
+        android:key="onPause"
+        android:defaultValue="70%"
+        android:entries="@array/onPause"
+        android:entryValues="@array/onPause" />
     <ListPreference android:title="Clock Color Scheme"
         android:key="clockColor"
         android:defaultValue="white on black"

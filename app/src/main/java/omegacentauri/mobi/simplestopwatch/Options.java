@@ -73,6 +73,7 @@ public class Options extends PreferenceActivity {
     public static final String PREF_TTS_SYNC = "ttsSync";
     public static final String PREF_BEEP_SYNC = "beepSync";
     public static final String PREF_SETTINGS_BUTTON = "settingsButton";
+    public static final String PREF_ONPAUSE = "onPause";
     private static final String PREF_EXTRA_HEIGHT = "extraButtonHeight";
     private static final String PREF_PERIODIC_BEEP_SPACING = "periodicBeepSpacing";
     private static final String PREF_PERIODIC_BEEP_LENGTH = "periodicBeepLength";

@@ -124,7 +124,7 @@ abstract public class ShowTime extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        //super.onCreate(savedInstanceState);
 
         PreferenceManager.setDefaultValues(this, R.xml.options, true);
 
@@ -192,6 +192,7 @@ abstract public class ShowTime extends Activity {
         debug(String.format("controlFore=%x", controlFore));
 
         bigDigits.setTextColor(fore);
+        bigDigits.setDimFraction(Double.parseDouble(options.getString(Options.PREF_ONPAUSE,"70%").replace("%",""))/100.);
 
         for (int id : textButtons) {
             Button b = findViewById(id);

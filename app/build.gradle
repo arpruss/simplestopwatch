@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 31
     archivesBaseName = "GiantStopwatch"
     defaultConfig {
         applicationId "omegacentauri.mobi.simplestopwatch"
         minSdkVersion 4
         targetSdkVersion 33
-        versionCode 1039
-        versionName "1.39"
+        versionCode 1040
+        versionName "1.40"
     }
     buildTypes {
         release {

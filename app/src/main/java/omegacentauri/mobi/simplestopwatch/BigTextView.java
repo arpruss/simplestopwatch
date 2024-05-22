@@ -3,12 +3,9 @@ package omegacentauri.mobi.simplestopwatch;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 public class BigTextView extends View {
@@ -27,6 +24,9 @@ public class BigTextView extends View {
     GetCenter getCenterY = null;
     static final float BASE_FONT_SIZE = 50f;
     private float maxAspect = 1f;
+    private double dimFraction;
+    private Paint dimPaint;
+    private Paint currentPaint;
 
     public BigTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,10 +37,23 @@ public class BigTextView extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
 
+        dimPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        dimPaint.setStyle(Paint.Style.FILL);
+        dimPaint.setColor(Color.BLACK);
+
+        dimFraction = 1.0;
+        currentPaint = paint;
+
         basePaint = new Paint();
         basePaint.setTextSize(BASE_FONT_SIZE);
 
-        setText("", true);
+        setText("", true, false);
+    }
+
+    public void setDimFraction(double f) {
+        dimFraction = f;
+        dimPaint.setColor(dim(paint.getColor()));
+        invalidate();
     }
 
     public void setMaxAspect(float maxAspect) {
@@ -70,13 +83,17 @@ public class BigTextView extends View {
         invalidate();
     }
 
-    public void setText(String s) {
+/*    public void setText(String s, boolean b, boolean b1) {
         setText(s, false);
-    }
+    } */
 
-    public void setText(String s, Boolean force) {
-        if (!force && text != null && text.equals(s))
+    public void setText(String s, Boolean force, Boolean paused) {
+        Paint newPaint = paused ? dimPaint : paint;
+
+        if (!force && text != null && text.equals(s) && currentPaint == newPaint)
             return;
+
+        currentPaint = newPaint;
 
         text = new String(s);
 
@@ -149,8 +166,8 @@ public class BigTextView extends View {
         else if (adjustY > maxAspect * adjustX)
             adjustY = maxAspect * adjustX;
 
-        paint.setTextSize(adjustY * BASE_FONT_SIZE);
-        paint.setTextScaleX(adjustX / adjustY);
+        currentPaint.setTextSize(adjustY * BASE_FONT_SIZE);
+        currentPaint.setTextScaleX(adjustX / adjustY);
 
         float dy = cHeight/2f - adjustY * height/2f;
 
@@ -158,7 +175,7 @@ public class BigTextView extends View {
         dy += adjustCenter(cHeight, getCenterY, adjustY * height) - cHeight/2f;
 
         for (int i = 0 ; i < n ; i++) {
-            miniFont.drawText(canvas, lines[i], cx + adjustX * xOffsets[i], dy + adjustY * yOffsets[i], paint, letterSpacing);
+            miniFont.drawText(canvas, lines[i], cx + adjustX * xOffsets[i], dy + adjustY * yOffsets[i], currentPaint, letterSpacing);
         }
     }
 
@@ -185,9 +202,30 @@ public class BigTextView extends View {
         }
     }
 
+    private int dim(int color) {
+        int a = (color >> 24) & 0xff;
+        int r = (color >> 16) & 0xff;
+        int g = (color >>  8) & 0xff;
+        int b = (color      ) & 0xff;
+        if (r == 0 && g == 0 && b == 0) {
+            r = (int) (255 * (1-dimFraction));
+            g = r;
+            b = r;
+        }
+        else {
+            StopWatch.debug("color "+r+" "+g+" "+b);
+            r = (int) (r * dimFraction);
+            g = (int) (g * dimFraction);
+            b = (int) (b * dimFraction);
+            StopWatch.debug("new color "+r+" "+g+" "+b);
+        }
+        return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
     public void setTextColor(int textColor) {
         if (textColor != paint.getColor()) {
             paint.setColor(textColor);
+            dimPaint.setColor(dim(textColor));
             invalidate();
         }
     }
