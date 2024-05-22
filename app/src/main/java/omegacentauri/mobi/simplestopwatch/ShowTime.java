@@ -196,14 +196,18 @@ abstract public class ShowTime extends Activity {
 
         for (int id : textButtons) {
             Button b = findViewById(id);
-            b.setTextColor(controlFore);
-            b.setBackgroundDrawable(makeOvalButtonBackground(controlFore));
+            if (b != null) {
+                b.setTextColor(controlFore);
+                b.setBackgroundDrawable(makeOvalButtonBackground(controlFore));
+            }
         }
 
         for (int[] ids : imageButtons) {
             ImageButton b = findViewById(ids[0]);
-            b.setImageDrawable(new MyStateDrawable(this, ids[1]));
-            b.setColorFilter(controlFore, PorterDuff.Mode.MULTIPLY);
+            if (b != null) {
+                b.setImageDrawable(new MyStateDrawable(this, ids[1]));
+                b.setColorFilter(controlFore, PorterDuff.Mode.MULTIPLY);
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -345,7 +349,7 @@ abstract public class ShowTime extends Activity {
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
-                if (!Options.swipeEnabled(options))
+                if (!Options.swipeEnabled(options) || e1 == null || e2 == null)
                     return false;
 
                 final float baseSize;
