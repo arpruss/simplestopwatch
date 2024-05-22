@@ -70,6 +70,9 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private long beepSync = 0;
     private long periodicBeepSpacing;
     private boolean countdownSilent;
+    private static final int AUDIO_RATE = 22050; //44100;
+    private static final double AUDIO_RATE_DOUBLE = AUDIO_RATE/1000.;
+
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView, View mainContainer) {
@@ -400,8 +403,8 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     private short[] sinewave(float frequency, long duration) {
-        int numSamples = (int)(44.100 * duration);
-        double alpha = frequency / 44100 * 2 * Math.PI;
+        int numSamples = (int)(AUDIO_RATE_DOUBLE * duration);
+        double alpha = frequency / AUDIO_RATE * 2 * Math.PI;
         short[] samples = new short[numSamples];
         for (int i = 0 ; i < numSamples ; i++)
             samples[i] = (short) (32767. * Math.sin(alpha * i));
@@ -455,27 +458,27 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         int periodicBeepLength = (int)Options.getPeriodicBeepLength(options);
         short[] tone = sinewave(TONE_FREQUENCY, Math.max(LONG_TONE_LENGTH, periodicBeepLength));
         int sessionId = 0;
-        int shortLength = Math.min(tone.length, (int) (44.100 * SHORT_TONE_LENGTH));
-        int longLength = Math.min(tone.length, (int) (44.100 * LONG_TONE_LENGTH));
-        int periodicLength = Math.min(tone.length, (int) (44.100 * periodicBeepLength));
+        int shortLength = Math.min(tone.length, (int) (AUDIO_RATE_DOUBLE * SHORT_TONE_LENGTH));
+        int longLength = Math.min(tone.length, (int) (AUDIO_RATE_DOUBLE * LONG_TONE_LENGTH));
+        int periodicLength = Math.min(tone.length, (int) (AUDIO_RATE_DOUBLE * periodicBeepLength));
 
-        int intSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_MONO,
+        int intSize = AudioTrack.getMinBufferSize(AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT) + 256;
 
-        longTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+        longTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, Math.max(longLength * 2, intSize), AudioTrack.MODE_STATIC);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
             sessionId = longTone.getAudioSessionId();
-            shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+            shortTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, Math.max(shortLength * 2,intSize), AudioTrack.MODE_STATIC, sessionId);
-            periodicTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+            periodicTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, Math.max(periodicLength * 2,intSize), AudioTrack.MODE_STATIC, sessionId);
         }
         else {
-            shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+            shortTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, Math.max(shortLength * 2, intSize), AudioTrack.MODE_STATIC);
-            periodicTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
+            periodicTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, Math.max(periodicLength * 2, intSize), AudioTrack.MODE_STATIC);
         }
         longTone.write(tone, 0, longLength);
