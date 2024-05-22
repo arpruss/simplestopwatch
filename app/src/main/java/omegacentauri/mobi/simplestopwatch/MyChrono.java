@@ -130,9 +130,11 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         if (periodicAnnounce) {
             lastAnnounced = floorDiv(t, periodicBeepSpacing) * periodicBeepSpacing;
             if (t <= lastAnnounced + 800) {
-                periodicTone.stop();
-                periodicTone.reloadStaticData();
-                periodicTone.play();
+                if (periodicTone != null) {
+                    periodicTone.stop();
+                    periodicTone.reloadStaticData();
+                    periodicTone.play();
+                }
             }
         }
         else if (t < -3000 || t >= 1000) {
@@ -154,18 +156,22 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
                 tts.speak(msg,TextToSpeech.QUEUE_FLUSH, ttsParams);
             }
             else if (!quiet && !countdownSilent) {
-                shortTone.stop();
-                shortTone.reloadStaticData();
-                shortTone.play();
+                if (shortTone != null) {
+                    shortTone.stop();
+                    shortTone.reloadStaticData();
+                    shortTone.play();
+                }
                 StopWatch.debug("beep!");
             }
             lastAnnounced = floorDiv(t, 1000)*1000;
         }
         else if (t >= 0) {
             if (!quiet && !countdownSilent) {
-                longTone.stop();
-                longTone.reloadStaticData();
-                longTone.play();
+                if (longTone != null) {
+                    longTone.stop();
+                    longTone.reloadStaticData();
+                    longTone.play();
+                }
             }
             ShowTime.vibrate(context, vibrateAfterCountDown);
             lastAnnounced = 0;
