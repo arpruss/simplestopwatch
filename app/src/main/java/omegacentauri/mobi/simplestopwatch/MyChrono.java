@@ -459,21 +459,24 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         int longLength = Math.min(tone.length, (int) (44.100 * LONG_TONE_LENGTH));
         int periodicLength = Math.min(tone.length, (int) (44.100 * periodicBeepLength));
 
+        int intSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT) + 256;
+
         longTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, longLength * 2, AudioTrack.MODE_STATIC);
+                AudioFormat.ENCODING_PCM_16BIT, Math.max(longLength * 2, intSize), AudioTrack.MODE_STATIC);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
             sessionId = longTone.getAudioSessionId();
             shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC, sessionId);
+                    AudioFormat.ENCODING_PCM_16BIT, Math.max(shortLength * 2,intSize), AudioTrack.MODE_STATIC, sessionId);
             periodicTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, periodicLength * 2, AudioTrack.MODE_STATIC, sessionId);
+                    AudioFormat.ENCODING_PCM_16BIT, Math.max(periodicLength * 2,intSize), AudioTrack.MODE_STATIC, sessionId);
         }
         else {
             shortTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, shortLength * 2, AudioTrack.MODE_STATIC);
+                    AudioFormat.ENCODING_PCM_16BIT, Math.max(shortLength * 2, intSize), AudioTrack.MODE_STATIC);
             periodicTone = new AudioTrack(STREAM, 44100, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, periodicLength * 2, AudioTrack.MODE_STATIC);
+                    AudioFormat.ENCODING_PCM_16BIT, Math.max(periodicLength * 2, intSize), AudioTrack.MODE_STATIC);
         }
         longTone.write(tone, 0, longLength);
         shortTone.write(tone, 0, shortLength);
