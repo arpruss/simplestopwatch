@@ -124,7 +124,7 @@ abstract public class ShowTime extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
         PreferenceManager.setDefaultValues(this, R.xml.options, true);
 
@@ -488,11 +488,22 @@ abstract public class ShowTime extends Activity {
         b.setTitle(title);
         b.setMessage(message);
         final AlertDialog d = b.create();
+        final Activity activity = this;
         d.show();
         new Handler().postDelayed(new Runnable(){
             public void run(){
-                d.cancel();
-                d.dismiss();
+                if (activity.isFinishing())
+                    return;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())
+                    return;
+                try {
+                    d.cancel();
+                }
+                catch(Exception e){}
+                try {
+                    d.dismiss();
+                }
+                catch(Exception e){}
             }
         }, time);
     }

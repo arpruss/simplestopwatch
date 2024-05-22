@@ -112,9 +112,9 @@ public class StopWatch extends ShowTime {
             ed.putBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, true);
             MyChrono.apply(ed);
             if (hasTouch())
-                timedMessage("StopWatch Mode", "Swipe on time or press menu button to switch to clock mode", 5200);
+                timedMessage("StopWatch Mode", "Swipe on time or press menu button to switch to clock mode", 2500);
             else
-                timedMessage("StopWatch Mode", "Press up/down or use menu button to switch to clock mode", 5200);
+                timedMessage("StopWatch Mode", "Press up/down or use menu button to switch to clock mode", 2500);
 //            Toast.makeText(this, "StopWatch mode: Swipe time to switch to clock", Toast.LENGTH_LONG).show();
         }
     }
