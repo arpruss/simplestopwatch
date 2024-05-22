@@ -439,6 +439,24 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         updateViews();
     }
 
+    private AudioTrack makeTrack(int length, int sessionID) {
+        AudioTrack t;
+        int intSize = AudioTrack.getMinBufferSize(AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT) + 256;
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.GINGERBREAD || sessionID < 0) {
+            t = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, Math.max(length * 2, intSize), AudioTrack.MODE_STATIC);
+        }
+        else {
+            t = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, Math.max(length * 2, intSize), AudioTrack.MODE_STATIC, sessionID);
+        }
+        if (t.getState() == AudioTrack.STATE_UNINITIALIZED)
+            return null;
+        return t;
+    }
+
     public void setAudio(String soundMode) {
         boostAudio = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && options.getBoolean(Options.PREF_BOOST, false);
         STREAM = Options.getStream(options);
@@ -455,35 +473,25 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
 
         quiet = false;
 
-        int periodicBeepLength = (int)Options.getPeriodicBeepLength(options);
-        short[] tone = sinewave(TONE_FREQUENCY, Math.max(LONG_TONE_LENGTH, periodicBeepLength));
-        int sessionId = 0;
+        int periodicBeepLength = Math.min((int)Options.getPeriodicBeepLength(options),30000);
+        short[] tone = sinewave(TONE_FREQUENCY, Math.max(LONG_TONE_LENGTH,periodicBeepLength));
         int shortLength = Math.min(tone.length, (int) (AUDIO_RATE_DOUBLE * SHORT_TONE_LENGTH));
         int longLength = Math.min(tone.length, (int) (AUDIO_RATE_DOUBLE * LONG_TONE_LENGTH));
         int periodicLength = Math.min(tone.length, (int) (AUDIO_RATE_DOUBLE * periodicBeepLength));
 
-        int intSize = AudioTrack.getMinBufferSize(AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT) + 256;
-
-        longTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, Math.max(longLength * 2, intSize), AudioTrack.MODE_STATIC);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
+        int sessionId = -1;
+        longTone = makeTrack(longLength, -1);
+        if (longTone != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             sessionId = longTone.getAudioSessionId();
-            shortTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, Math.max(shortLength * 2,intSize), AudioTrack.MODE_STATIC, sessionId);
-            periodicTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, Math.max(periodicLength * 2,intSize), AudioTrack.MODE_STATIC, sessionId);
         }
-        else {
-            shortTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, Math.max(shortLength * 2, intSize), AudioTrack.MODE_STATIC);
-            periodicTone = new AudioTrack(STREAM, AUDIO_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, Math.max(periodicLength * 2, intSize), AudioTrack.MODE_STATIC);
-        }
-        longTone.write(tone, 0, longLength);
-        shortTone.write(tone, 0, shortLength);
-        periodicTone.write(tone, 0, periodicLength);
+        shortTone = makeTrack(shortLength, sessionId);
+        periodicTone = makeTrack(periodicLength, sessionId);
+        if (longTone != null)
+            longTone.write(tone, 0, longLength);
+        if (shortTone != null)
+            shortTone.write(tone, 0, shortLength);
+        if (periodicTone != null)
+            periodicTone.write(tone, 0, periodicLength);
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         if (options.getBoolean(Options.PREF_BOOST, false))
