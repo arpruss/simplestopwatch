@@ -515,7 +515,10 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
                     }
                     else {
                         if (tts != null)
-                            tts.speak("",TextToSpeech.QUEUE_FLUSH, ttsParams);
+                            try {
+                                tts.speak("", TextToSpeech.QUEUE_FLUSH, ttsParams);
+                            }
+                            catch(Exception e) {}
                     }
                 }
             });
