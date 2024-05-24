@@ -108,11 +108,6 @@ public class Clock extends ShowTime {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.clockmenu, menu);
         return true;

@@ -19,6 +19,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -34,6 +35,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.security.Key;
 
 abstract public class ShowTime extends Activity {
     private static final boolean DEBUG = false;
@@ -516,7 +519,14 @@ abstract public class ShowTime extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             invalidateOptionsMenu();
         }
-        openOptionsMenu();
+        try {
+            openOptionsMenu();
+        }
+        catch(Exception e) {
+            // on some devices openOptionsMenu() seems to crash
+            // I have no idea why, but here is a workaround
+            AlternateMenu.showAlternateMenu(this);
+        }
     }
 
     @Override
@@ -525,7 +535,8 @@ abstract public class ShowTime extends Activity {
             onButtonMenu(null);
             return true;
         }
-        else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+        else
+            if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
             flingUp();
             return true;
         }
