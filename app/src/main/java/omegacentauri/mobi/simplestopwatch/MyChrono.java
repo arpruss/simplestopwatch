@@ -104,6 +104,28 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         return active ? (( paused ? pauseTime : SystemClock.elapsedRealtime() ) - baseTime) : delayTime;
     }
 
+    private void safePlay(AudioTrack t) {
+        if (t == null)
+            return;
+
+        try {
+            t.stop();
+        }
+        catch(IllegalStateException e) {
+        }
+        try {
+            t.reloadStaticData();
+        }
+        catch(IllegalStateException e) {
+        }
+        try {
+            t.play();
+        }
+        catch(IllegalStateException e) {
+        }
+    }
+
+
     private void announce(long t) {
         if (t < -1000 && (tts != null && ttsMode)) {
             t += ttsSync;
@@ -133,11 +155,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         if (periodicAnnounce) {
             lastAnnounced = floorDiv(t, periodicBeepSpacing) * periodicBeepSpacing;
             if (t <= lastAnnounced + 800) {
-                if (periodicTone != null) {
-                    periodicTone.stop();
-                    periodicTone.reloadStaticData();
-                    periodicTone.play();
-                }
+                safePlay(periodicTone);
             }
         }
         else if (t < -3000 || t >= 1000) {
@@ -159,22 +177,14 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
                 tts.speak(msg,TextToSpeech.QUEUE_FLUSH, ttsParams);
             }
             else if (!quiet && !countdownSilent) {
-                if (shortTone != null) {
-                    shortTone.stop();
-                    shortTone.reloadStaticData();
-                    shortTone.play();
-                }
+                safePlay(shortTone);
                 StopWatch.debug("beep!");
             }
             lastAnnounced = floorDiv(t, 1000)*1000;
         }
         else if (t >= 0) {
             if (!quiet && !countdownSilent) {
-                if (longTone != null) {
-                    longTone.stop();
-                    longTone.reloadStaticData();
-                    longTone.play();
-                }
+                safePlay(longTone);
             }
             ShowTime.vibrate(context, vibrateAfterCountDown);
             lastAnnounced = 0;
