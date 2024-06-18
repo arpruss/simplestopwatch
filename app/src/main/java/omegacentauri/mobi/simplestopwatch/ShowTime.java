@@ -232,17 +232,21 @@ abstract public class ShowTime extends Activity {
             return;
         String o = options.getString(Options.PREF_ORIENTATION, "automatic");
         try {
-            if (o.equals("landscape"))
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            if (o.equals("landscape")) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+            }
             else if (o.equals("portrait"))
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+            else if (o.equals("system")) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+            }
             else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-                }
-                else {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+                    }
+                    else {
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    }
             }
         } catch(Exception e) {
             try {
