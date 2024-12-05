@@ -190,6 +190,8 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     public void updateViews() {
+        if (options.getString(Options.PREF_SCHEME,Options.PREF_SCHEME_START_STOP).equals(Options.PREF_SCHEME_RESTART))
+            delayTime = 0;
         long t = getTime();
         announce(t);
 
@@ -430,6 +432,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         baseTime = SystemClock.elapsedRealtime();
         paused = false;
         active = true;
+        delayTime = 0;
         startUpdating();
         save();
     }
