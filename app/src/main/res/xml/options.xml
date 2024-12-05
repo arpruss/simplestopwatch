@@ -19,7 +19,7 @@
     <ListPreference android:title="Font"
         android:summary="Display font for large digits"
         android:key="font"
-        android:defaultValue="medium"
+        android:defaultValue="bold"
         android:entries="@array/fontNames"
         android:entryValues="@array/fontValues" />
     <ListPreference android:title="Stopwatch Color Scheme"
@@ -48,6 +48,13 @@
         android:entries="@array/tapActionNames"
         android:entryValues="@array/tapActions"
         />
+    <ListPreference android:title="Button Control Scheme"
+        android:key="controlScheme"
+        android:defaultValue="startStop"
+        android:entries="@array/schemeDisplayNames"
+        android:entryValues="@array/schemeValues"
+        />
+
     <ListPreference android:title="Countdown Sounds"
         android:key="sounds"
         android:defaultValue="voice"

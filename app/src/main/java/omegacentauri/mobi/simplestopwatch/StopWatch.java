@@ -10,6 +10,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.TabStopSpan;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -105,6 +106,22 @@ public class StopWatch extends ShowTime {
     protected void onResume() {
         super.onResume();
 
+        if (firstButton != null) {
+            if (controlScheme.equals(Options.PREF_SCHEME_RESTART)) {
+                firstButton.setLongClickable(true);
+                firstButton.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        onButtonStartLong(view);
+                        return true;
+                    }
+                });
+            }
+            else {
+                firstButton.setLongClickable(false);
+            }
+        }
+
         volumeControl = options.getBoolean(Options.PREF_VOLUME, true);
         updateButtons();
         if (Options.swipeEnabled(options) && !options.getBoolean(Options.PREF_STOPWATCH_SWIPE_INFO, false)) {
@@ -120,18 +137,26 @@ public class StopWatch extends ShowTime {
     }
 
     void updateButtons() {
-        if (!chrono.active) {
-            firstButton.setText("Start");
-            secondButton.setText("Delay");
+        if (controlScheme.equals(Options.PREF_SCHEME_RESTART)) {
+            if (!chrono.active && !chrono.paused)
+                firstButton.setText("Start");
+            else
+                firstButton.setText("Restart");
         }
         else {
-            if (chrono.paused) {
-                firstButton.setText("Continue");
-                secondButton.setText("Reset");
-                //secondButton.setVisibility(View.VISIBLE);
+            boolean restartButton = controlScheme.equals(Options.PREF_SCHEME_START_STOP_RESTART);
+            if (!chrono.active) {
+                firstButton.setText("Start");
+                secondButton.setText("Delay");
             } else {
-                firstButton.setText("Stop");
-                secondButton.setText("Lap");
+                if (chrono.paused) {
+                    firstButton.setText("Continue");
+                    secondButton.setText("Reset");
+                    //secondButton.setVisibility(View.VISIBLE);
+                } else {
+                    firstButton.setText("Stop");
+                    secondButton.setText(restartButton ? "Restart" : "Lap");
+                }
             }
         }
 
@@ -144,7 +169,7 @@ public class StopWatch extends ShowTime {
             //this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
         }
         else {
-            secondButton.setVisibility(View.VISIBLE);
+            secondButton.setVisibility(controlScheme.equals(Options.PREF_SCHEME_RESTART) ? View.GONE : View.VISIBLE);
             menuButton.setVisibility(View.VISIBLE);
             settingsButton.setVisibility(
                     options.getBoolean(Options.PREF_SETTINGS_BUTTON, true) ? View.VISIBLE : View.GONE );
@@ -152,6 +177,7 @@ public class StopWatch extends ShowTime {
 
             //this.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION);
         }
+
     }
 
     @Override
@@ -257,7 +283,7 @@ public class StopWatch extends ShowTime {
     void pressSecondButton() {
         if (Build.VERSION.SDK_INT >= 5)
             secondButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        chrono.secondButton();
+        chrono.secondButton(controlScheme);
         updateButtons();
     }
 
@@ -265,12 +291,24 @@ public class StopWatch extends ShowTime {
     public void pressFirstButton() {
         if (Build.VERSION.SDK_INT >= 5)
             firstButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        chrono.firstButton();
+        chrono.firstButton(controlScheme);
+        updateButtons();
+    }
+
+    @Override
+    public void pressFirstButtonLong() {
+        if (Build.VERSION.SDK_INT >= 5)
+            firstButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        chrono.firstButtonLong(controlScheme);
         updateButtons();
     }
 
     public void onButtonStart(View v) {
         pressFirstButton();
+    }
+
+    public void onButtonStartLong(View v) {
+        pressFirstButtonLong();
     }
 
     public void onButtonReset(View v) {

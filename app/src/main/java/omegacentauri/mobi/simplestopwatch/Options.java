@@ -74,6 +74,11 @@ public class Options extends PreferenceActivity {
     public static final String PREF_BEEP_SYNC = "beepSync";
     public static final String PREF_SETTINGS_BUTTON = "settingsButton";
     public static final String PREF_ONPAUSE = "onPause";
+    public static final String PREF_SCHEME_START_STOP = "startStop";
+    public static final String PREF_SCHEME_RESTART = "restart";
+
+    public static final String PREF_SCHEME = "controlScheme";
+    public static final String PREF_SCHEME_START_STOP_RESTART = "startStopRestart";
     private static final String PREF_EXTRA_HEIGHT = "extraButtonHeight";
     private static final String PREF_PERIODIC_BEEP_SPACING = "periodicBeepSpacing";
     private static final String PREF_PERIODIC_BEEP_LENGTH = "periodicBeepLength";
@@ -114,7 +119,7 @@ public class Options extends PreferenceActivity {
     }
 
     static MiniFont getFont(SharedPreferences options) {
-        String f = options.getString(PREF_FONT, "medium");
+        String f = options.getString(PREF_FONT, "bold");
         MiniFont mf;
         if (f.equals("regular")) {
             Log.v("chrono", "regular");

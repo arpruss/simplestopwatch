@@ -69,6 +69,7 @@ abstract public class ShowTime extends Activity {
     protected MyTimeKeeper timeKeeper;
     private GestureDetector gestureDetector;
     private View.OnTouchListener gestureListener;
+    protected String controlScheme;
 
     Class[] getActivityCircle() {
         Class activityCircle[];
@@ -318,6 +319,7 @@ abstract public class ShowTime extends Activity {
 
         findViewById(R.id.settings).setVisibility( options.getBoolean(Options.PREF_SETTINGS_BUTTON, true) ? View.VISIBLE : View.GONE );
 
+        controlScheme = options.getString(Options.PREF_SCHEME, Options.PREF_SCHEME_START_STOP);
         /*
         Class a = nextActivity(0);
         if (a != this.getClass()) {
@@ -325,7 +327,6 @@ abstract public class ShowTime extends Activity {
             return;
         }
          */
-
         final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
@@ -424,6 +425,9 @@ abstract public class ShowTime extends Activity {
     }
 
     public void pressFirstButton() {
+    }
+
+    public void pressFirstButtonLong() {
     }
 
     @Override

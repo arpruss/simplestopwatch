@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -362,8 +360,15 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         return String.format("#%d\t%s\t%s", getNumberOfLaps() + 1, formatTimeFull(t), formatTimeFull(t-lastLapTime));
     }
 
-    public void secondButton() {
+    public void secondButton(String controlScheme) {
+        if (controlScheme.equals(Options.PREF_SCHEME_RESTART))
+            return;
         if (active && ! paused) {
+            // lap or restart
+            if (controlScheme.equals(Options.PREF_SCHEME_START_STOP_RESTART)) {
+                restartButton();
+                return;
+            }
             long t = getTime();
             if (0 <= t) {
                 String l = formatLapTime(t);
@@ -421,7 +426,40 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
         return samples;
     }
 
-    public void firstButton() {
+    public void restartButton() {
+        baseTime = SystemClock.elapsedRealtime();
+        paused = false;
+        active = true;
+        startUpdating();
+        save();
+    }
+
+    public void firstButtonLong(String controlScheme) {
+        if (!controlScheme.equals(Options.PREF_SCHEME_RESTART)) {
+            return;
+        }
+
+        if (active) {
+            paused = false;
+            active = false;
+            lapData = "";
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                context.invalidateOptionsMenu();
+//            }
+            lastLapTime = 0;
+            stopUpdating();
+            save();
+            updateViews();
+        }
+
+
+    }
+
+    public void firstButton(String controlScheme) {
+        if (controlScheme.equals(Options.PREF_SCHEME_RESTART)) {
+            restartButton();
+            return;
+        }
         if (active && paused) {
             baseTime += SystemClock.elapsedRealtime() - pauseTime;
             paused = false;

@@ -8,7 +8,7 @@
 
     <string-array name="tapActionNames">
         <item>none</item>
-        <item>start/stop</item>
+        <item>button 1 (start/stop/pause)</item>
         <item>toggle full screen</item>
     </string-array>
 
@@ -196,5 +196,16 @@
         <item>red on black</item>
         <item>white on black</item>
         <item>yellow on black</item>
+    </string-array>
+
+    <string-array name="schemeDisplayNames">
+        <item>Start/Stop/Pause and Lap</item>
+        <item>Start/Stop/Pause and Restart</item>
+        <item>Restart (long: Zero)</item>
+    </string-array>
+    <string-array name="schemeValues">
+        <item>startStop</item>
+        <item>startStopRestart</item>
+        <item>restart</item>
     </string-array>
 </resources>
