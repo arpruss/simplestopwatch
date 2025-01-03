@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class StopWatch extends ShowTime {
     private static final long NO_TOUCH_WARN_DELAY = 5 * 60 * 1000l;
     private View menuButton;
     private View settingsButton;
+    private ImageButton currentStopwatchButton;
 
     @Override
     public boolean noTouch() {
@@ -77,6 +79,7 @@ public class StopWatch extends ShowTime {
         noTouchIcon = findViewById(R.id.lock);
         menuButton = findViewById(R.id.menu);
         settingsButton = findViewById(R.id.settings);
+        currentStopwatchButton = findViewById(R.id.current_stopwatch);
         laps = (TextView)findViewById(R.id.laps);
         textButtons = TEXT_BUTTONS;
         imageButtons = IMAGE_BUTTONS;
@@ -137,6 +140,30 @@ public class StopWatch extends ShowTime {
     }
 
     void updateButtons() {
+        if (options.getBoolean(Options.PREF_MULTIPLE, false)) {
+            currentStopwatchButton.setVisibility(View.VISIBLE);
+            switch (options.getInt(Options.PREF_CURRENT_STOPWATCH, 0)) {
+                case 1:
+                    currentStopwatchButton.setImageResource(R.drawable.s2);
+                    break;
+                case 2:
+                    currentStopwatchButton.setImageResource(R.drawable.s3);
+                    break;
+                case 3:
+                    currentStopwatchButton.setImageResource(R.drawable.s4);
+                    break;
+                case 4:
+                    currentStopwatchButton.setImageResource(R.drawable.s5);
+                    break;
+                default:
+                case 0:
+                    currentStopwatchButton.setImageResource(R.drawable.s1);
+                    break;
+            }
+        }
+        else {
+            currentStopwatchButton.setVisibility(View.GONE);
+        }
         if (controlScheme.equals(Options.PREF_SCHEME_RESTART)) {
             if (!chrono.active && !chrono.paused)
                 firstButton.setText("Start");
@@ -453,4 +480,8 @@ public class StopWatch extends ShowTime {
         Toast.makeText(this, "Touch screen will be disabled when stopwatch is running. Use Volume Up to stop and Volume Down for lap.", Toast.LENGTH_LONG).show();
     }
 
+    public void setCurrentStopwatch(View view) {
+        chrono.setCurrentStopwatch();
+        updateButtons();
+    }
 }

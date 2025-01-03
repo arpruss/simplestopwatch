@@ -152,13 +152,6 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
             ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    public static void clearSaved(SharedPreferences pref) {
-        SharedPreferences.Editor ed = pref.edit();
-        ed.putBoolean(Options.PREF_ACTIVE, false);
-        apply(ed);
-        StopWatch.debug("cleared "+Options.PREF_ACTIVE);
-    }
-
     public static void detectBoot(SharedPreferences options) {
         return;
     }
@@ -168,32 +161,6 @@ public class MyClock implements BigTextView.GetCenter, MyTimeKeeper {
 
     @Override
     public void suspend() {
-    }
-
-    public static void fixOnBoot(SharedPreferences options) {
-        if (! options.getBoolean(Options.PREF_ACTIVE, false)) {
-            StopWatch.debug("not active");
-            return;
-        }
-        long oldBootTime = options.getLong(Options.PREF_BOOT_TIME, 0);
-        SharedPreferences.Editor ed = options.edit();
-        if (oldBootTime == 0) {
-            ed.putBoolean(Options.PREF_ACTIVE, false);
-        }
-        else {
-            long delta = getBootTime() - oldBootTime;
-            if (delta == 0)
-                return;
-            adjust(options, ed, Options.PREF_START_TIME, -delta);
-            adjust(options, ed, Options.PREF_PAUSED_TIME, -delta);
-            ed.putBoolean(Options.PREF_BOOT_ADJUSTED, true);
-        }
-        apply(ed);
-    }
-
-    private static void adjust(SharedPreferences options, SharedPreferences.Editor ed, String opt, long delta) {
-        StopWatch.debug("opt "+opt+" "+delta);
-        ed.putLong(opt, options.getLong(opt, 0) + delta);
     }
 
     @Override

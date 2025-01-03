@@ -28,10 +28,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Options extends PreferenceActivity {
-    public static final String PREF_START_TIME = "baseTime";
-    public static final String PREF_PAUSED_TIME = "pausedTime";
-    public static final String PREF_ACTIVE = "active";
-    public static final String PREF_PAUSED = "paused";
+    public static final int MAX_STOPWATCHES = 5;
+    private static final String PREF_LAPS = "laps";
+    private static final String PREF_LAST_LAP_TIME = "lastLapTime";
+    private static final String PREF_START_TIME = "baseTime";
+    private static final String PREF_PAUSED_TIME = "pausedTime";
+    private static final String PREF_ACTIVE = "active";
+    private static final String PREF_PAUSED = "paused";
+    private static final String PREF_LAST_ANNOUNCED = "lastAnnounced";
+
+    public static final String PREF_CURRENT_STOPWATCH = "currentStopwatchNumber";
     public static final String PREF_BOOT_TIME = "boot";
     public static final String PREF_SCREEN_ON = "screenOn";
     public static final String PREF_PRECISION = "precision";
@@ -44,13 +50,10 @@ public class Options extends PreferenceActivity {
     public static final String PREF_DISTORTION = "distortion";
     public static final String PREF_LINE_SPACING = "lineSpacing";
     public static final String PREF_LETTER_SPACING = "letterSpacing";
-    public static final String PREF_LAST_LAP_TIME = "lastLapTime";
 //    public static final String PREF_VIBRATION = "vibration";
     public static final String PREF_DELAY = "delay";
     public static final String PREF_CUSTOM_DELAY = "customDelay";
     public static final String PREF_SCALE = "scale";
-    public static final String PREF_LAPS = "laps";
-    public static final String PREF_LAST_ANNOUNCED = "lastAnnounced";
     public static final String PREF_SOUND = "sounds";
     public static final String PREF_BOOST = "boost";
     public static final String PREF_ALARM = "alarm";
@@ -82,6 +85,7 @@ public class Options extends PreferenceActivity {
     private static final String PREF_EXTRA_HEIGHT = "extraButtonHeight";
     private static final String PREF_PERIODIC_BEEP_SPACING = "periodicBeepSpacing";
     private static final String PREF_PERIODIC_BEEP_LENGTH = "periodicBeepLength";
+    public static String PREF_MULTIPLE = "multiple";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
@@ -92,12 +96,12 @@ public class Options extends PreferenceActivity {
         colorMap.put(name, new int[]{fg,bg});
     }
     static {
-        addColor("gray (20%) on black", Color.argb(255,20*255/100,20*255/100,20*255/100), Color.BLACK);
-        addColor("gray (40%) on black", Color.argb(255,40*255/100,40*255/100,40*255/100), Color.BLACK);
-        addColor("gray (60%) on black", Color.argb(255,60*255/100,60*255/100,60*255/100), Color.BLACK);
-        addColor("gray (80%) on black", Color.argb(255,80*255/100,80*255/100,80*255/100), Color.BLACK);
+        addColor("gray (20%) on black", Color.argb(255, 20 * 255 / 100, 20 * 255 / 100, 20 * 255 / 100), Color.BLACK);
+        addColor("gray (40%) on black", Color.argb(255, 40 * 255 / 100, 40 * 255 / 100, 40 * 255 / 100), Color.BLACK);
+        addColor("gray (60%) on black", Color.argb(255, 60 * 255 / 100, 60 * 255 / 100, 60 * 255 / 100), Color.BLACK);
+        addColor("gray (80%) on black", Color.argb(255, 80 * 255 / 100, 80 * 255 / 100, 80 * 255 / 100), Color.BLACK);
         addColor("black on white", Color.BLACK, Color.WHITE);
-        addColor("dark green on black", Color.argb(255,0,128,0), Color.BLACK);
+        addColor("dark green on black", Color.argb(255, 0, 128, 0), Color.BLACK);
         addColor("green on black", Color.GREEN, Color.BLACK);
         addColor("red on black", Color.RED, Color.BLACK);
         addColor("yellow on black", Color.YELLOW, Color.BLACK);
@@ -248,6 +252,34 @@ public class Options extends PreferenceActivity {
         catch(Exception e) {
             return 0;
         }
+    }
+
+    public static String getPrefLaps(int currentStopwatch) {
+        return currentStopwatch == 0 ? PREF_LAPS : PREF_LAPS + currentStopwatch;
+    }
+
+    public static String getPrefLastLapTime(int currentStopwatch) {
+        return currentStopwatch == 0 ? PREF_LAST_LAP_TIME : PREF_LAST_LAP_TIME + currentStopwatch;
+    }
+
+    public static String getPrefStartTime(int currentStopwatch) {
+        return currentStopwatch == 0 ? PREF_START_TIME : PREF_START_TIME + currentStopwatch;
+    }
+
+    public static String getPrefPausedTime(int currentStopwatch) {
+        return currentStopwatch == 0 ? PREF_PAUSED_TIME : PREF_PAUSED_TIME + currentStopwatch;
+    }
+
+    public static String getPrefActive(int currentStopwatch) {
+        return currentStopwatch == 0 ? PREF_ACTIVE : PREF_ACTIVE + currentStopwatch;
+    }
+
+    public static String getPrefPaused(int currentStopwatch) {
+        return currentStopwatch == 0 ? PREF_PAUSED : PREF_PAUSED + currentStopwatch;
+    }
+
+    public static String getPrefLastAnnounced(int currentStopwatch) {
+        return currentStopwatch == 0 ? PREF_LAST_ANNOUNCED : PREF_LAST_ANNOUNCED + currentStopwatch;
     }
 
     @Override

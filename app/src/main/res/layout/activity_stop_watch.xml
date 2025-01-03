@@ -97,6 +97,16 @@
             android:src="@drawable/lock" />
 
         <ImageButton
+            android:id="@+id/current_stopwatch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:onClick="setCurrentStopwatch"
+            android:hapticFeedbackEnabled="true"
+            android:src="@drawable/s1" />
+
+        <ImageButton
             android:id="@+id/settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

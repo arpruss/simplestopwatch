@@ -17,6 +17,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.TabStopSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -70,6 +71,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private boolean countdownSilent;
     private static final int AUDIO_RATE = 22050; //44100;
     private static final double AUDIO_RATE_DOUBLE = AUDIO_RATE/1000.;
+    private int currentStopwatch;
 
 
     @SuppressLint("NewApi")
@@ -595,14 +597,16 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     public void restore() {
-        baseTime = options.getLong(Options.PREF_START_TIME, 0);
-        pauseTime = options.getLong(Options.PREF_PAUSED_TIME, 0);
+        currentStopwatch = options.getBoolean(Options.PREF_MULTIPLE, false) ?
+                options.getInt(Options.PREF_CURRENT_STOPWATCH, 0) : 0;
+        baseTime = options.getLong(Options.getPrefStartTime(currentStopwatch), 0);
+        pauseTime = options.getLong(Options.getPrefPausedTime(currentStopwatch), 0);
+        active = options.getBoolean(Options.getPrefActive(currentStopwatch), false);
+        paused = options.getBoolean(Options.getPrefPaused(currentStopwatch), false);
+        lapData = options.getString(Options.getPrefLaps(currentStopwatch), "");
+        lastLapTime = options.getLong(Options.getPrefLastLapTime(currentStopwatch), 0);
+        lastAnnounced = options.getLong(Options.getPrefLastAnnounced(currentStopwatch), 0);
         delayTime = options.getLong(Options.PREF_DELAY, 0);
-        active = options.getBoolean(Options.PREF_ACTIVE, false);
-        paused = options.getBoolean(Options.PREF_PAUSED, false);
-        lapData = options.getString(Options.PREF_LAPS, "");
-        lastLapTime = options.getLong(Options.PREF_LAST_LAP_TIME, 0);
-        lastAnnounced = options.getLong(Options.PREF_LAST_ANNOUNCED, 0);
         setAudio(options.getString(Options.PREF_SOUND, "voice"));
 
         StopWatch.debug("baseTime "+baseTime);
@@ -649,14 +653,16 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     public void save() {
         StopWatch.debug("saving");
         SharedPreferences.Editor ed = options.edit();
-        ed.putLong(Options.PREF_START_TIME, baseTime);
-        ed.putLong(Options.PREF_PAUSED_TIME, pauseTime);
-        ed.putBoolean(Options.PREF_ACTIVE, active);
-        ed.putBoolean(Options.PREF_PAUSED, paused);
+        ed.putInt(Options.PREF_CURRENT_STOPWATCH, currentStopwatch);
+        ed.putLong(Options.getPrefStartTime(currentStopwatch), baseTime);
+        ed.putLong(Options.getPrefPausedTime(currentStopwatch), pauseTime);
+        ed.putBoolean(Options.getPrefActive(currentStopwatch), active);
+        ed.putBoolean(Options.getPrefPaused(currentStopwatch), paused);
+        ed.putString(Options.getPrefLaps(currentStopwatch), lapData);
+        ed.putLong(Options.getPrefLastLapTime(currentStopwatch), lastLapTime);
+        ed.putLong(Options.getPrefLastAnnounced(currentStopwatch), lastAnnounced);
+
         ed.putLong(Options.PREF_DELAY, delayTime);
-        ed.putString(Options.PREF_LAPS, lapData);
-        ed.putLong(Options.PREF_LAST_LAP_TIME, lastLapTime);
-        ed.putLong(Options.PREF_LAST_ANNOUNCED, lastAnnounced);
         ed.putLong(Options.PREF_BOOT_TIME, getBootTime());
 
         apply(ed);
@@ -687,13 +693,6 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
             ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
-    public static void clearSaved(SharedPreferences pref) {
-        SharedPreferences.Editor ed = pref.edit();
-        ed.putBoolean(Options.PREF_ACTIVE, false);
-        apply(ed);
-        StopWatch.debug("cleared "+Options.PREF_ACTIVE);
     }
 
     public static void detectBoot(SharedPreferences options) {
@@ -757,25 +756,24 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     public static void fixOnBoot(SharedPreferences options) {
-        if (! options.getBoolean(Options.PREF_ACTIVE, false)) {
-            StopWatch.debug("not active");
-            return;
+        for (int s = 0 ; s < Options.MAX_STOPWATCHES ; s++) {
+            if (!options.getBoolean(Options.getPrefActive(s), false)) {
+                continue;
+            }
+            long oldBootTime = options.getLong(Options.PREF_BOOT_TIME, 0);
+            SharedPreferences.Editor ed = options.edit();
+            if (oldBootTime == 0) {
+                ed.putBoolean(Options.getPrefActive(s), false);
+            } else {
+                long delta = getBootTime() - oldBootTime;
+                if (delta == 0)
+                    return;
+                adjust(options, ed, Options.getPrefStartTime(s), -delta);
+                adjust(options, ed, Options.getPrefPausedTime(s), -delta);
+                ed.putBoolean(Options.PREF_BOOT_ADJUSTED, true);
+            }
+            apply(ed);
         }
-        long oldBootTime = options.getLong(Options.PREF_BOOT_TIME, 0);
-        SharedPreferences.Editor ed = options.edit();
-        if (oldBootTime == 0) {
-            StopWatch.debug("zero old boot time");
-            ed.putBoolean(Options.PREF_ACTIVE, false);
-        }
-        else {
-            long delta = getBootTime() - oldBootTime;
-            if (delta == 0)
-                return;
-            adjust(options, ed, Options.PREF_START_TIME, -delta);
-            adjust(options, ed, Options.PREF_PAUSED_TIME, -delta);
-            ed.putBoolean(Options.PREF_BOOT_ADJUSTED, true);
-        }
-        apply(ed);
     }
 
     private static void adjust(SharedPreferences options, SharedPreferences.Editor ed, String opt, long delta) {
@@ -786,5 +784,14 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     @Override
     public float getCenter() {
         return mainContainer.getHeight() / 2f;
+    }
+
+    public void setCurrentStopwatch() {
+        save();
+        currentStopwatch = (currentStopwatch + 1) % 5;
+        SharedPreferences.Editor ed = options.edit();
+        ed.putInt(Options.PREF_CURRENT_STOPWATCH, currentStopwatch);
+        apply(ed);
+        restore();
     }
 }
