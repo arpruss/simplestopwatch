@@ -177,10 +177,11 @@
             />
     </PreferenceCategory>
     <PreferenceCategory android:title="Experimental (at your own risk)">
-        <CheckBoxPreference android:title="Multiple Stopwatches"
-            android:key="multiple"
-            android:defaultValue="false"
-            android:summary="Cycle through A, B, C, D and E stopwatches."
+        <ListPreference android:title="Number of Stopwatches"
+            android:key="numStopwatches1"
+            android:defaultValue="1"
+            android:entries="@array/numStopwatchesDisplayValues"
+            android:entryValues="@array/numStopwatchesValues" />
             />
     </PreferenceCategory>
 

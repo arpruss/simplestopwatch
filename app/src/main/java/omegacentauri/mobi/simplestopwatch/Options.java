@@ -28,7 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Options extends PreferenceActivity {
-    public static final int MAX_STOPWATCHES = 5;
+    public static final int MAX_STOPWATCHES = 6;
+    public static final String PREF_NUM_STOPWATCHES = "numStopwatches1";
     private static final String PREF_LAPS = "laps";
     private static final String PREF_LAST_LAP_TIME = "lastLapTime";
     private static final String PREF_START_TIME = "baseTime";
@@ -85,7 +86,6 @@ public class Options extends PreferenceActivity {
     private static final String PREF_EXTRA_HEIGHT = "extraButtonHeight";
     private static final String PREF_PERIODIC_BEEP_SPACING = "periodicBeepSpacing";
     private static final String PREF_PERIODIC_BEEP_LENGTH = "periodicBeepLength";
-    public static String PREF_MULTIPLE = "multiple";
     static Map<String, int[]> colorMap = new HashMap<String,int[]>();
     static final int[] defaultColor = {Color.WHITE, Color.BLACK};
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
@@ -280,6 +280,17 @@ public class Options extends PreferenceActivity {
 
     public static String getPrefLastAnnounced(int currentStopwatch) {
         return currentStopwatch == 0 ? PREF_LAST_ANNOUNCED : PREF_LAST_ANNOUNCED + currentStopwatch;
+    }
+
+    public static int getNumStopwatches(SharedPreferences options) {
+        return Integer.parseInt(options.getString(PREF_NUM_STOPWATCHES,"1"));
+    }
+    public static int getCurrentStopwatch(SharedPreferences options) {
+        int cs = options.getInt(PREF_CURRENT_STOPWATCH, 0);
+        if (cs > 0 && cs >= getNumStopwatches(options))
+            return 0;
+        else
+            return cs;
     }
 
     @Override

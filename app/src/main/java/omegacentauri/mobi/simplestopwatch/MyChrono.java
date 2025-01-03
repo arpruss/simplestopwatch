@@ -597,8 +597,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     public void restore() {
-        currentStopwatch = options.getBoolean(Options.PREF_MULTIPLE, false) ?
-                options.getInt(Options.PREF_CURRENT_STOPWATCH, 0) : 0;
+        currentStopwatch = Options.getCurrentStopwatch(options);
         baseTime = options.getLong(Options.getPrefStartTime(currentStopwatch), 0);
         pauseTime = options.getLong(Options.getPrefPausedTime(currentStopwatch), 0);
         active = options.getBoolean(Options.getPrefActive(currentStopwatch), false);
@@ -788,7 +787,8 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
 
     public void setCurrentStopwatch() {
         save();
-        currentStopwatch = (currentStopwatch + 1) % 5;
+        Log.v("stopwatch", ""+currentStopwatch+" "+Options.getNumStopwatches(options));
+        currentStopwatch = (currentStopwatch + 1) % Options.getNumStopwatches(options);
         SharedPreferences.Editor ed = options.edit();
         ed.putInt(Options.PREF_CURRENT_STOPWATCH, currentStopwatch);
         apply(ed);

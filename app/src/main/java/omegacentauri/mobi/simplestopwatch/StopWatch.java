@@ -36,7 +36,19 @@ public class StopWatch extends ShowTime {
     };
     protected static final int IMAGE_BUTTONS[][] = {
             {R.id.settings, R.drawable.settings},
-            {R.id.menu, R.drawable.menu}
+            {R.id.menu, R.drawable.menu },
+            {R.id.current_stopwatch1, R.drawable.s1},
+            {R.id.current_stopwatch2, R.drawable.s2},
+            {R.id.current_stopwatch3, R.drawable.s3},
+            {R.id.current_stopwatch4, R.drawable.s4},
+            {R.id.current_stopwatch5, R.drawable.s5},
+            {R.id.current_stopwatch6, R.drawable.s6},
+    };
+
+    private static final int[] currentStopwatchButtons = {
+            R.id.current_stopwatch1, R.id.current_stopwatch2,
+            R.id.current_stopwatch3, R.id.current_stopwatch4,
+            R.id.current_stopwatch5, R.id.current_stopwatch6
     };
     private boolean volumeControl;
     private View noTouchIcon;
@@ -45,7 +57,6 @@ public class StopWatch extends ShowTime {
     private static final long NO_TOUCH_WARN_DELAY = 5 * 60 * 1000l;
     private View menuButton;
     private View settingsButton;
-    private ImageButton currentStopwatchButton;
 
     @Override
     public boolean noTouch() {
@@ -79,7 +90,6 @@ public class StopWatch extends ShowTime {
         noTouchIcon = findViewById(R.id.lock);
         menuButton = findViewById(R.id.menu);
         settingsButton = findViewById(R.id.settings);
-        currentStopwatchButton = findViewById(R.id.current_stopwatch);
         laps = (TextView)findViewById(R.id.laps);
         textButtons = TEXT_BUTTONS;
         imageButtons = IMAGE_BUTTONS;
@@ -140,30 +150,14 @@ public class StopWatch extends ShowTime {
     }
 
     void updateButtons() {
-        if (options.getBoolean(Options.PREF_MULTIPLE, false)) {
-            currentStopwatchButton.setVisibility(View.VISIBLE);
-            switch (options.getInt(Options.PREF_CURRENT_STOPWATCH, 0)) {
-                case 1:
-                    currentStopwatchButton.setImageResource(R.drawable.s2);
-                    break;
-                case 2:
-                    currentStopwatchButton.setImageResource(R.drawable.s3);
-                    break;
-                case 3:
-                    currentStopwatchButton.setImageResource(R.drawable.s4);
-                    break;
-                case 4:
-                    currentStopwatchButton.setImageResource(R.drawable.s5);
-                    break;
-                default:
-                case 0:
-                    currentStopwatchButton.setImageResource(R.drawable.s1);
-                    break;
-            }
+        int numStopwatches = Options.getNumStopwatches(options);
+        int currentStopwatch = Options.getCurrentStopwatch(options);
+        for (int i = 0; i < currentStopwatchButtons.length ; i++) {
+            findViewById(currentStopwatchButtons[i]).setVisibility(
+                    ( numStopwatches > 1 && currentStopwatch == i ) ? View.VISIBLE :
+                    View.GONE);
         }
-        else {
-            currentStopwatchButton.setVisibility(View.GONE);
-        }
+
         if (controlScheme.equals(Options.PREF_SCHEME_RESTART)) {
             if (!chrono.active && !chrono.paused)
                 firstButton.setText("Start");

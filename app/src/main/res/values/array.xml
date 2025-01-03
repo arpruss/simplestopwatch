@@ -56,6 +56,24 @@
         <item>unlimited</item>
     </string-array>
 
+    <string-array name="numStopwatchesValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="numStopwatchesDisplayValues">
+        <item>1</item>
+        <item>2 (A-B)</item>
+        <item>3 (A-C)</item>
+        <item>4 (A-D)</item>
+        <item>5 (A-E)</item>
+        <item>6 (A-F)</item>
+    </string-array>
+
     <string-array name="formatValues">
         <item>h:m</item>
         <item>h:m:s</item>

@@ -97,14 +97,70 @@
             android:src="@drawable/lock" />
 
         <ImageButton
-            android:id="@+id/current_stopwatch"
+            android:id="@+id/current_stopwatch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="6dp"
             android:background="@null"
+            android:visibility="gone"
             android:onClick="setCurrentStopwatch"
             android:hapticFeedbackEnabled="true"
             android:src="@drawable/s1" />
+
+        <ImageButton
+            android:id="@+id/current_stopwatch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:onClick="setCurrentStopwatch"
+            android:hapticFeedbackEnabled="true"
+            android:src="@drawable/s2" />
+
+        <ImageButton
+            android:id="@+id/current_stopwatch3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:onClick="setCurrentStopwatch"
+            android:hapticFeedbackEnabled="true"
+            android:src="@drawable/s3" />
+
+        <ImageButton
+            android:id="@+id/current_stopwatch4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:onClick="setCurrentStopwatch"
+            android:hapticFeedbackEnabled="true"
+            android:src="@drawable/s4" />
+
+        <ImageButton
+            android:id="@+id/current_stopwatch5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:onClick="setCurrentStopwatch"
+            android:hapticFeedbackEnabled="true"
+            android:src="@drawable/s5" />
+
+        <ImageButton
+            android:id="@+id/current_stopwatch6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@null"
+            android:visibility="gone"
+            android:onClick="setCurrentStopwatch"
+            android:hapticFeedbackEnabled="true"
+            android:src="@drawable/s6" />
 
         <ImageButton
             android:id="@+id/settings"
