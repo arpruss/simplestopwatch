@@ -113,7 +113,9 @@ public class Options extends PreferenceActivity {
     }
 
     static boolean swipeEnabled(SharedPreferences options) {
-        return !getTapAction(options).equals("start_stop") && (
+        return !getTapAction(options).equals("start_stop") &&
+                !getTapAction(options).equals("button2") &&
+                (
                 options.getBoolean(PREF_CLOCK_LITTLE_SECONDS, true) || options.getBoolean(PREF_CLOCK_BIG_SECONDS, true) );
     }
 

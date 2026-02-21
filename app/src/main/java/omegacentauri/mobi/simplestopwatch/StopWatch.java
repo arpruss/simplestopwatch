@@ -301,7 +301,8 @@ public class StopWatch extends ShowTime {
         dialog.show();
     }
 
-    void pressSecondButton() {
+    @Override
+    public void pressSecondButton() {
         if (Build.VERSION.SDK_INT >= 5)
             secondButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         chrono.secondButton(controlScheme);

@@ -7,9 +7,9 @@ android {
         applicationId "omegacentauri.mobi.simplestopwatch"
         minSdkVersion 4
         //noinspection EditedTargetSdkVersion
-        targetSdkVersion 34
-        versionCode 1051
-        versionName "1.51"
+        targetSdkVersion 35
+        versionCode 1053
+        versionName "1.53"
     }
     buildTypes {
         release {

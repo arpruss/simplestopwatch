@@ -9,12 +9,14 @@
     <string-array name="tapActionNames">
         <item>none</item>
         <item>button 1 (start/stop/pause)</item>
+        <item>button 2 (lap/reset/delay)</item>
         <item>toggle full screen</item>
     </string-array>
 
     <string-array name="tapActions">
         <item>none</item>
         <item>start_stop</item>
+        <item>button2</item>
         <item>fullscreen</item>
     </string-array>
 

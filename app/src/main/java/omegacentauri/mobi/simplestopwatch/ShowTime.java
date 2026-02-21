@@ -333,8 +333,12 @@ abstract public class ShowTime extends Activity {
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDown(MotionEvent motionEvent) {
-                if (options.getString(Options.PREF_TAP_ACTION, "fullscreen").equals("start_stop")) {
+                String tapAction =options.getString(Options.PREF_TAP_ACTION, "fullscreen");
+                if (tapAction.equals("start_stop")) {
                     pressFirstButton();
+                }
+                else if (tapAction.equals("button2")) {
+                    pressSecondButton();
                 }
                 return true;
             }
@@ -350,7 +354,8 @@ abstract public class ShowTime extends Activity {
 
             @Override
             public void onLongPress(MotionEvent motionEvent) {
-                if (options.getString(Options.PREF_TAP_ACTION, "fullscreen").equals("start_stop"))
+                String tapAction = options.getString(Options.PREF_TAP_ACTION, "fullscreen");
+                if (tapAction.equals("start_stop") || tapAction.equals("button2"))
                     return;
                 timeKeeper.copyToClipboard();
             }
@@ -425,6 +430,9 @@ abstract public class ShowTime extends Activity {
     }
 
     public void pressFirstButton() {
+    }
+
+    public void pressSecondButton() {
     }
 
     public void pressFirstButtonLong() {
