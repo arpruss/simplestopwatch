@@ -34,14 +34,13 @@ public class Clock extends ShowTime {
 
         setContentView(R.layout.activity_clock);
         bigDigits = (BigTextView)findViewById(R.id.chrono);
-        secondButton = (Button)findViewById(R.id.reset);
-        firstButton = (Button)findViewById(R.id.start);
         controlBar = (LinearLayout)findViewById(R.id.controlBar);
         mainContainer = findViewById(R.id.main_view);
         textButtons = TEXT_BUTTONS;
         imageButtons = IMAGE_BUTTONS;
 
         setupChrono();
+        setInsetListener(findViewById(R.id.main_clock));
     }
 
     protected void setupChrono() {

@@ -108,6 +108,8 @@ public class StopWatch extends ShowTime {
 
         if (noTouch)
             lockModeWarn();
+
+        setInsetListener(findViewById(R.id.main_stopwatch));
     }
 
     @Override

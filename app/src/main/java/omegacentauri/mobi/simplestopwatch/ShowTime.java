@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -29,6 +30,7 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -142,6 +144,29 @@ abstract public class ShowTime extends Activity {
                 return gestureDetector.onTouchEvent(motionEvent);
             }
         };
+
+    }
+
+    void setInsetListener(View main) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            main.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                    if (Build.VERSION.SDK_INT >= 30) {
+                        // Android 11 (API 30) and higher
+                        Insets systemBarInsets = insets.getInsets(WindowInsets.Type.systemBars());
+                        v.setPadding(systemBarInsets.left, systemBarInsets.top, systemBarInsets.right, systemBarInsets.bottom);
+                    } else if (Build.VERSION.SDK_INT >= 10) {
+                        // Android 6.0 (API 23) to 10
+                        v.setPadding(insets.getSystemWindowInsetLeft(),
+                                insets.getSystemWindowInsetTop(),
+                                insets.getSystemWindowInsetRight(),
+                                insets.getSystemWindowInsetBottom());
+                    }
+                    return insets;
+                }
+            });
+        }
     }
 
     static int[] getStateDescription(int focused, int pressed) {
@@ -311,6 +336,8 @@ abstract public class ShowTime extends Activity {
             lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         }
         mainContainer.setLayoutParams(lp);
+
+
     }
 
     @Override
