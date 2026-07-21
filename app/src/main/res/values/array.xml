@@ -86,6 +86,7 @@
         <item>m:s.ms</item>
         <item>s</item>
         <item>s.ms</item>
+        <item>s.f</item>
     </string-array>
 
     <string-array name="extraButtonHeightValues">
