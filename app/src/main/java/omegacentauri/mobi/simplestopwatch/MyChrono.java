@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private final Activity context;
@@ -72,7 +74,7 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     private static final int AUDIO_RATE = 22050; //44100;
     private static final double AUDIO_RATE_DOUBLE = AUDIO_RATE/1000.;
     private int currentStopwatch;
-
+    private final ExecutorService audioCleanupExecutor = Executors.newSingleThreadExecutor();
 
     @SuppressLint("NewApi")
     public MyChrono(Activity context, SharedPreferences options, BigTextView mainView, TextView fractionView, TextView lapView, View mainContainer) {
@@ -735,22 +737,44 @@ public class MyChrono implements BigTextView.GetCenter, MyTimeKeeper {
     }
 
     public void destroyAudio() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && loudnessEnhancer != null) {
-            loudnessEnhancer.setEnabled(false);
-            loudnessEnhancer = null;
-        }
-        if (shortTone != null) {
-            shortTone.release();
-            shortTone = null;
-        }
-        if (longTone != null) {
-            longTone.release();
-            longTone = null;
-        }
-        if (tts != null) {
-            tts.shutdown();
-            tts = null;
-        }
+        final LoudnessEnhancer myLoudness = loudnessEnhancer;
+        final AudioTrack myShort = shortTone;
+        final AudioTrack myLong = longTone;
+        final TextToSpeech myTTS = tts;
+        loudnessEnhancer = null;
+        shortTone = null;
+        longTone = null;
+        tts = null;
+
+        audioCleanupExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && myLoudness != null) {
+                        try {
+                            myLoudness.setEnabled(false);
+                        }
+                        catch (Exception e){};
+                    }
+                    if (myShort != null) {
+                        try {
+                            myShort.release();
+                        }
+                        catch (Exception e){};
+                    }
+                    if (myLong != null) {
+                        try {
+                            myLong.release();
+                        }
+                        catch (Exception e){};
+                    }
+                    if (myTTS != null) {
+                        try {
+                            myTTS.shutdown();
+                        }
+                        catch (Exception e){}
+                    }
+            }
+        });
 
     }
 

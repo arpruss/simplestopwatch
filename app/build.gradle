@@ -8,8 +8,8 @@ android {
         minSdkVersion 4
         //noinspection EditedTargetSdkVersion
         targetSdkVersion 37
-        versionCode 1054
-        versionName "1.54"
+        versionCode 1055
+        versionName "1.55"
     }
     buildTypes {
         release {
